@@ -24,7 +24,7 @@ include __DIR__ . '/includes/header.php';
       <?php foreach ($brands as $brand):
         $isFeatured = !empty($brand['featured']);
         $cardClass = $isFeatured ? 'brand-card featured' : 'brand-card';
-        $brandHref = $rootPath . '/brands/' . $brand['slug'] . '/';
+        $brandHref = $rootPath . '/brands/caterpillar/';
         $imagePath = $assetPath . '/img/brands/' . $brand['image'];
       ?>
         <a class="<?php echo $cardClass; ?>" href="<?php echo $brandHref; ?>">
