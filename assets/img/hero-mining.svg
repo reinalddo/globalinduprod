@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 640" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="skyGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe082"/>
+      <stop offset="45%" stop-color="#f6c343"/>
+      <stop offset="100%" stop-color="#1b1b1f"/>
+    </linearGradient>
+    <linearGradient id="ridgeLight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f5c400"/>
+      <stop offset="60%" stop-color="#d69621"/>
+      <stop offset="100%" stop-color="#a86c1d"/>
+    </linearGradient>
+    <linearGradient id="truckBody" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7d268"/>
+      <stop offset="100%" stop-color="#d08b19"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="640" fill="url(#skyGlow)"/>
+  <path d="M0 420C180 360 380 390 560 360C760 326 960 380 1180 348C1400 316 1660 360 1920 320V640H0Z" fill="url(#ridgeLight)" opacity="0.35"/>
+  <path d="M0 470C240 430 420 470 640 440C900 404 1160 460 1440 424C1640 398 1800 420 1920 402V640H0Z" fill="#201d1b" opacity="0.55"/>
+  <g opacity="0.85">
+    <rect x="260" y="282" width="280" height="120" rx="20" fill="url(#truckBody)"/>
+    <rect x="340" y="252" width="140" height="28" rx="10" fill="#fbe7a4"/>
+    <circle cx="320" cy="420" r="36" fill="#111111"/>
+    <circle cx="480" cy="420" r="36" fill="#111111"/>
+  </g>
+  <g opacity="0.7">
+    <rect x="780" y="300" width="260" height="110" rx="18" fill="url(#truckBody)"/>
+    <rect x="860" y="270" width="140" height="24" rx="9" fill="#fbe7a4"/>
+    <circle cx="840" cy="422" r="34" fill="#121212"/>
+    <circle cx="1000" cy="422" r="34" fill="#121212"/>
+  </g>
+  <g opacity="0.65">
+    <rect x="1280" y="312" width="300" height="120" rx="24" fill="url(#truckBody)"/>
+    <rect x="1380" y="280" width="160" height="26" rx="10" fill="#fbe7a4"/>
+    <circle cx="1360" cy="430" r="38" fill="#121212"/>
+    <circle cx="1520" cy="430" r="38" fill="#121212"/>
+  </g>
+</svg>

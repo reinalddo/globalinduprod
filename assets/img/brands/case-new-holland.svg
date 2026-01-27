@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="gradCNH" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7d154"/>
+      <stop offset="100%" stop-color="#f0a500"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="#1f1f1f"/>
+  <rect x="80" y="120" width="480" height="120" rx="24" fill="url(#gradCNH)"/>
+  <text x="320" y="176" text-anchor="middle" font-family="'Arial Black', sans-serif" font-size="54" fill="#111">CASE</text>
+  <text x="320" y="222" text-anchor="middle" font-family="'Arial Black', sans-serif" font-size="38" fill="#111">NEW HOLLAND</text>
+</svg>

@@ -1,0 +1,20 @@
+<?php
+return [
+  ['name' => 'Caterpillar', 'slug' => 'caterpillar', 'image' => 'caterpillar.svg', 'featured' => true],
+  ['name' => 'Komatsu', 'slug' => 'komatsu', 'image' => 'komatsu.svg'],
+  ['name' => 'Allison Transmission', 'slug' => 'allison-transmission', 'image' => 'allison-transmission.svg'],
+  ['name' => 'MTU', 'slug' => 'mtu', 'image' => 'mtu.svg'],
+  ['name' => 'Cummins', 'slug' => 'cummins', 'image' => 'cummins.svg'],
+  ['name' => 'Freightliner', 'slug' => 'freightliner', 'image' => 'freightliner.svg'],
+  ['name' => 'John Deere', 'slug' => 'john-deere', 'image' => 'john-deere.svg'],
+  ['name' => 'Atlas Copco', 'slug' => 'atlas-copco', 'image' => 'atlas-copco.svg'],
+  ['name' => 'Epiroc', 'slug' => 'epiroc', 'image' => 'epiroc.svg'],
+  ['name' => 'Waukesha', 'slug' => 'waukesha', 'image' => 'waukesha.svg'],
+  ['name' => 'Sandvik', 'slug' => 'sandvik', 'image' => 'sandvik.svg'],
+  ['name' => 'Volvo', 'slug' => 'volvo', 'image' => 'volvo.svg'],
+  ['name' => 'Case New Holland', 'slug' => 'case-new-holland', 'image' => 'case-new-holland.svg'],
+  ['name' => 'Tigercat', 'slug' => 'tigercat', 'image' => 'tigercat.svg'],
+  ['name' => 'Buhler', 'slug' => 'buhler', 'image' => 'buhler.svg'],
+  ['name' => 'Ditch Witch', 'slug' => 'ditch-witch', 'image' => 'ditch-witch.svg'],
+  ['name' => 'Detroit Diesel', 'slug' => 'detroit-diesel', 'image' => 'detroit-diesel.svg'],
+];

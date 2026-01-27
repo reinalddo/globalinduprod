@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="gradJD" cx="0.35" cy="0.3" r="1">
+      <stop offset="0%" stop-color="#3fae2a"/>
+      <stop offset="100%" stop-color="#1a4f1a"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#gradJD)"/>
+  <rect x="160" y="95" width="320" height="220" rx="38" fill="#f1c40f" opacity="0.95"/>
+  <path d="M320 140C290 140 264 160 264 200C264 238 291 256 320 256C350 256 376 236 376 200C376 162 348 140 320 140Z" fill="#2e7d32"/>
+  <path d="M300 200L320 166L340 200L320 234Z" fill="#f1c40f"/>
+  <text x="320" y="310" text-anchor="middle" font-family="'Arial Black', sans-serif" font-size="48" fill="#f1f1f1">JOHN DEERE</text>
+</svg>

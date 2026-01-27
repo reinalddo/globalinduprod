@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="gradW" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d7d7d7"/>
+      <stop offset="100%" stop-color="#7a7a7a"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="#101010"/>
+  <rect x="100" y="120" width="440" height="130" rx="20" fill="url(#gradW)"/>
+  <text x="320" y="170" text-anchor="middle" font-family="'Arial Black', sans-serif" font-size="42" fill="#111">WAUKESHA</text>
+  <text x="320" y="215" text-anchor="middle" font-family="'Arial Black', sans-serif" font-size="32" fill="#111">ENGINES</text>
+</svg>
