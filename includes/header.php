@@ -16,25 +16,27 @@ $activeNav = $activeNav ?? 'home';
 <body<?php echo !empty($bodyClass) ? ' class="' . htmlspecialchars($bodyClass, ENT_QUOTES, 'UTF-8') . '"' : ''; ?>>
   <header class="site-header">
     <div class="top-bar">
-      <div class="language-switcher">
-        <button type="button" data-toggle="language-menu">
-          <img src="<?php echo $assetPath; ?>/img/icons/flag-es.svg" alt="Bandera de España" loading="lazy">
-          <span>Español</span>
-        </button>
-        <div class="language-menu" data-language-menu>
-          <a href="#">English</a>
-          <a href="#">Deutsch</a>
-          <a href="#">Русский</a>
+      <div class="top-bar-inner">
+        <div class="language-switcher">
+          <button type="button" data-toggle="language-menu">
+            <img src="<?php echo $assetPath; ?>/img/icons/flag-es.svg" alt="Bandera de España" loading="lazy">
+            <span>Español</span>
+          </button>
+          <div class="language-menu" data-language-menu>
+            <a href="#">English</a>
+            <a href="#">Deutsch</a>
+            <a href="#">Русский</a>
+          </div>
         </div>
+        <form class="search-wrapper" role="search">
+          <label class="sr-only" for="header-search">Buscar</label>
+          <input id="header-search" type="search" placeholder="Buscar piezas, ex. 123-4567">
+          <button type="submit">Buscar</button>
+        </form>
+        <a class="quote-link" href="#cotizar">
+          <span>cotizar</span>
+        </a>
       </div>
-      <form class="search-wrapper" role="search">
-        <label class="sr-only" for="header-search">Buscar</label>
-        <input id="header-search" type="search" placeholder="Buscar piezas, ex. 123-4567">
-        <button type="submit">Buscar</button>
-      </form>
-      <a class="quote-link" href="#cotizar">
-        <span>cotizar</span>
-      </a>
     </div>
     <nav class="navbar is-dark" role="navigation" aria-label="Menú principal">
       <div class="navbar-brand">
