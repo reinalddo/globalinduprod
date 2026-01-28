@@ -3,6 +3,7 @@ $pageTitle = 'Proveedor global de repuestos para maquinaria pesada';
 $rootPath = '.';
 $assetPath = $rootPath . '/assets';
 $activeNav = 'home';
+$bodyClass = 'page-home';
 $brands = require __DIR__ . '/data/brands.php';
 $brandNames = array_column($brands, 'name');
 $brandHighlights = implode(', ', array_slice($brandNames, 0, min(8, count($brandNames))));

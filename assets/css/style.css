@@ -299,6 +299,16 @@ a {
   padding: 120px 16px 80px;
 }
 
+.page-home .hero {
+  min-height: max(420px, calc(100vh - 148px));
+}
+
+@media (max-width: 1023px) {
+  .page-home .hero {
+    min-height: max(420px, calc(100vh - 196px));
+  }
+}
+
 .page-hero {
   position: relative;
   min-height: 360px;

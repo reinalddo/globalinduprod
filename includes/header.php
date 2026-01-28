@@ -13,7 +13,7 @@ $activeNav = $activeNav ?? 'home';
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" integrity="sha256-w1SENuOeJ4+nobVhtSGcVwqDAVBBusZT6F4LmSpaefM=" crossorigin="anonymous">
   <link rel="stylesheet" href="<?php echo $assetPath; ?>/css/style.css">
 </head>
-<body>
+<body<?php echo !empty($bodyClass) ? ' class="' . htmlspecialchars($bodyClass, ENT_QUOTES, 'UTF-8') . '"' : ''; ?>>
   <header class="site-header">
     <div class="top-bar">
       <div class="language-switcher">
