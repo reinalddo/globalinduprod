@@ -26,20 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (navToggle && nav) {
-    const navList = nav.querySelector('.nav-links');
     navToggle.addEventListener('click', () => {
-      nav.classList.toggle('is-open');
-      if (navList) {
-        navList.classList.toggle('is-open');
-      }
+      const isActive = navToggle.classList.toggle('is-active');
+      nav.classList.toggle('is-active', isActive);
     });
-    if (navList) {
-      navList.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', () => {
-          nav.classList.remove('is-open');
-          navList.classList.remove('is-open');
-        });
+    nav.querySelectorAll('.navbar-item').forEach((link) => {
+      link.addEventListener('click', () => {
+        navToggle.classList.remove('is-active');
+        nav.classList.remove('is-active');
       });
-    }
+    });
   }
 });

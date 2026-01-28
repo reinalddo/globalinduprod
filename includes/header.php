@@ -10,10 +10,11 @@ $activeNav = $activeNav ?? 'home';
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" integrity="sha256-w1SENuOeJ4+nobVhtSGcVwqDAVBBusZT6F4LmSpaefM=" crossorigin="anonymous">
   <link rel="stylesheet" href="<?php echo $assetPath; ?>/css/style.css">
 </head>
 <body>
-  <header>
+  <header class="site-header">
     <div class="top-bar">
       <div class="language-switcher">
         <button type="button" data-toggle="language-menu">
@@ -35,22 +36,24 @@ $activeNav = $activeNav ?? 'home';
         <span>cotizar</span>
       </a>
     </div>
-    <div class="primary-nav">
-      <div class="nav-left">
-        <a class="brand-logo" href="<?php echo $rootPath; ?>/">
+    <nav class="navbar is-dark" role="navigation" aria-label="Menú principal">
+      <div class="navbar-brand">
+        <a class="navbar-item brand-logo" href="<?php echo $rootPath; ?>/">
           <img src="<?php echo $assetPath; ?>/img/logo.svg" alt="Logo AGA Parts" loading="lazy">
         </a>
-        <button class="nav-toggle" type="button" data-nav-toggle>Menú</button>
+        <a role="button" class="navbar-burger" aria-label="Abrir menú" aria-expanded="false" data-nav-toggle>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
       </div>
-      <nav data-primary-nav>
-        <ul class="nav-links">
-          <li><a href="<?php echo $rootPath; ?>/marcas/" class="<?php echo $activeNav === 'marcas' ? 'is-active' : ''; ?>">Marcas</a></li>
-          <li><a href="<?php echo $rootPath; ?>/maquinaria/" class="<?php echo $activeNav === 'maquinaria' ? 'is-active' : ''; ?>">Maquinaria</a></li>
-          <li><a href="<?php echo $rootPath; ?>/industrias/" class="<?php echo $activeNav === 'industrias' ? 'is-active' : ''; ?>">Industrias</a></li>
-          <li><a href="<?php echo $rootPath; ?>/compania/" class="<?php echo $activeNav === 'compania' ? 'is-active' : ''; ?>">Compañía</a></li>
-          <li><a href="<?php echo $rootPath; ?>/government-contracts/" class="<?php echo $activeNav === 'contratos' ? 'is-active' : ''; ?>">Government Contracts</a></li>
-          <li><a href="<?php echo $rootPath; ?>/contacto/" class="<?php echo $activeNav === 'contacto' ? 'is-active' : ''; ?>">Contacto</a></li>
-        </ul>
-      </nav>
-    </div>
+      <div class="navbar-menu" data-primary-nav>
+        <div class="navbar-end">
+          <a href="<?php echo $rootPath; ?>/" class="navbar-item <?php echo $activeNav === 'home' ? 'is-active' : ''; ?>">Inicio</a>
+          <a href="<?php echo $rootPath; ?>/nosotros/" class="navbar-item <?php echo $activeNav === 'nosotros' ? 'is-active' : ''; ?>">Nosotros</a>
+          <a href="<?php echo $rootPath; ?>/servicios/" class="navbar-item <?php echo $activeNav === 'servicios' ? 'is-active' : ''; ?>">Servicios</a>
+          <a href="<?php echo $rootPath; ?>/contacto/" class="navbar-item <?php echo $activeNav === 'contacto' ? 'is-active' : ''; ?>">Contacto</a>
+        </div>
+      </div>
+    </nav>
   </header>

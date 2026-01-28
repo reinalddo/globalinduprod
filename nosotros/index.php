@@ -1,8 +1,8 @@
 <?php
-$pageTitle = 'Maquinaria pesada y especializada';
+$pageTitle = 'Nosotros';
 $rootPath = '..';
 $assetPath = $rootPath . '/assets';
-$activeNav = 'maquinaria';
+$activeNav = 'nosotros';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
   <main>
@@ -18,7 +18,7 @@ include dirname(__DIR__) . '/includes/header.php';
       <nav class="breadcrumb">
         <a href="<?php echo $rootPath; ?>/">Inicio</a>
         <span>/</span>
-        <span>Maquinaria</span>
+        <span>Nosotros</span>
       </nav>
 
       <h2 style="margin-top:32px;">Planes de mantenimiento por tipo de activo</h2>

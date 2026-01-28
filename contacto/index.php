@@ -51,6 +51,11 @@ include dirname(__DIR__) . '/includes/header.php';
           <button type="submit">Enviar solicitud</button>
         </form>
       </div>
+
+      <div class="map-embed">
+        <h2>Ubicación</h2>
+        <iframe title="Mapa de la oficina" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.641495928014!2d-74.0103375234088!3d40.65605954036408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25b2f105cf6c1%3A0xd888fffbe671c5f!2s210%2041st%20St%20%23202%2C%20Brooklyn%2C%20NY%2011232%2C%20EE.%20UU.!5e0!3m2!1ses!2sar!4v1706500000000!5m2!1ses!2sar" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
     </section>
   </main>
 <?php include dirname(__DIR__) . '/includes/footer.php'; ?>

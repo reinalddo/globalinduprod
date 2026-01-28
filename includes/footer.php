@@ -13,17 +13,17 @@
       <div class="footer-block">
         <h4>Empresa</h4>
         <ul>
-          <li><a href="<?php echo $rootPath; ?>/compania/">Quiénes somos</a></li>
-          <li><a href="<?php echo $rootPath; ?>/marcas/">Catálogo</a></li>
-          <li><a href="<?php echo $rootPath; ?>/government-contracts/">Contratos</a></li>
-          <li><a href="<?php echo $rootPath; ?>/contacto/">Atención 24/7</a></li>
+          <li><a href="<?php echo $rootPath; ?>/nosotros/">Nosotros</a></li>
+          <li><a href="<?php echo $rootPath; ?>/servicios/">Servicios</a></li>
+          <li><a href="<?php echo $rootPath; ?>/#clientes">Clientes</a></li>
+          <li><a href="<?php echo $rootPath; ?>/contacto/">Contacto</a></li>
         </ul>
       </div>
       <div class="footer-block">
         <h4>Información</h4>
         <ul>
           <li><a href="<?php echo $rootPath; ?>/contacto/">Contáctenos</a></li>
-          <li><a href="<?php echo $rootPath; ?>/maquinaria/">Cómo ordenar</a></li>
+          <li><a href="<?php echo $rootPath; ?>/servicios/">Cómo trabajamos</a></li>
           <li><a href="#terminos">Términos y condiciones</a></li>
           <li><a href="#privacidad">Política de privacidad</a></li>
         </ul>

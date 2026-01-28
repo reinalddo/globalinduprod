@@ -4,6 +4,8 @@ $rootPath = '.';
 $assetPath = $rootPath . '/assets';
 $activeNav = 'home';
 $brands = require __DIR__ . '/data/brands.php';
+$brandNames = array_column($brands, 'name');
+$brandHighlights = implode(', ', array_slice($brandNames, 0, min(8, count($brandNames))));
 include __DIR__ . '/includes/header.php';
 ?>
   <main>
@@ -24,21 +26,32 @@ include __DIR__ . '/includes/header.php';
       <?php foreach ($brands as $brand):
         $isFeatured = !empty($brand['featured']);
         $cardClass = $isFeatured ? 'brand-card featured' : 'brand-card';
-        $brandHref = $rootPath . '/brands/caterpillar/';
         $imagePath = $assetPath . '/img/brands/' . $brand['image'];
       ?>
-        <a class="<?php echo $cardClass; ?>" href="<?php echo $brandHref; ?>">
+        <div class="<?php echo $cardClass; ?>">
           <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
           <span><?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?></span>
-        </a>
+        </div>
       <?php endforeach; ?>
     </section>
+
+    <section class="clients-intro" id="clientes">
+      <div class="clients-card">
+        <h3>Confianza global</h3>
+        <p>Abastecemos flotas que operan con fabricantes como <?php echo htmlspecialchars($brandHighlights, ENT_QUOTES, 'UTF-8'); ?> y más de doscientas marcas aliadas. Coordinamos entregas internacionales con control de trazabilidad y documentación completa.</p>
+      </div>
+      <div class="clients-card">
+        <h3>¿No ve su marca?</h3>
+        <p>Nuestro equipo de compras localiza piezas críticas en cuestión de horas. Envíenos su listado y le proponemos alternativas OEM, aftermarket o remanufacturadas con garantía.</p>
+      </div>
+    </section>
+
     <section class="section-heading" style="margin:80px auto 100px;">
       <h2>Conozca el catálogo completo</h2>
       <p>Consulte más de 200 fabricantes con piezas certificadas y asesoría personalizada. Cada marca cuenta con fichas detalladas y disponibilidad global.</p>
       <div class="cta-panel" style="margin-top:36px;">
         <strong>¿Necesita otra marca o familia de producto?</strong>
-        <a href="<?php echo $rootPath; ?>/marcas/">Ver catálogo</a>
+        <a href="<?php echo $rootPath; ?>/contacto/">Escríbanos</a>
       </div>
     </section>
   </main>
