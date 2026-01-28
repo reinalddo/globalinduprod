@@ -6,7 +6,7 @@ $activeNav = 'nosotros';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
   <main>
-    <section class="page-hero page-hero--bright">
+    <section class="page-hero page-hero--bright page-hero--nosotros">
       <div class="page-hero-content">
         <p style="letter-spacing:0.08em; text-transform:uppercase; font-size:0.9rem; color:#f1c75b; margin-bottom:10px;">Somos Global Induprod</p>
         <h1>Logística industrial y outsourcing integral para su operación</h1>
@@ -26,18 +26,21 @@ include dirname(__DIR__) . '/includes/header.php';
 
       <div class="about-media-grid">
         <article class="about-media-card about-media-card--logistics">
+          <img src="resumen/resumen-operadores-industriales.jpg" alt="Operarios coordinando logística industrial" loading="lazy">
           <div class="about-media-card__content">
             <h3>Logística binacional 24/7</h3>
             <p>Inventarios espejo en Miami y San Felipe, coordinación terrestre, marítima y aérea, aduanas y documentación para entregar repuestos críticos con tiempos de tránsito controlados.</p>
           </div>
         </article>
         <article class="about-media-card about-media-card--maintenance">
+          <img src="resumen/resumen-ingenieria-colaborativa.jpg" alt="Equipo de ingeniería revisando planos industriales" loading="lazy">
           <div class="about-media-card__content">
             <h3>Mantenimiento y montaje industrial</h3>
             <p>Cuadrillas propias de soldadores, instrumentistas, electricistas y mecánicos para overhaul de plantas, calderas, bombas, maquinaria pesada y sistemas de carga en puertos y aeropuertos.</p>
           </div>
         </article>
         <article class="about-media-card about-media-card--alliances">
+          <img src="resumen/resumen-equipo-reunion.jpg" alt="Alianzas técnicas reunidas en sala de juntas" loading="lazy">
           <div class="about-media-card__content">
             <h3>Alianzas certificadas</h3>
             <p>Más de 300 aliados técnicos en América y Europa respaldan proyectos de ingeniería, fabricación y seguridad industrial con cumplimiento de normas API, ASTM, AWS y NFPA.</p>
@@ -77,36 +80,42 @@ include dirname(__DIR__) . '/includes/header.php';
 
       <div class="services-media-grid">
         <article class="services-media-card services-media-card--construction">
+          <img src="servicios/servicio-construccion-industrial.jpg" alt="Construcción y montaje de estructuras industriales" loading="lazy">
           <div class="services-media-card__content">
             <h3>Construcción y obra civil</h3>
             <p>Ingeniería, inspección y ejecución de estructuras metálicas, obras civiles, rehabilitación de muelles, muros de contención y plantas industriales con cumplimiento de normas internacionales.</p>
           </div>
         </article>
         <article class="services-media-card services-media-card--maintenance">
+          <img src="servicios/servicio-mantenimiento-integral.jpg" alt="Técnicos realizando mantenimiento integral a maquinaria" loading="lazy">
           <div class="services-media-card__content">
             <h3>Mantenimiento integral</h3>
             <p>Overhaul de calderas, turbinas, bombas y sistemas de carga; mantenimiento eléctrico e instrumentación con cuadrillas certificadas y planes predictivos, preventivos y correctivos.</p>
           </div>
         </article>
         <article class="services-media-card services-media-card--logistics">
+          <img src="servicios/servicio-logistica-portuaria.jpg" alt="Operaciones logísticas en puerto industrial" loading="lazy">
           <div class="services-media-card__content">
             <h3>Logística y suministros</h3>
             <p>Importación, nacionalización y distribución de repuestos, equipos médicos, transformadores, herramientas y consumibles con trazabilidad completa y certificaciones OEM.</p>
           </div>
         </article>
         <article class="services-media-card services-media-card--outsourcing">
+          <img src="servicios/servicio-outsourcing-seguridad.jpg" alt="Supervisión de personal y seguridad industrial" loading="lazy">
           <div class="services-media-card__content">
             <h3>Outsourcing y seguridad</h3>
             <p>Gestión de capital humano, seguridad industrial, capacitación técnica y servicios múltiples que sustentan operaciones portuarias, aeronáuticas y petroquímicas.</p>
           </div>
         </article>
         <article class="services-media-card services-media-card--ports">
+          <img src="servicios/servicio-seguridad-industrial.jpg" alt="Inspección de seguridad en operaciones portuarias" loading="lazy">
           <div class="services-media-card__content">
             <h3>Servicios portuarios y aeronáuticos</h3>
             <p>Overhaul de grúas pórtico, defensas, ayudas a la navegación, sistemas contra incendios y luminarias aeronáuticas con soporte de salvataje y rescate bajo normas NFPA y OACI.</p>
           </div>
         </article>
         <article class="services-media-card services-media-card--environment">
+          <img src="servicios/servicio-gestion-residuos.jpg" alt="Gestión ambiental y tratamiento de residuos" loading="lazy">
           <div class="services-media-card__content">
             <h3>Gestión ambiental y residuos</h3>
             <p>Recolección, transporte y tratamiento de desechos peligrosos y especiales, saneamiento industrial y logística de cargas sobredimensionadas con documentación regulatoria completa.</p>
