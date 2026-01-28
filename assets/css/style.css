@@ -6,6 +6,7 @@
   --text-light: #f7f7f7;
   --font-base: 'Poppins', 'Segoe UI', sans-serif;
   --container-max-width: 1120px;
+  --header-offset: 148px;
 }
 
 *,
@@ -19,6 +20,13 @@ body {
   font-family: var(--font-base);
   background: #ffffff;
   color: #191919;
+  padding-top: var(--header-offset);
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --header-offset: 120px;
+  }
 }
 
 img {
@@ -44,11 +52,12 @@ a {
 }
 
 .site-header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 30;
+  z-index: 110;
+  pointer-events: auto;
 }
 
 .site-header .navbar {
@@ -371,7 +380,8 @@ a {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 120px 16px 80px;
+  padding: calc(var(--header-offset) + 120px) 16px 80px;
+  margin-top: calc(-1 * var(--header-offset));
 }
 
 .page-home .hero {
@@ -392,8 +402,9 @@ a {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 120px 16px 90px;
+  padding: calc(var(--header-offset) + 120px) 16px 90px;
   background: url('../img/hero-construction.svg') center/cover no-repeat;
+  margin-top: calc(-1 * var(--header-offset));
 }
 
 .page-hero::after {
@@ -825,8 +836,9 @@ footer {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 120px 16px 60px;
+  padding: calc(var(--header-offset) + 120px) 16px 60px;
   text-align: center;
+  margin-top: calc(-1 * var(--header-offset));
 }
 
 .brand-hero::after {
