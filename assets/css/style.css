@@ -536,11 +536,127 @@ a {
   box-shadow: 0 26px 40px rgba(0, 0, 0, 0.26);
 }
 
+.about-media-grid,
+.services-media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  width: 100%;
+  margin: 48px 0 56px;
+}
+
+.about-media-card,
+.services-media-card {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.24);
+  color: #ffffff;
+}
+.about-media-card::after,
+.services-media-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7, 7, 7, 0) 18%, rgba(7, 7, 7, 0.75) 82%);
+}
+
+.about-media-card__content,
+.services-media-card__content {
+  position: relative;
+  z-index: 1;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-media-card h3,
+.services-media-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.about-media-card p,
+.services-media-card p {
+  margin: 0;
+  line-height: 1.6;
+  color: #f2f2f2;
+}
+
+.about-media-card--logistics {
+  background-image: linear-gradient(135deg, rgba(10, 10, 10, 0.2), rgba(12, 12, 12, 0.4)), url('../img/hero-construction.svg');
+}
+
+.about-media-card--maintenance {
+  background-image: linear-gradient(135deg, rgba(10, 10, 10, 0.2), rgba(12, 12, 12, 0.55)), url('../img/hero-mining.svg');
+}
+
+.about-media-card--alliances {
+  background-image: linear-gradient(135deg, rgba(10, 10, 10, 0.25), rgba(14, 14, 14, 0.55)), url('../img/hero-construction.svg');
+  background-position: right center;
+}
+
+.services-media-card--construction {
+  background-image: linear-gradient(140deg, rgba(15, 71, 130, 0.15), rgba(7, 24, 52, 0.78)), url('../img/hero-construction.svg');
+}
+
+.services-media-card--maintenance {
+  background-image: linear-gradient(135deg, rgba(15, 92, 64, 0.18), rgba(4, 22, 16, 0.78)), url('../img/hero-mining.svg');
+  background-position: center;
+}
+
+.services-media-card--logistics {
+  background-image: linear-gradient(135deg, rgba(158, 99, 17, 0.16), rgba(36, 21, 4, 0.78)), url('../img/hero-construction.svg');
+  background-position: left center;
+}
+
+.services-media-card--outsourcing {
+  background-image: linear-gradient(135deg, rgba(104, 31, 99, 0.18), rgba(26, 7, 38, 0.78)), url('../img/hero-mining.svg');
+  background-position: right center;
+}
+
+.services-media-card--ports {
+  background-image: linear-gradient(135deg, rgba(59, 37, 0, 0.18), rgba(15, 9, 1, 0.78)), url('../img/hero-construction.svg');
+}
+
+.services-media-card--environment {
+  background-image: linear-gradient(135deg, rgba(6, 58, 81, 0.16), rgba(3, 20, 27, 0.78)), url('../img/hero-mining.svg');
+  background-position: center bottom;
+}
+
+@media (max-width: 720px) {
+  .about-media-grid,
+  .services-media-grid {
+    margin: 36px 0 48px;
+    gap: 18px;
+  }
+
+  .about-media-card,
+  .services-media-card {
+    min-height: 220px;
+    border-radius: 18px;
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.22);
+  }
+
+  .about-media-card__content,
+  .services-media-card__content {
+    padding: 24px;
+  }
+}
+
 .clients-intro {
   display: grid;
   gap: 24px;
-  width: min(1100px, 92vw);
-  margin: 0 auto 72px;
+  width: 100%;
+  margin: 0 0 72px;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
@@ -805,20 +921,23 @@ footer {
   pointer-events: auto;
 }
 
+
 .main-content {
-  width: min(1100px, 92vw);
-  margin: 48px auto 80px;
-  background: #fff;
-  padding: 48px 60px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
-  border-radius: 18px;
+  width: min(1080px, calc(100% - 48px));
+  margin: -120px auto 96px;
+  background: #ffffff;
+  padding: 48px clamp(24px, 4vw, 56px) 64px;
+  box-shadow: 0 28px 56px rgba(0, 0, 0, 0.16);
+  border-radius: 28px;
+  position: relative;
+  z-index: 2;
 }
 
 .breadcrumb {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   text-transform: uppercase;
   color: #767676;
   letter-spacing: 0.08em;
@@ -826,6 +945,25 @@ footer {
 
 .breadcrumb a {
   color: #111;
+  font-weight: 600;
+}
+
+.main-content .breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #f7f7f7;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8a8a8a;
+  margin-bottom: 28px;
+}
+
+.main-content .breadcrumb span:last-child {
+  color: #bababa;
 }
 
 .brand-hero {
@@ -949,7 +1087,13 @@ footer {
   }
 
   .main-content {
-    padding: 36px 32px;
+    margin: -96px auto 80px;
+    padding: 40px 28px 56px;
+    border-radius: 24px;
+  }
+
+  .main-content .breadcrumb {
+    font-size: 0.7rem;
   }
 
   .catalog-grid {
@@ -981,6 +1125,17 @@ footer {
 
   .top-search__toggle {
     display: inline-flex;
+  }
+
+  .main-content {
+    margin: -80px auto 64px;
+    padding: 32px 20px 48px;
+    border-radius: 22px;
+  }
+
+  .main-content .breadcrumb {
+    font-size: 0.66rem;
+    padding: 6px 12px;
   }
 
   .top-search__panel {
