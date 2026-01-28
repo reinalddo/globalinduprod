@@ -207,7 +207,7 @@ a {
 }
 
 .language-switcher {
-      padding: 6px 0;
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -233,14 +233,16 @@ a {
 
 .language-menu {
   position: absolute;
-  top: 120%;
+  top: calc(100% + 6px);
   left: 0;
+  transform: none;
   display: none;
   min-width: 140px;
   padding: 12px 0;
   background: #ffffff;
   border-radius: 6px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  z-index: 50;
 }
 
 .language-menu.is-visible {
@@ -248,7 +250,9 @@ a {
 }
 
 .language-menu a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 16px;
   color: #333;
   font-size: 0.85rem;

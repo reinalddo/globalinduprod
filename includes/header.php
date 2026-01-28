@@ -23,9 +23,14 @@ $activeNav = $activeNav ?? 'home';
             <span>Español</span>
           </button>
           <div class="language-menu" data-language-menu>
-            <a href="#">English</a>
-            <a href="#">Deutsch</a>
-            <a href="#">Русский</a>
+            <a href="#">
+              <img src="<?php echo $assetPath; ?>/img/icons/flag-es.svg" alt="Bandera de España" loading="lazy">
+              <span>Español</span>
+            </a>
+            <a href="#">
+              <img src="<?php echo $assetPath; ?>/img/icons/flag-us.svg" alt="Bandera de Estados Unidos" loading="lazy">
+              <span>English</span>
+            </a>
           </div>
         </div>
         <form class="search-wrapper" role="search">
