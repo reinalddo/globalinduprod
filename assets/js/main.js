@@ -26,14 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (navToggle && nav) {
+    navToggle.setAttribute('aria-expanded', 'false');
+    nav.setAttribute('aria-hidden', 'true');
+
     navToggle.addEventListener('click', () => {
       const isActive = navToggle.classList.toggle('is-active');
       nav.classList.toggle('is-active', isActive);
+      navToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+      nav.setAttribute('aria-hidden', isActive ? 'false' : 'true');
     });
     nav.querySelectorAll('.navbar-item').forEach((link) => {
       link.addEventListener('click', () => {
         navToggle.classList.remove('is-active');
         nav.classList.remove('is-active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        nav.setAttribute('aria-hidden', 'true');
       });
     });
   }
