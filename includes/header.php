@@ -33,14 +33,22 @@ $activeNav = $activeNav ?? 'home';
             </a>
           </div>
         </div>
-        <form class="search-wrapper" role="search">
-          <label class="sr-only" for="header-search">Buscar</label>
-          <input id="header-search" type="search" placeholder="Buscar piezas, ex. 123-4567">
-          <button type="submit">Buscar</button>
-        </form>
-        <a class="quote-link" href="#cotizar">
-          <span>cotizar</span>
-        </a>
+        <div class="top-search" data-search-panel>
+          <button class="top-search__toggle" type="button" aria-expanded="false" aria-controls="top-search-content">
+            <span>Buscar</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3a7.5 7.5 0 015.926 12.137l5.218 5.219a1 1 0 01-1.414 1.414l-5.219-5.218A7.5 7.5 0 1110.5 3zm0 2a5.5 5.5 0 100 11 5.5 5.5 0 000-11z"/></svg>
+          </button>
+          <div class="top-search__panel" id="top-search-content" hidden>
+            <form class="search-wrapper" role="search">
+              <label class="sr-only" for="header-search">Buscar</label>
+              <input id="header-search" type="search" placeholder="Buscar piezas, ex. 123-4567">
+              <button type="submit">Buscar</button>
+            </form>
+            <a class="quote-link" href="#cotizar">
+              <span>cotizar</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
     <nav class="navbar is-dark" role="navigation" aria-label="Menú principal">
