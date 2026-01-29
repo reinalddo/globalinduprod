@@ -19,8 +19,8 @@ include __DIR__ . '/includes/header.php';
     </section>
 
     <section class="section-heading">
-      <h2>Mejores marcas de alrededor del mundo</h2>
-      <p>Trabajamos codo a codo con fabricantes globales para asegurarle disponibilidad inmediata, trazabilidad certificada y soporte experto durante todo el ciclo de vida de su maquinaria.</p>
+      <h2>Nuestros Aliados Estratégicos</h2>
+      <p>Contamos con más de 300 aliados estratégicos comerciales alrededor del mundo, los cuales nos han dado su representación y nos brindan respaldo total para nuestros clientes, a su vez, damos mayor capacidad de respuesta a nivel nacional e internacional.</p>
     </section>
 
     <section class="brand-grid">
