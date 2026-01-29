@@ -6,7 +6,7 @@ $activeNav = 'contacto';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
   <main>
-    <section class="page-hero page-hero--bright">
+    <section class="page-hero page-hero--bright page-hero--contact">
       <div class="page-hero-content">
         <p style="letter-spacing:0.08em; text-transform:uppercase; font-size:0.9rem; color:#f1c75b; margin-bottom:10px;">Atención 24/7</p>
         <h1>Estamos listos para apoyar su próximo proyecto</h1>
@@ -24,11 +24,14 @@ include dirname(__DIR__) . '/includes/header.php';
       <div class="contact-layout" style="margin-top:32px;">
         <article class="contact-card">
           <h2>Oficinas principales</h2>
-          <p>AGA Parts<br>210 41st Street, #202<br>Brooklyn, New York, 11232</p>
-          <p><strong>Correo:</strong> sales@aga-parts-demo.com<br><strong>Teléfono:</strong> +1 (347) 773-3247</p>
-          <p>Atención en español, inglés y ruso. Coordinamos videollamadas para análisis técnico o negociaciones de contratos.</p>
-          <h3>Horario</h3>
-          <p>Lunes a viernes: 08:00 - 20:00 EST<br>Sábados: 09:00 - 13:00 EST</p>
+          <p><strong>Venezuela</strong><br>Global Induprod RL<br>Urbanización Colinas del Yurubí, Calle Polígono de Tiro, diagonal Hospital Pediátrico "Niño Jesús". Centro Profesional Spasso, Planta Baja Oficinas 02 y 03.<br>San Felipe, Yaracuy - Venezuela.</p>
+          <p><strong>Teléfonos:</strong> 0412-762.25.47 / 0424-574.04.08 / 0424-312.7477 / 0412-268.2883</p>
+          <p><strong>Correo:</strong> <a href="mailto:mauro@induprod.com">mauro@induprod.com</a></p>
+          <p><strong>Estados Unidos</strong><br>Global Induprod International LLC<br>9858 NW 43rd Ter, Doral, FL 33178, USA.</p>
+          <p><strong>Teléfono:</strong> +1 786 294 1719</p>
+          <p><strong>Sitio web:</strong> <a href="https://www.globalinduprod.com" target="_blank" rel="noopener">www.globalinduprod.com</a></p>
+          <h3>Datos corporativos</h3>
+          <p><strong>Razón social:</strong> Asociación Cooperativa Global Induprod RL<br><strong>RIF:</strong> J-29964631-8<br><strong>Registro:</strong> Registro Público Estado Yaracuy No 29 del 10/09/2010. Tomo 30. Folio 151.<br><strong>Capital suscrito:</strong> 940.000,00 (Registro No 29 del 02/08/2012. Tomo 19. Folio 162)</p>
         </article>
 
         <form class="contact-card contact-form" action="#" method="post">
@@ -54,7 +57,7 @@ include dirname(__DIR__) . '/includes/header.php';
 
       <div class="map-embed">
         <h2>Ubicación</h2>
-        <iframe title="Mapa de la oficina" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.641495928014!2d-74.0103375234088!3d40.65605954036408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25b2f105cf6c1%3A0xd888fffbe671c5f!2s210%2041st%20St%20%23202%2C%20Brooklyn%2C%20NY%2011232%2C%20EE.%20UU.!5e0!3m2!1ses!2sar!4v1706500000000!5m2!1ses!2sar" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe title="Mapa de la oficina" src="https://www.google.com/maps?q=Centro+Profesional+Spasso+San+Felipe+Yaracuy+Venezuela&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </section>
   </main>

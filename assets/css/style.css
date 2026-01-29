@@ -480,6 +480,12 @@ a {
   text-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
 }
 
+.page-hero--contact {
+  background-image: url('../img/contact-hero.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
 .page-hero-kicker {
   letter-spacing: 0.08em;
   text-transform: uppercase;
