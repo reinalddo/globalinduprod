@@ -526,19 +526,25 @@ a {
   margin-bottom: 28px;
 }
 
+.parallax-grid {
+  display: grid;
+  gap: clamp(24px, 4vw, 40px);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  width: min(1120px, calc(100% - 32px));
+  margin: clamp(24px, 5vw, 48px) auto;
+}
+
 .parallax-block {
   position: relative;
-  width: 100vw;
-  /*margin: clamp(16px, 5vw, 48px) auto;*/
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  min-height: 360px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: flex-end;
   background-position: center;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: scroll;
   overflow: hidden;
+  border-radius: 0;
 }
 
 .parallax-block::after {
@@ -551,9 +557,8 @@ a {
 .parallax-block__inner {
   position: relative;
   z-index: 1;
-  width: min(var(--container-max-width), calc(100% - 64px));
-  margin: 0 auto;
-  padding: 120px 24px;
+  width: 100%;
+  padding: clamp(24px, 4vw, 36px);
   color: #ffffff;
   text-shadow: 0 3px 18px rgba(0, 0, 0, 0.6);
 }
@@ -608,13 +613,8 @@ a {
 }
 
 @media (max-width: 960px) {
-  .parallax-block {
-    background-attachment: scroll;
-    min-height: 320px;
-  }
-
   .parallax-block__inner {
-    padding: 96px 24px;
+    padding: clamp(24px, 6vw, 36px);
   }
 }
 
@@ -628,13 +628,8 @@ a {
     width: min(100%, calc(100% - 32px));
   }
 
-  .parallax-block {
-    margin: 20px auto;
-    min-height: 260px;
-  }
-
   .parallax-block__inner {
-    padding: 56px 18px;
+    padding: clamp(24px, 8vw, 32px);
   }
 }
 
