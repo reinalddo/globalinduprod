@@ -52,6 +52,92 @@ $featuredServices = [
     'link' => $rootPath . '/servicios/seguridad-industrial/',
   ],
 ];
+$clientsList = [
+  [
+    'name' => 'Petroquímica de Venezuela, C.A.',
+    'logo' => 'petroquimica-de-venezuela-ca.svg',
+  ],
+  [
+    'name' => 'Recuvensa',
+    'logo' => 'recuvensa.svg',
+  ],
+  [
+    'name' => 'PDVSA Minera',
+    'logo' => 'pdvsa-minera.svg',
+  ],
+  [
+    'name' => 'PDVSA Industrial',
+    'logo' => 'pdvsa-industrial.svg',
+  ],
+  [
+    'name' => 'CORPOELEC',
+    'logo' => 'corpoelec.svg',
+  ],
+  [
+    'name' => 'CVG',
+    'logo' => 'cvg.svg',
+  ],
+  [
+    'name' => 'CVM',
+    'logo' => 'cvm.svg',
+  ],
+  [
+    'name' => 'Transporte Cerealero APC, C.A.',
+    'logo' => 'transporte-cerealeros-apc-ca.svg',
+  ],
+  [
+    'name' => 'Cartón de Venezuela, S.A.',
+    'logo' => 'carton-de-venezuela-sa.svg',
+  ],
+  [
+    'name' => 'Centro de Almacenes Congelados, C.A. CEALCO',
+    'logo' => 'centro-de-almacenes-congelados-ca-cealco.svg',
+  ],
+  [
+    'name' => 'Apphire Jewelry, C.A.',
+    'logo' => 'apphire-jewelry-ca.svg',
+  ],
+  [
+    'name' => 'Cemento Cerro Azul, C.A.',
+    'logo' => 'cemento-cerro-azul-ca.svg',
+  ],
+  [
+    'name' => 'Minerven, C.A.',
+    'logo' => 'minerven-ca.svg',
+  ],
+  [
+    'name' => 'Industria Azucarera Santa Clara, C.A.',
+    'logo' => 'industria-azucarera-santa-clara-ca.svg',
+  ],
+  [
+    'name' => 'PDVSA Gas, S.A.',
+    'logo' => 'pdvsa-gas-sa.svg',
+  ],
+  [
+    'name' => 'Concejo Municipal de Peña Ministerio del Poder Popular para la Juventud y el Deporte',
+    'logo' => 'concejo-municipal-de-pena-ministerio-del-poder-popular-para-la-juventud-y-el-deporte.svg',
+  ],
+  [
+    'name' => 'Ministerio Público',
+    'logo' => 'ministerio-publico.svg',
+  ],
+  [
+    'name' => 'Fábrica para Procesamiento de Sábila de Venezuela, C.A.',
+    'logo' => 'fabrica-para-procesamiento-de-sabila-de-venezuela-ca.svg',
+  ],
+  [
+    'name' => 'Asociación Civil de Copropietarios del Conjunto Residencial Caña Dulce',
+    'logo' => 'asociacion-civil-de-copropietarios-del-conjunto-residencial-cana-dulce.svg',
+  ],
+  [
+    'name' => 'Industria Azucarera Santa Elena, C.A.',
+    'logo' => 'industria-azucarera-santa-elena-ca.svg',
+  ],
+  [
+    'name' => 'Global Furniture, C.A.',
+    'logo' => 'global-furniture-ca.svg',
+  ],
+];
 include __DIR__ . '/includes/header.php';
 ?>
   <main>
@@ -110,24 +196,24 @@ include __DIR__ . '/includes/header.php';
       </div>
     </section>
 
-    <section class="clients-intro" id="clientes">
-      <div class="clients-card">
-        <h3>Confianza global</h3>
-        <p>Abastecemos flotas que operan con fabricantes como <?php echo htmlspecialchars($brandHighlights, ENT_QUOTES, 'UTF-8'); ?> y más de doscientas marcas aliadas. Coordinamos entregas internacionales con control de trazabilidad y documentación completa.</p>
+    <section class="home-clients" id="clientes">
+      <div class="section-heading">
+        <h2>Clientes que confían en Global Induprod</h2>
+        <p>Respaldamos operaciones públicas y privadas con suministros, ingeniería y soporte técnico integral para mantener en marcha proyectos energéticos, industriales y de infraestructura en toda Venezuela.</p>
       </div>
-      <div class="clients-card">
-        <h3>¿No ve su marca?</h3>
-        <p>Nuestro equipo de compras localiza piezas críticas en cuestión de horas. Envíenos su listado y le proponemos alternativas OEM, aftermarket o remanufacturadas con garantía.</p>
+      <div class="clients-grid">
+        <?php foreach ($clientsList as $client):
+          $logoPath = $rootPath . '/inicio/clientes/' . $client['logo'];
+        ?>
+          <article class="client-card">
+            <div class="client-card__logo">
+              <img src="<?php echo htmlspecialchars($logoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('Logo de ' . $client['name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+            </div>
+            <h3><?php echo htmlspecialchars($client['name'], ENT_QUOTES, 'UTF-8'); ?></h3>
+          </article>
+        <?php endforeach; ?>
       </div>
     </section>
 
-    <section class="section-heading" style="margin:80px auto 100px;">
-      <h2>Conozca el catálogo completo</h2>
-      <p>Consulte más de 200 fabricantes con piezas certificadas y asesoría personalizada. Cada marca cuenta con fichas detalladas y disponibilidad global.</p>
-      <div class="cta-panel" style="margin-top:36px;">
-        <strong>¿Necesita otra marca o familia de producto?</strong>
-        <a href="<?php echo $rootPath; ?>/contacto/">Escríbanos</a>
-      </div>
-    </section>
   </main>
 <?php include __DIR__ . '/includes/footer.php'; ?>
