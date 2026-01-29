@@ -3,6 +3,23 @@ $pageTitle = 'Logística y Suministros';
 $rootPath = '../..';
 $assetPath = $rootPath . '/assets';
 $activeNav = 'servicios';
+$relatedServices = [
+  [
+    'slug' => 'construccion-montaje',
+    'title' => 'Construcción y Montaje',
+    'excerpt' => 'Ingeniería civil, estructuras metálicas y puesta en marcha de plantas industriales.',
+  ],
+  [
+    'slug' => 'mantenimiento-industrial',
+    'title' => 'Mantenimiento Integral',
+    'excerpt' => 'Planes predictivos y overhaul de calderas, turbinas, bombas y sistemas eléctricos.',
+  ],
+  [
+    'slug' => 'importacion-comercializacion',
+    'title' => 'Importación y Comercialización',
+    'excerpt' => 'Gestión aduanal, abastecimiento OEM y distribución nacional e internacional.',
+  ],
+];
 include dirname(__DIR__, 2) . '/includes/header.php';
 ?>
   <main>
@@ -72,19 +89,20 @@ include dirname(__DIR__, 2) . '/includes/header.php';
 
       <section class="service-gallery">
         <h3>Otros Servicios</h3>
-        <div class="service-gallery__grid">
-          <figure class="service-gallery__item">
-            <img src="gallery/gallery-01.jpg" alt="Centro logístico con racks de inventario industrial" loading="lazy">
-            <figcaption>Inventarios espejo con control de lotes y trazabilidad.</figcaption>
-          </figure>
-          <figure class="service-gallery__item">
-            <img src="gallery/gallery-02.jpg" alt="Equipo coordinando despacho de carga industrial" loading="lazy">
-            <figcaption>Coordinación operativa para entregas puerta a puerta.</figcaption>
-          </figure>
-          <figure class="service-gallery__item">
-            <img src="gallery/gallery-03.jpg" alt="Contenedores y transporte multimodal" loading="lazy">
-            <figcaption>Logística multimodal integrada para proyectos críticos.</figcaption>
-          </figure>
+        <div class="services-grid">
+          <?php foreach ($relatedServices as $service): ?>
+            <?php $servicePath = $rootPath . '/servicios/' . rawurlencode($service['slug']); ?>
+            <a class="service-card" href="<?php echo $servicePath; ?>/">
+              <picture>
+                <img src="<?php echo $servicePath; ?>/thumbnail.jpg" alt="<?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+              </picture>
+              <div class="service-card__body">
+                <h3><?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                <p><?php echo htmlspecialchars($service['excerpt'], ENT_QUOTES, 'UTF-8'); ?></p>
+                <span class="service-card__cta">Ver servicio</span>
+              </div>
+            </a>
+          <?php endforeach; ?>
         </div>
       </section>
 
