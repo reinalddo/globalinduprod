@@ -6,7 +6,7 @@ $activeNav = 'contacto';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
   <main>
-    <section class="page-hero page-hero--bright page-hero--contact">
+    <section class="page-hero page-hero--contact">
       <div class="page-hero-content">
         <p style="letter-spacing:0.08em; text-transform:uppercase; font-size:0.9rem; color:#f1c75b; margin-bottom:10px;">Atención 24/7</p>
         <h1>Estamos listos para apoyar su próximo proyecto</h1>
