@@ -24,10 +24,10 @@ $services = [
     'image' => 'servicios-portuarios/thumbnail.jpg',
   ],
   [
-    'slug' => 'logistica-suministros',
+    'slug' => 'servicio',
     'title' => 'Logística y Suministros',
     'excerpt' => 'Inventarios espejo, nacionalización y entrega de repuestos críticos 24/7.',
-    'image' => 'logistica-suministros/thumbnail.jpg',
+    'image' => 'servicio/thumbnail.jpg',
   ],
   [
     'slug' => 'importacion-comercializacion',
@@ -77,10 +77,10 @@ include dirname(__DIR__) . '/includes/header.php';
         <h2>Nuestros pilares de servicio</h2>
         <p>Seleccionamos nueve líneas estratégicas que integran construcción, mantenimiento, logística, seguridad y talento humano para garantizar operaciones continuas en entornos críticos.</p>
       </header>
-
+    <br>
       <div class="services-grid">
         <?php foreach ($services as $service): ?>
-          <a class="service-card" href="<?php echo $rootPath; ?>/servicios/logistica-suministros/">
+          <a class="service-card" href="<?php echo $rootPath; ?>/servicios/servicio/">
             <picture>
               <img src="<?php echo htmlspecialchars($service['image'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
             </picture>

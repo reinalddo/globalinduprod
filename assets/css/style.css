@@ -819,7 +819,7 @@ a {
 }
 
 .services-overview {
-  width: min(1120px, 92vw);
+  width: min(1500px, 92vw);
   margin: 72px auto 120px;
 }
 
@@ -852,9 +852,9 @@ a {
 
 .service-card {
   position: relative;
-  border-radius: 20px;
+  /*border-radius: 20px;*/
   overflow: hidden;
-  min-height: 260px;
+  min-height: 360px;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;

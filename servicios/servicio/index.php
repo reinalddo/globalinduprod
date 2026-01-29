@@ -71,7 +71,7 @@ include dirname(__DIR__, 2) . '/includes/header.php';
       </div>
 
       <section class="service-gallery">
-        <h3>Operación en imágenes</h3>
+        <h3>Otros Servicios</h3>
         <div class="service-gallery__grid">
           <figure class="service-gallery__item">
             <img src="gallery/gallery-01.jpg" alt="Centro logístico con racks de inventario industrial" loading="lazy">
