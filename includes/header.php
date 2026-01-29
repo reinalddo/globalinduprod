@@ -54,7 +54,7 @@ $activeNav = $activeNav ?? 'home';
     <nav class="navbar is-dark" role="navigation" aria-label="Menú principal">
       <div class="navbar-brand">
         <a class="navbar-item brand-logo" href="<?php echo $rootPath; ?>/">
-          <img src="<?php echo $assetPath; ?>/img/logo.svg" alt="Logo AGA Parts" loading="lazy">
+          <img src="<?php echo $rootPath; ?>/logo.png" alt="Logo Global Induprod" loading="lazy">
         </a>
         <a role="button" class="navbar-burger" aria-label="Abrir menú" aria-expanded="false" data-nav-toggle>
           <span aria-hidden="true"></span>

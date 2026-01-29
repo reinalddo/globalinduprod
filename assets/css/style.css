@@ -367,9 +367,9 @@ a {
 }
 
 .brand-logo img {
-  width: 150px;
+  width: auto;
   height: auto;
-  max-height: 48px;
+  max-height: 56px;
 }
 
 .hero {
@@ -1520,7 +1520,7 @@ footer {
 }
 
 .footer-brand img {
-  width: 150px;
+  width: 160px;
   margin-bottom: 12px;
 }
 

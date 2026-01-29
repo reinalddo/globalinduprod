@@ -1,7 +1,7 @@
   <footer id="contacto">
     <div class="footer-inner">
       <div class="footer-block footer-brand">
-        <img src="<?php echo $assetPath; ?>/img/logo.svg" alt="Logo AGA Parts" loading="lazy">
+        <img src="<?php echo $rootPath; ?>/logo.png" alt="Logo Global Induprod" loading="lazy">
         <address>
           AGA Parts<br>
           210 41st Street, #202<br>
