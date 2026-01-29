@@ -374,7 +374,7 @@ a {
 
 .hero {
   position: relative;
-  background: url('../img/hero-mining.svg') center/cover no-repeat;
+  background: url('../../inicio/hero/hero.png') center/cover no-repeat;
   min-height: 420px;
   color: var(--text-light);
   display: flex;

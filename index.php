@@ -7,6 +7,13 @@ $bodyClass = 'page-home';
 $brands = require __DIR__ . '/data/brands.php';
 $brandNames = array_column($brands, 'name');
 $brandHighlights = implode(', ', array_slice($brandNames, 0, min(8, count($brandNames))));
+$alliesImages = glob(__DIR__ . '/inicio/aliados/*.{jpg,jpeg,png,webp}', GLOB_BRACE);
+if ($alliesImages === false) {
+  $alliesImages = [];
+} else {
+  natsort($alliesImages);
+  $alliesImages = array_values($alliesImages);
+}
 include __DIR__ . '/includes/header.php';
 ?>
   <main>
@@ -24,13 +31,16 @@ include __DIR__ . '/includes/header.php';
     </section>
 
     <section class="brand-grid">
-      <?php foreach ($brands as $brand):
+      <?php foreach ($brands as $index => $brand):
         $isFeatured = !empty($brand['featured']);
         $cardClass = $isFeatured ? 'brand-card featured' : 'brand-card';
         $imagePath = $assetPath . '/img/brands/' . $brand['image'];
+        if (!empty($alliesImages[$index])) {
+          $imagePath = $rootPath . '/inicio/aliados/' . rawurlencode(basename($alliesImages[$index]));
+        }
       ?>
         <div class="<?php echo $cardClass; ?>">
-          <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+          <img src="<?php echo htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
           <span><?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
       <?php endforeach; ?>
