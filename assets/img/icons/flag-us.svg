@@ -1,31 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 36">
+  <defs>
+    <polygon id="star" fill="#fff" points="0,-1 0.2245,-0.309 0.9511,-0.309 0.3633,0.118 0.5878,0.809 0,0.382 -0.5878,0.809 -0.3633,0.118 -0.9511,-0.309 -0.2245,-0.309"/>
+  </defs>
   <rect width="54" height="36" fill="#b22234"/>
   <g fill="#fff">
-    <rect y="4" width="54" height="4"/>
-    <rect y="12" width="54" height="4"/>
-    <rect y="20" width="54" height="4"/>
-    <rect y="28" width="54" height="4"/>
+    <rect y="2.7692308" width="54" height="2.7692308"/>
+    <rect y="8.3076923" width="54" height="2.7692308"/>
+    <rect y="13.8461538" width="54" height="2.7692308"/>
+    <rect y="19.3846154" width="54" height="2.7692308"/>
+    <rect y="24.9230769" width="54" height="2.7692308"/>
+    <rect y="30.4615385" width="54" height="2.7692308"/>
   </g>
   <rect width="21.6" height="19.2" fill="#3c3b6e"/>
-  <g fill="#fff" transform="scale(0.6)">
-    <g transform="translate(2.5,3.2)">
-      <g id="star-row">
-        <polygon points="5,0 6.5,4.5 11,4.5 7.4,7.3 8.9,11.8 5,9 1.1,11.8 2.6,7.3 -1,4.5 3.5,4.5"/>
-      </g>
-      <g transform="translate(7.5,0)"><use href="#star-row"/></g>
-      <g transform="translate(15,0)"><use href="#star-row"/></g>
-      <g transform="translate(22.5,0)"><use href="#star-row"/></g>
+  <g fill="#fff">
+    <g transform="translate(0,1.0666667)">
+      <use href="#star" transform="translate(1.8,0)"/>
+      <use href="#star" transform="translate(5.4,0)"/>
+      <use href="#star" transform="translate(9,0)"/>
+      <use href="#star" transform="translate(12.6,0)"/>
+      <use href="#star" transform="translate(16.2,0)"/>
+      <use href="#star" transform="translate(19.8,0)"/>
     </g>
-    <g transform="translate(6.25,8.8)">
-      <g id="star-row-offset">
-        <polygon points="5,0 6.5,4.5 11,4.5 7.4,7.3 8.9,11.8 5,9 1.1,11.8 2.6,7.3 -1,4.5 3.5,4.5"/>
-      </g>
-      <g transform="translate(7.5,0)"><use href="#star-row-offset"/></g>
-      <g transform="translate(15,0)"><use href="#star-row-offset"/></g>
+    <g transform="translate(0,3.2)">
+      <use href="#star" transform="translate(3.6,0)"/>
+      <use href="#star" transform="translate(7.2,0)"/>
+      <use href="#star" transform="translate(10.8,0)"/>
+      <use href="#star" transform="translate(14.4,0)"/>
+      <use href="#star" transform="translate(18,0)"/>
     </g>
-    <g transform="translate(2.5,14.4)"><use href="#star-row"/></g>
-    <g transform="translate(6.25,20)"><use href="#star-row-offset"/></g>
-    <g transform="translate(2.5,25.6)"><use href="#star-row"/></g>
+    <g transform="translate(0,5.3333333)">
+      <use href="#star" transform="translate(1.8,0)"/>
+      <use href="#star" transform="translate(5.4,0)"/>
+      <use href="#star" transform="translate(9,0)"/>
+      <use href="#star" transform="translate(12.6,0)"/>
+      <use href="#star" transform="translate(16.2,0)"/>
+      <use href="#star" transform="translate(19.8,0)"/>
+    </g>
+    <g transform="translate(0,7.4666667)">
+      <use href="#star" transform="translate(3.6,0)"/>
+      <use href="#star" transform="translate(7.2,0)"/>
+      <use href="#star" transform="translate(10.8,0)"/>
+      <use href="#star" transform="translate(14.4,0)"/>
+      <use href="#star" transform="translate(18,0)"/>
+    </g>
+    <g transform="translate(0,9.6)">
+      <use href="#star" transform="translate(1.8,0)"/>
+      <use href="#star" transform="translate(5.4,0)"/>
+      <use href="#star" transform="translate(9,0)"/>
+      <use href="#star" transform="translate(12.6,0)"/>
+      <use href="#star" transform="translate(16.2,0)"/>
+      <use href="#star" transform="translate(19.8,0)"/>
+    </g>
+    <g transform="translate(0,11.7333333)">
+      <use href="#star" transform="translate(3.6,0)"/>
+      <use href="#star" transform="translate(7.2,0)"/>
+      <use href="#star" transform="translate(10.8,0)"/>
+      <use href="#star" transform="translate(14.4,0)"/>
+      <use href="#star" transform="translate(18,0)"/>
+    </g>
+    <g transform="translate(0,13.8666667)">
+      <use href="#star" transform="translate(1.8,0)"/>
+      <use href="#star" transform="translate(5.4,0)"/>
+      <use href="#star" transform="translate(9,0)"/>
+      <use href="#star" transform="translate(12.6,0)"/>
+      <use href="#star" transform="translate(16.2,0)"/>
+      <use href="#star" transform="translate(19.8,0)"/>
+    </g>
+    <g transform="translate(0,16)">
+      <use href="#star" transform="translate(3.6,0)"/>
+      <use href="#star" transform="translate(7.2,0)"/>
+      <use href="#star" transform="translate(10.8,0)"/>
+      <use href="#star" transform="translate(14.4,0)"/>
+      <use href="#star" transform="translate(18,0)"/>
+    </g>
+    <g transform="translate(0,18.1333333)">
+      <use href="#star" transform="translate(1.8,0)"/>
+      <use href="#star" transform="translate(5.4,0)"/>
+      <use href="#star" transform="translate(9,0)"/>
+      <use href="#star" transform="translate(12.6,0)"/>
+      <use href="#star" transform="translate(16.2,0)"/>
+      <use href="#star" transform="translate(19.8,0)"/>
+    </g>
   </g>
 </svg>
