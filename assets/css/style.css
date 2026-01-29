@@ -487,6 +487,12 @@ a {
   margin: 0 0 12px;
 }
 
+.page-hero--logistica {
+  background-image: url('../../servicios/logistica-suministros/hero.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
 @media (max-width: 768px) {
   .page-hero--nosotros {
     background-image: url('../../nosotros/hero/hero-equipo-industrial.jpg');
@@ -755,6 +761,220 @@ a {
 
   .service-card {
     min-height: 220px;
+  }
+}
+
+.service-detail {
+  width: min(1100px, 92vw);
+  margin: 56px auto 120px;
+  display: grid;
+  gap: 56px;
+}
+
+.service-detail__header {
+  display: grid;
+  gap: 24px;
+}
+
+.service-detail__header h2 {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+.service-detail__header p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.service-detail__highlights {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.service-detail__highlights li {
+  background: rgba(241, 199, 91, 0.16);
+  border: 1px solid rgba(241, 199, 91, 0.32);
+  color: #4a3200;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+}
+
+.service-detail__content {
+  display: grid;
+  gap: 40px;
+}
+
+.service-detail__body h3 {
+  margin: 0 0 18px;
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.service-detail__body p {
+  margin: 0 0 16px;
+  line-height: 1.7;
+}
+
+.service-detail__list {
+  margin: 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 10px;
+  color: #333333;
+}
+
+.service-detail__sidebar {
+  display: grid;
+  gap: 24px;
+}
+
+.service-stats {
+  background: #0f0f0f;
+  color: #f5f5f5;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.24);
+}
+
+.service-stats h3 {
+  margin: 0 0 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 1rem;
+}
+
+.service-stats ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.service-gallery {
+  display: grid;
+  gap: 24px;
+}
+
+.service-gallery h3 {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 1.3rem;
+}
+
+.service-gallery__grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.service-gallery__item {
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.18);
+  display: grid;
+  gap: 0;
+}
+
+.service-gallery__item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.service-gallery__item figcaption {
+  margin: 0;
+  padding: 16px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333333;
+}
+
+.service-detail__cta {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px;
+  border-radius: 18px;
+  background: linear-gradient(120deg, rgba(241, 199, 91, 0.18), rgba(255, 255, 255, 0.92));
+  border: 1px solid rgba(241, 199, 91, 0.32);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+}
+
+.service-detail__cta h3 {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.service-detail__cta p {
+  margin: 0;
+  color: #3a3a3a;
+  line-height: 1.6;
+}
+
+.service-detail__cta-link {
+  align-self: flex-start;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: var(--color-secondary);
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-detail__cta-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 960px) {
+  .service-detail__header {
+    grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+    align-items: end;
+  }
+
+  .service-detail__highlights {
+    justify-items: start;
+  }
+
+  .service-detail__content {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+
+  .service-detail__cta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .service-gallery__item img {
+    height: 180px;
+  }
+
+  .service-detail {
+    margin: 48px auto 90px;
+    gap: 40px;
+  }
+
+  .service-detail__cta {
+    gap: 16px;
   }
 }
 

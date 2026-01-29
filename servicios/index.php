@@ -80,7 +80,7 @@ include dirname(__DIR__) . '/includes/header.php';
 
       <div class="services-grid">
         <?php foreach ($services as $service): ?>
-          <a class="service-card" href="<?php echo $rootPath; ?>/servicios/<?php echo htmlspecialchars($service['slug'], ENT_QUOTES, 'UTF-8'); ?>/">
+          <a class="service-card" href="<?php echo $rootPath; ?>/servicios/logistica-suministros/">
             <picture>
               <img src="<?php echo htmlspecialchars($service['image'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
             </picture>
