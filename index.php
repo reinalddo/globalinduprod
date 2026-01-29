@@ -14,6 +14,44 @@ if ($alliesImages === false) {
   natsort($alliesImages);
   $alliesImages = array_values($alliesImages);
 }
+$featuredServices = [
+  [
+    'title' => 'Logística y Suministros',
+    'excerpt' => 'Inventarios espejo binacionales, nacionalización express y entregas puerta a puerta para repuestos críticos.',
+    'image' => 'logistica.jpg',
+    'link' => $rootPath . '/servicios/servicio/',
+  ],
+  [
+    'title' => 'Construcción y Montaje',
+    'excerpt' => 'Obras civiles, estructuras metálicas, subestaciones y puesta en marcha siguiendo estándares industriales.',
+    'image' => 'construccion.jpg',
+    'link' => $rootPath . '/servicios/construccion-montaje/',
+  ],
+  [
+    'title' => 'Mantenimiento Industrial',
+    'excerpt' => 'Planes predictivos, overhaul de calderas, turbinas y sistemas de proceso con soporte técnico permanente.',
+    'image' => 'mantenimiento.jpg',
+    'link' => $rootPath . '/servicios/mantenimiento-industrial/',
+  ],
+  [
+    'title' => 'Servicios Portuarios',
+    'excerpt' => 'Overhaul de grúas, sistemas contra incendio y adecuaciones integrales para terminales marítimos.',
+    'image' => 'portuario.jpg',
+    'link' => $rootPath . '/servicios/servicios-portuarios/',
+  ],
+  [
+    'title' => 'Alquiler de Equipos Pesados',
+    'excerpt' => 'Flotas de grúas, gabarras, vehículos especiales y maquinaria pesada disponibles 24/7.',
+    'image' => 'alquiler.jpg',
+    'link' => $rootPath . '/servicios/alquiler-equipos/',
+  ],
+  [
+    'title' => 'Seguridad Industrial',
+    'excerpt' => 'Sistemas de protección, dotación de EPP y vigilancia especializada para operaciones críticas.',
+    'image' => 'seguridad.jpg',
+    'link' => $rootPath . '/servicios/seguridad-industrial/',
+  ],
+];
 include __DIR__ . '/includes/header.php';
 ?>
   <main>
@@ -44,6 +82,32 @@ include __DIR__ . '/includes/header.php';
           <span><?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
       <?php endforeach; ?>
+    </section>
+
+    <section class="home-services">
+      <div class="section-heading">
+        <h2>Servicios para operaciones industriales críticas</h2>
+        <p>Integramos construcción, logística, mantenimiento, talento humano y seguridad industrial para garantizar continuidad operativa en refinerías, puertos, minería, agroindustria y proyectos de energía.</p>
+      </div>
+      <div class="services-grid">
+        <?php foreach ($featuredServices as $service):
+          $serviceImage = $rootPath . '/inicio/servicios/' . $service['image'];
+        ?>
+          <a class="service-card" href="<?php echo htmlspecialchars($service['link'], ENT_QUOTES, 'UTF-8'); ?>">
+            <picture>
+              <img src="<?php echo htmlspecialchars($serviceImage, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('Servicio de ' . $service['title'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+            </picture>
+            <div class="service-card__body">
+              <h3><?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+              <p><?php echo htmlspecialchars($service['excerpt'], ENT_QUOTES, 'UTF-8'); ?></p>
+              <span class="service-card__cta">Ver servicio</span>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      </div>
+      <div class="home-services__cta">
+        <a class="home-services__link" href="<?php echo $rootPath; ?>/servicios/">Ver todos los servicios</a>
+      </div>
     </section>
 
     <section class="clients-intro" id="clientes">

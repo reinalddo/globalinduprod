@@ -749,6 +749,42 @@ a {
   margin: 0 auto 72px;
 }
 
+.home-services {
+  width: min(1200px, 92vw);
+  margin: 96px auto;
+  display: grid;
+  gap: 32px;
+}
+
+.home-services .section-heading {
+  margin: 0 auto 12px;
+}
+
+.home-services__cta {
+  display: flex;
+  justify-content: center;
+}
+
+.home-services__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(241, 199, 91, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: #3a2a00;
+  background: rgba(241, 199, 91, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-services__link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.18);
+}
+
 .brand-card {
   position: relative;
   overflow: hidden;
