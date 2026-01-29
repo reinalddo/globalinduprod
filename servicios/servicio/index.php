@@ -20,6 +20,20 @@ $relatedServices = [
     'excerpt' => 'Gestión aduanal, abastecimiento OEM y distribución nacional e internacional.',
   ],
 ];
+$serviceGallery = [
+  [
+    'file' => 'gallery/gallery-01.jpg',
+    'alt' => 'Centro logístico con inventarios industriales',
+  ],
+  [
+    'file' => 'gallery/gallery-02.jpg',
+    'alt' => 'Equipo coordinando despacho de carga crítica',
+  ],
+  [
+    'file' => 'gallery/gallery-03.jpg',
+    'alt' => 'Depósito multimodal con mercancía estratégica',
+  ],
+];
 include dirname(__DIR__, 2) . '/includes/header.php';
 ?>
   <main>
@@ -42,6 +56,22 @@ include dirname(__DIR__, 2) . '/includes/header.php';
 
       <header class="service-detail__header">
         <div>
+          <div class="service-hero-gallery" data-gallery>
+            <div class="service-hero-gallery__viewport">
+              <?php foreach ($serviceGallery as $index => $item): ?>
+                <figure class="service-hero-gallery__slide<?php echo $index === 0 ? ' is-active' : ''; ?>" data-index="<?php echo $index; ?>">
+                  <img src="<?php echo htmlspecialchars($item['file'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($item['alt'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                </figure>
+              <?php endforeach; ?>
+            </div>
+            <div class="service-hero-gallery__thumbs">
+              <?php foreach ($serviceGallery as $index => $item): ?>
+                <button type="button" class="service-hero-gallery__thumb<?php echo $index === 0 ? ' is-active' : ''; ?>" data-target="<?php echo $index; ?>">
+                  <img src="<?php echo htmlspecialchars($item['file'], ENT_QUOTES, 'UTF-8'); ?>" alt="Miniatura <?php echo $index + 1; ?>">
+                </button>
+              <?php endforeach; ?>
+            </div>
+          </div>
           <h2>Abastecimiento integral con cobertura binacional</h2>
           <p>Gestionamos compras internacionales, control de inventarios en Miami y Yaracuy, documentación aduanal y entregas puerta a puerta para asegurar continuidad operativa en entornos críticos y proyectos de gran escala.</p>
         </div>
@@ -115,4 +145,67 @@ include dirname(__DIR__, 2) . '/includes/header.php';
       </section>
     </section>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const galleries = document.querySelectorAll('[data-gallery]');
+      galleries.forEach(function (gallery) {
+        const slides = Array.from(gallery.querySelectorAll('.service-hero-gallery__slide'));
+        const thumbs = Array.from(gallery.querySelectorAll('.service-hero-gallery__thumb'));
+        let current = 0;
+        let timerId;
+
+        if (slides.length <= 1) {
+          slides.forEach(function (slide) {
+            slide.classList.add('is-active');
+            slide.style.transform = 'translateX(0)';
+          });
+          thumbs.forEach(function (thumb) {
+            thumb.classList.add('is-active');
+          });
+          return;
+        }
+
+        const update = function () {
+          slides.forEach(function (slide, index) {
+            slide.style.transform = 'translateX(' + (index - current) * 100 + '%)';
+            slide.classList.toggle('is-active', index === current);
+          });
+          thumbs.forEach(function (thumb, index) {
+            thumb.classList.toggle('is-active', index === current);
+          });
+        };
+
+        const goTo = function (index) {
+          const total = slides.length;
+          current = (index + total) % total;
+          update();
+        };
+
+        const startAuto = function () {
+          clearInterval(timerId);
+          timerId = setInterval(function () {
+            goTo(current + 1);
+          }, 6000);
+        };
+
+        thumbs.forEach(function (thumb, index) {
+          thumb.addEventListener('click', function () {
+            goTo(index);
+            startAuto();
+          });
+        });
+
+        gallery.addEventListener('mouseenter', function () {
+          clearInterval(timerId);
+        });
+
+        gallery.addEventListener('mouseleave', function () {
+          startAuto();
+        });
+
+        update();
+        startAuto();
+      });
+    });
+  </script>
 <?php include dirname(__DIR__, 2) . '/includes/footer.php'; ?>

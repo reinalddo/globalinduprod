@@ -495,7 +495,7 @@ a {
 }
 
 .page-hero--logistica {
-  background-image: url('../../servicios/logistica-suministros/hero.jpg');
+  background-image: url('../../servicios/servicio/hero.jpg');
   background-position: center;
   background-size: cover;
 }
@@ -957,7 +957,7 @@ a {
 }
 
 .service-detail {
-  width: min(1100px, 92vw);
+  /*width: min(1100px, 92vw);*/
   margin: 56px auto 120px;
   display: grid;
   gap: 56px;
@@ -978,6 +978,87 @@ a {
 .service-detail__header p {
   margin: 0;
   line-height: 1.7;
+}
+.service-hero-gallery {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.service-hero-gallery__viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 22px;
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.22);
+  background: #0f0f0f;
+}
+
+.service-hero-gallery__slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  transition: transform 0.6s ease;
+  display: flex;
+  transform: translateX(100%);
+  will-change: transform;
+}
+
+.service-hero-gallery__slide.is-active {
+  transform: translateX(0);
+}
+
+.service-hero-gallery__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-hero-gallery__thumbs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.service-hero-gallery__thumb {
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 96px;
+  height: 64px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-hero-gallery__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-hero-gallery__thumb.is-active,
+.service-hero-gallery__thumb:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24);
+}
+
+@media (max-width: 720px) {
+  .service-hero-gallery__viewport {
+    aspect-ratio: 4 / 3;
+  }
+
+  .service-hero-gallery__thumbs {
+    justify-content: center;
+  }
+
+  .service-hero-gallery__thumb {
+    width: 82px;
+    height: 54px;
+  }
 }
 
 .service-detail__highlights {
