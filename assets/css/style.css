@@ -18,9 +18,10 @@
 body {
   margin: 0;
   font-family: var(--font-base);
-  background: #ffffff;
+  background: transparent;
   color: #191919;
   padding-top: var(--header-offset);
+  overflow-x: hidden;
 }
 
 @media (max-width: 1023px) {
@@ -496,6 +497,144 @@ a {
 @media (max-width: 768px) {
   .page-hero--nosotros {
     background-image: url('../../nosotros/hero/hero-equipo-industrial.jpg');
+  }
+}
+
+.main-content {
+  position: relative;
+  width: min(1280px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 48px 0 72px;
+  background: #ffffff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.page-hero + .main-content {
+  margin-top: clamp(48px, 8vw, 96px);
+}
+
+.main-content > *:not(.parallax-block) {
+  width: min(960px, calc(100% - 64px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-content > nav.breadcrumb {
+  margin-bottom: 28px;
+}
+
+.parallax-block {
+  position: relative;
+  width: 100vw;
+  /*margin: clamp(16px, 5vw, 48px) auto;*/
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  min-height: 360px;
+  display: flex;
+  align-items: flex-end;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow: hidden;
+}
+
+.parallax-block::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(184deg, rgba(0, 0, 0, 0.25) 12%, rgba(0, 0, 0, 0.78) 88%);
+}
+
+.parallax-block__inner {
+  position: relative;
+  z-index: 1;
+  width: min(var(--container-max-width), calc(100% - 64px));
+  margin: 0 auto;
+  padding: 120px 24px;
+  color: #ffffff;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.6);
+}
+
+.parallax-block__inner h3 {
+  margin: 0 0 12px;
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.parallax-block__inner p {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.parallax-block--about-logistics {
+  background-image: url('../../nosotros/resumen/resumen-operadores-industriales.jpg');
+}
+
+.parallax-block--about-maintenance {
+  background-image: url('../../nosotros/resumen/resumen-ingenieria-colaborativa.jpg');
+}
+
+.parallax-block--about-alliances {
+  background-image: url('../../nosotros/resumen/resumen-equipo-reunion.jpg');
+}
+
+.parallax-block--service-construction {
+  background-image: url('../../nosotros/servicios/servicio-construccion-industrial.jpg');
+}
+
+.parallax-block--service-maintenance {
+  background-image: url('../../nosotros/servicios/servicio-mantenimiento-integral.jpg');
+}
+
+.parallax-block--service-logistics {
+  background-image: url('../../nosotros/servicios/servicio-logistica-portuaria.jpg');
+}
+
+.parallax-block--service-outsourcing {
+  background-image: url('../../nosotros/servicios/servicio-outsourcing-seguridad.jpg');
+}
+
+.parallax-block--service-ports {
+  background-image: url('../../nosotros/servicios/servicio-seguridad-industrial.jpg');
+}
+
+.parallax-block--service-environment {
+  background-image: url('../../nosotros/servicios/servicio-gestion-residuos.jpg');
+}
+
+@media (max-width: 960px) {
+  .parallax-block {
+    background-attachment: scroll;
+    min-height: 320px;
+  }
+
+  .parallax-block__inner {
+    padding: 96px 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-content {
+    padding: 48px 0 72px;
+    width: min(100%, calc(100% - 24px));
+  }
+
+  .main-content > *:not(.parallax-block) {
+    width: min(100%, calc(100% - 32px));
+  }
+
+  .parallax-block {
+    margin: 20px auto;
+    min-height: 260px;
+  }
+
+  .parallax-block__inner {
+    padding: 56px 18px;
   }
 }
 

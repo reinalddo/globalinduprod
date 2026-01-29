@@ -24,29 +24,26 @@ include dirname(__DIR__) . '/includes/header.php';
       <h2 style="margin-top:32px;">Quiénes somos</h2>
       <p>Global Induprod RL es una asociación cooperativa con sede en San Felipe, Yaracuy, que opera en alianza con Global Induprod International LLC en Miami para garantizar disponibilidad inmediata de repuestos, equipos y soluciones industriales. Nuestro equipo multidisciplinario atiende logística, mantenimiento, fabricación y montaje para empresas públicas y privadas en entornos altamente exigentes.</p>
 
-      <div class="about-media-grid">
-        <article class="about-media-card about-media-card--logistics">
-          <img src="resumen/resumen-operadores-industriales.jpg" alt="Operarios coordinando logística industrial" loading="lazy">
-          <div class="about-media-card__content">
-            <h3>Logística binacional 24/7</h3>
-            <p>Inventarios espejo en Miami y San Felipe, coordinación terrestre, marítima y aérea, aduanas y documentación para entregar repuestos críticos con tiempos de tránsito controlados.</p>
-          </div>
-        </article>
-        <article class="about-media-card about-media-card--maintenance">
-          <img src="resumen/resumen-ingenieria-colaborativa.jpg" alt="Equipo de ingeniería revisando planos industriales" loading="lazy">
-          <div class="about-media-card__content">
-            <h3>Mantenimiento y montaje industrial</h3>
-            <p>Cuadrillas propias de soldadores, instrumentistas, electricistas y mecánicos para overhaul de plantas, calderas, bombas, maquinaria pesada y sistemas de carga en puertos y aeropuertos.</p>
-          </div>
-        </article>
-        <article class="about-media-card about-media-card--alliances">
-          <img src="resumen/resumen-equipo-reunion.jpg" alt="Alianzas técnicas reunidas en sala de juntas" loading="lazy">
-          <div class="about-media-card__content">
-            <h3>Alianzas certificadas</h3>
-            <p>Más de 300 aliados técnicos en América y Europa respaldan proyectos de ingeniería, fabricación y seguridad industrial con cumplimiento de normas API, ASTM, AWS y NFPA.</p>
-          </div>
-        </article>
-      </div>
+      <section class="parallax-block parallax-block--about-logistics" aria-labelledby="about-logistics-title">
+        <div class="parallax-block__inner">
+          <h3 id="about-logistics-title">Logística binacional 24/7</h3>
+          <p>Inventarios espejo en Miami y San Felipe, coordinación terrestre, marítima y aérea, aduanas y documentación para entregar repuestos críticos con tiempos de tránsito controlados.</p>
+        </div>
+      </section>
+
+      <section class="parallax-block parallax-block--about-maintenance" aria-labelledby="about-maintenance-title">
+        <div class="parallax-block__inner">
+          <h3 id="about-maintenance-title">Mantenimiento y montaje industrial</h3>
+          <p>Cuadrillas propias de soldadores, instrumentistas, electricistas y mecánicos para overhaul de plantas, calderas, bombas, maquinaria pesada y sistemas de carga en puertos y aeropuertos.</p>
+        </div>
+      </section>
+
+      <section class="parallax-block parallax-block--about-alliances" aria-labelledby="about-alliances-title">
+        <div class="parallax-block__inner">
+          <h3 id="about-alliances-title">Alianzas certificadas</h3>
+          <p>Más de 300 aliados técnicos en América y Europa respaldan proyectos de ingeniería, fabricación y seguridad industrial con cumplimiento de normas API, ASTM, AWS y NFPA.</p>
+        </div>
+      </section>
 
       <div class="clients-intro" style="margin:36px 0;">
         <div class="clients-card">
@@ -78,50 +75,47 @@ include dirname(__DIR__) . '/includes/header.php';
         <li>Capital humano, outsourcing operacional, capacitación y seguridad industrial.</li>
       </ul>
 
-      <div class="services-media-grid">
-        <article class="services-media-card services-media-card--construction">
-          <img src="servicios/servicio-construccion-industrial.jpg" alt="Construcción y montaje de estructuras industriales" loading="lazy">
-          <div class="services-media-card__content">
-            <h3>Construcción y obra civil</h3>
-            <p>Ingeniería, inspección y ejecución de estructuras metálicas, obras civiles, rehabilitación de muelles, muros de contención y plantas industriales con cumplimiento de normas internacionales.</p>
-          </div>
-        </article>
-        <article class="services-media-card services-media-card--maintenance">
-          <img src="servicios/servicio-mantenimiento-integral.jpg" alt="Técnicos realizando mantenimiento integral a maquinaria" loading="lazy">
-          <div class="services-media-card__content">
-            <h3>Mantenimiento integral</h3>
-            <p>Overhaul de calderas, turbinas, bombas y sistemas de carga; mantenimiento eléctrico e instrumentación con cuadrillas certificadas y planes predictivos, preventivos y correctivos.</p>
-          </div>
-        </article>
-        <article class="services-media-card services-media-card--logistics">
-          <img src="servicios/servicio-logistica-portuaria.jpg" alt="Operaciones logísticas en puerto industrial" loading="lazy">
-          <div class="services-media-card__content">
-            <h3>Logística y suministros</h3>
-            <p>Importación, nacionalización y distribución de repuestos, equipos médicos, transformadores, herramientas y consumibles con trazabilidad completa y certificaciones OEM.</p>
-          </div>
-        </article>
-        <article class="services-media-card services-media-card--outsourcing">
-          <img src="servicios/servicio-outsourcing-seguridad.jpg" alt="Supervisión de personal y seguridad industrial" loading="lazy">
-          <div class="services-media-card__content">
-            <h3>Outsourcing y seguridad</h3>
-            <p>Gestión de capital humano, seguridad industrial, capacitación técnica y servicios múltiples que sustentan operaciones portuarias, aeronáuticas y petroquímicas.</p>
-          </div>
-        </article>
-        <article class="services-media-card services-media-card--ports">
-          <img src="servicios/servicio-seguridad-industrial.jpg" alt="Inspección de seguridad en operaciones portuarias" loading="lazy">
-          <div class="services-media-card__content">
-            <h3>Servicios portuarios y aeronáuticos</h3>
-            <p>Overhaul de grúas pórtico, defensas, ayudas a la navegación, sistemas contra incendios y luminarias aeronáuticas con soporte de salvataje y rescate bajo normas NFPA y OACI.</p>
-          </div>
-        </article>
-        <article class="services-media-card services-media-card--environment">
-          <img src="servicios/servicio-gestion-residuos.jpg" alt="Gestión ambiental y tratamiento de residuos" loading="lazy">
-          <div class="services-media-card__content">
-            <h3>Gestión ambiental y residuos</h3>
-            <p>Recolección, transporte y tratamiento de desechos peligrosos y especiales, saneamiento industrial y logística de cargas sobredimensionadas con documentación regulatoria completa.</p>
-          </div>
-        </article>
-      </div>
+      <section class="parallax-block parallax-block--service-construction" aria-labelledby="service-construction-title">
+        <div class="parallax-block__inner">
+          <h3 id="service-construction-title">Construcción y obra civil</h3>
+          <p>Ingeniería, inspección y ejecución de estructuras metálicas, obras civiles, rehabilitación de muelles, muros de contención y plantas industriales con cumplimiento de normas internacionales.</p>
+        </div>
+      </section>
+
+      <section class="parallax-block parallax-block--service-maintenance" aria-labelledby="service-maintenance-title">
+        <div class="parallax-block__inner">
+          <h3 id="service-maintenance-title">Mantenimiento integral</h3>
+          <p>Overhaul de calderas, turbinas, bombas y sistemas de carga; mantenimiento eléctrico e instrumentación con cuadrillas certificadas y planes predictivos, preventivos y correctivos.</p>
+        </div>
+      </section>
+
+      <section class="parallax-block parallax-block--service-logistics" aria-labelledby="service-logistics-title">
+        <div class="parallax-block__inner">
+          <h3 id="service-logistics-title">Logística y suministros</h3>
+          <p>Importación, nacionalización y distribución de repuestos, equipos médicos, transformadores, herramientas y consumibles con trazabilidad completa y certificaciones OEM.</p>
+        </div>
+      </section>
+
+      <section class="parallax-block parallax-block--service-outsourcing" aria-labelledby="service-outsourcing-title">
+        <div class="parallax-block__inner">
+          <h3 id="service-outsourcing-title">Outsourcing y seguridad</h3>
+          <p>Gestión de capital humano, seguridad industrial, capacitación técnica y servicios múltiples que sustentan operaciones portuarias, aeronáuticas y petroquímicas.</p>
+        </div>
+      </section>
+
+      <section class="parallax-block parallax-block--service-ports" aria-labelledby="service-ports-title">
+        <div class="parallax-block__inner">
+          <h3 id="service-ports-title">Servicios portuarios y aeronáuticos</h3>
+          <p>Overhaul de grúas pórtico, defensas, ayudas a la navegación, sistemas contra incendios y luminarias aeronáuticas con soporte de salvataje y rescate bajo normas NFPA y OACI.</p>
+        </div>
+      </section>
+
+      <section class="parallax-block parallax-block--service-environment" aria-labelledby="service-environment-title">
+        <div class="parallax-block__inner">
+          <h3 id="service-environment-title">Gestión ambiental y residuos</h3>
+          <p>Recolección, transporte y tratamiento de desechos peligrosos y especiales, saneamiento industrial y logística de cargas sobredimensionadas con documentación regulatoria completa.</p>
+        </div>
+      </section>
 
       <h3 style="margin-top:36px;">Confianza respaldada</h3>
       <p>Atendemos a corporaciones como PDVSA, Petroquímica de Venezuela, Corpoelec, CVG y grandes agroindustrias. Contamos con más de 300 aliados estratégicos globales para asegurar repuestos certificados, documentación y soporte técnico en sitio.</p>
