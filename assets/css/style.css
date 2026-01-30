@@ -417,6 +417,13 @@ a {
   margin-top: calc(-1 * var(--header-offset));
 }
 
+.hero-content h1,
+.hero-content p,
+.hero-content span,
+.hero-content a {
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+}
+
 .page-home .hero {
   min-height: max(420px, calc(100vh - 148px));
 }
@@ -465,6 +472,13 @@ a {
   font-size: 1.05rem;
   line-height: 1.7;
   color: #e4e4e4;
+}
+
+.page-hero-content h1,
+.page-hero-content p,
+.page-hero-content span,
+.page-hero-kicker {
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
 }
 
 .page-hero--bright::after {
