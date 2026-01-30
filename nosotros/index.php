@@ -59,7 +59,7 @@ include dirname(__DIR__) . '/includes/header.php';
         </section>
       </div>
 
-      <div class="clients-intro" style="margin:36px 0;">
+      <div class="clients-intro">
         <div class="clients-card">
           <h3>Misión</h3>
           <p>Ofrecer suministros, servicios de montaje, fabricación y mantenimiento industrial, seguridad integral y soluciones logísticas que permitan a nuestros clientes concentrarse en la continuidad operativa con un aliado técnico, oportuno y confiable.</p>

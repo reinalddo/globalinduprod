@@ -10,6 +10,7 @@ $activeNav = $activeNav ?? 'home';
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
+  <link rel="icon" type="image/png" sizes="32x32" href="<?php echo $rootPath; ?>/logo.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
   <link rel="stylesheet" href="<?php echo $assetPath; ?>/css/style.css">
