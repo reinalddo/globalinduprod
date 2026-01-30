@@ -53,6 +53,15 @@ $featuredServices = [
   ],
 ];
 $heroImageBase = rtrim($rootPath, '/') . '/inicio/hero/';
+if (!empty($_SERVER['HTTP_HOST'])) {
+  $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+  $scheme = $isHttps ? 'https://' : 'http://';
+  $scriptDir = dirname($_SERVER['SCRIPT_NAME'] ?? '') ?: '';
+  $scriptDir = str_replace('\\', '/', $scriptDir);
+  $scriptDir = ($scriptDir === '/' ? '' : rtrim($scriptDir, '/'));
+  $baseUrl = $scheme . $_SERVER['HTTP_HOST'] . $scriptDir;
+  $heroImageBase = rtrim($baseUrl, '/') . '/inicio/hero/';
+}
 $heroSlides = [
   [
     'image' => $heroImageBase . 'hero.png',
