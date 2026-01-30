@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Evil Empire';
+  src: url('../fonts/Evil%20Empire.otf') format('opentype');
+  font-display: swap;
+}
+
 :root {
   --color-primary: #f5c400;
   --color-primary-dark: #cfa300;
@@ -5,6 +11,7 @@
   --color-accent: #f5c400;
   --text-light: #f7f7f7;
   --font-base: 'Poppins', 'Segoe UI', sans-serif;
+  --font-heading: 'Evil Empire', 'Times New Roman', serif;
   --container-max-width: 1120px;
   --header-offset: 148px;
 }
@@ -22,6 +29,25 @@ body {
   color: #191919;
   padding-top: var(--header-offset);
   overflow-x: hidden;
+}
+
+main h1,
+main h2,
+main h3,
+main h4,
+main h5,
+main h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+}
+
+main h2 {
+  font-family: var(--font-heading);
+  color: var(--color-primary-dark);
+  font-size: clamp(2.2rem, 3vw, 3.1rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
 }
 
 @media (max-width: 1023px) {
@@ -731,7 +757,7 @@ a {
 }
 
 .section-heading h2 {
-  font-size: 2rem;
+  font-size: clamp(2.4rem, 3.8vw, 3.3rem);
   margin-bottom: 16px;
 }
 
@@ -982,7 +1008,7 @@ a {
 
 .services-overview__intro h2 {
   margin: 0;
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-size: clamp(2.2rem, 3.4vw, 3rem);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -1115,7 +1141,7 @@ a {
   margin: 0 0 12px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-size: clamp(2.2rem, 3.4vw, 3rem);
 }
 
 .service-detail__header p {
@@ -1611,11 +1637,8 @@ a {
 }
 
 .map-embed h2 {
-  margin: 0;
-  font-size: 1.3rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-secondary);
+  margin: 0 0 18px;
+  font-size: clamp(2.1rem, 3vw, 2.8rem);
 }
 
 .map-embed iframe {
