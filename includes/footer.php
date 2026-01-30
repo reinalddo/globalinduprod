@@ -13,13 +13,13 @@
       <div class="footer-block">
         <h4>Empresa</h4>
         <ul>
+          <li><a href="<?php echo $rootPath; ?>/">Inicio</a></li>
           <li><a href="<?php echo $rootPath; ?>/nosotros/">Nosotros</a></li>
           <li><a href="<?php echo $rootPath; ?>/servicios/">Servicios</a></li>
-          <li><a href="<?php echo $rootPath; ?>/#clientes">Clientes</a></li>
           <li><a href="<?php echo $rootPath; ?>/contacto/">Contacto</a></li>
         </ul>
       </div>
-      <div class="footer-block">
+      <div class="footer-block" style="display: none;">
         <h4>Información</h4>
         <ul>
           <li><a href="<?php echo $rootPath; ?>/contacto/">Contáctenos</a></li>

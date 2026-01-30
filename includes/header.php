@@ -43,7 +43,7 @@ $activeNav = $activeNav ?? 'home';
             </button>
             <form class="nav-search__form" id="nav-search-form" role="search" hidden>
               <label for="header-search" class="sr-only">Buscar</label>
-              <input id="header-search" type="search" placeholder="Buscar piezas, ex. 123-4567" autocomplete="off">
+              <input id="header-search" type="search" placeholder="buscar..." autocomplete="off">
             </form>
           </div>
           <div class="nav-languages" role="group" aria-label="Cambiar idioma">
