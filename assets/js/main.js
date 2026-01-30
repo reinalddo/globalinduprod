@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dotsContainer = heroSlider.querySelector('[data-hero-dots]');
     const dots = dotsContainer ? Array.from(dotsContainer.querySelectorAll('[data-hero-dot]')) : [];
     const AUTOPLAY_DELAY = 10000;
+    const hasMultipleSlides = slides.length > 1;
     let currentIndex = slides.findIndex((slide) => slide.classList.contains('is-active'));
     if (currentIndex < 0) {
       currentIndex = 0;
@@ -173,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const startAutoplay = () => {
-      if (slides.length <= 1) {
+      if (!hasMultipleSlides) {
         return;
       }
       if (autoTimer) {
@@ -214,7 +215,98 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    if (slides.length > 1) {
+    if (hasMultipleSlides) {
+      let gestureStartX = null;
+      let gestureStartY = null;
+      const SWIPE_THRESHOLD = 45;
+
+      const storeGestureStart = (x, y) => {
+        gestureStartX = x;
+        gestureStartY = y;
+      };
+
+      const resetGesture = () => {
+        gestureStartX = null;
+        gestureStartY = null;
+      };
+
+      const handleGestureEnd = (x, y) => {
+        if (gestureStartX === null || gestureStartY === null) {
+          return;
+        }
+        const deltaX = x - gestureStartX;
+        const deltaY = y - gestureStartY;
+        resetGesture();
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > SWIPE_THRESHOLD) {
+          if (deltaX < 0) {
+            updateSlides(currentIndex + 1);
+          } else {
+            updateSlides(currentIndex - 1);
+          }
+        }
+      };
+
+      if (window.PointerEvent) {
+        heroSlider.addEventListener('pointerdown', (event) => {
+          if (event.pointerType === 'mouse') {
+            return;
+          }
+          storeGestureStart(event.clientX, event.clientY);
+          if (typeof heroSlider.setPointerCapture === 'function') {
+            heroSlider.setPointerCapture(event.pointerId);
+          }
+          stopAutoplay();
+        });
+
+        heroSlider.addEventListener('pointerup', (event) => {
+          if (event.pointerType === 'mouse') {
+            return;
+          }
+          if (typeof heroSlider.releasePointerCapture === 'function') {
+            heroSlider.releasePointerCapture(event.pointerId);
+          }
+          handleGestureEnd(event.clientX, event.clientY);
+          startAutoplay();
+        });
+
+        heroSlider.addEventListener('pointercancel', (event) => {
+          if (typeof heroSlider.releasePointerCapture === 'function' && event.pointerId != null) {
+            heroSlider.releasePointerCapture(event.pointerId);
+          }
+          resetGesture();
+          startAutoplay();
+        });
+      } else {
+        heroSlider.addEventListener('touchstart', (event) => {
+          if (event.changedTouches && event.changedTouches[0]) {
+            const touch = event.changedTouches[0];
+            storeGestureStart(touch.clientX, touch.clientY);
+            stopAutoplay();
+          }
+        }, { passive: true });
+
+        const handleTouchEnd = (event) => {
+          if (event.changedTouches && event.changedTouches[0]) {
+            const touch = event.changedTouches[0];
+            handleGestureEnd(touch.clientX, touch.clientY);
+            startAutoplay();
+          }
+        };
+
+        heroSlider.addEventListener('touchend', handleTouchEnd);
+        document.addEventListener('touchend', handleTouchEnd);
+
+        const handleTouchCancel = () => {
+          resetGesture();
+          startAutoplay();
+        };
+
+        heroSlider.addEventListener('touchcancel', handleTouchCancel);
+        document.addEventListener('touchcancel', handleTouchCancel);
+      }
+    }
+
+    if (hasMultipleSlides) {
       heroSlider.addEventListener('mouseenter', stopAutoplay);
       heroSlider.addEventListener('mouseleave', startAutoplay);
       document.addEventListener('visibilitychange', () => {

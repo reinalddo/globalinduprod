@@ -474,6 +474,10 @@ a {
   overflow: hidden;
 }
 
+.hero-slider {
+  touch-action: pan-y;
+}
+
 .hero-slider__track {
   position: relative;
   width: 100%;
@@ -672,20 +676,7 @@ a {
   }
 
   .hero-slider__control {
-    top: auto;
-    bottom: 108px;
-    transform: none;
-    opacity: 0.85;
-  }
-
-  .hero-slider__control--prev {
-    left: 50%;
-    margin-left: -74px;
-  }
-
-  .hero-slider__control--next {
-    right: 50%;
-    margin-right: -74px;
+    display: none;
   }
 
   .hero-slider__dots {
