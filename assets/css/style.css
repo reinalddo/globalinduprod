@@ -753,7 +753,7 @@ a {
 .section-heading {
   text-align: center;
   margin: 56px auto 24px;
-  max-width: 760px;
+  width: min(1200px, 92vw);
 }
 
 .section-heading h2 {
