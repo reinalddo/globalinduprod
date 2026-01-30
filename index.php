@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Proveedor global de repuestos para maquinaria pesada';
+$pageTitle = 'Inicio';
 $rootPath = '.';
 $assetPath = $rootPath . '/assets';
 $activeNav = 'home';
@@ -141,20 +141,20 @@ $clientsList = [
 include __DIR__ . '/includes/header.php';
 ?>
   <main>
-    <section class="hero">
+    <section class="hero" data-aos="fade-up" data-aos-duration="900" data-aos-easing="ease-out-cubic">
       <div class="hero-content">
-        <p style="letter-spacing:0.08em; text-transform:uppercase; font-size:0.95rem; color:#f1c75b; margin-bottom:12px;">Proveedor global</p>
-        <h1>Repuestos y soluciones para maquinaria pesada</h1>
-        <p>Distribuimos componentes originales y alternativos para flotas de minería, construcción y agricultura. Cobertura mundial, logística ágil y asesoría técnica especializada.</p>
+        <p data-aos="fade-up" data-aos-delay="0" style="letter-spacing:0.08em; text-transform:uppercase; font-size:0.95rem; color:#f1c75b; margin-bottom:12px;">Proveedor global</p>
+        <h1 data-aos="fade-up" data-aos-delay="120">Repuestos y soluciones para maquinaria pesada</h1>
+        <p data-aos="fade-up" data-aos-delay="220">Distribuimos componentes originales y alternativos para flotas de minería, construcción y agricultura. Cobertura mundial, logística ágil y asesoría técnica especializada.</p>
       </div>
     </section>
 
-    <section class="section-heading">
-      <h2>Nuestros Aliados Estratégicos</h2>
-      <p>Contamos con más de 300 aliados estratégicos comerciales alrededor del mundo, los cuales nos han dado su representación y nos brindan respaldo total para nuestros clientes, a su vez, damos mayor capacidad de respuesta a nivel nacional e internacional.</p>
+    <section class="section-heading" data-aos="fade-up">
+      <h2 data-aos="fade-up">Nuestros Aliados Estratégicos</h2>
+      <p data-aos="fade-up" data-aos-delay="120">Contamos con más de 300 aliados estratégicos comerciales alrededor del mundo, los cuales nos han dado su representación y nos brindan respaldo total para nuestros clientes, a su vez, damos mayor capacidad de respuesta a nivel nacional e internacional.</p>
     </section>
 
-    <section class="brand-grid">
+    <section class="brand-grid" data-aos="fade-up" data-aos-offset="180">
       <?php foreach ($brands as $index => $brand):
         $isFeatured = !empty($brand['featured']);
         $cardClass = $isFeatured ? 'brand-card featured' : 'brand-card';
@@ -162,24 +162,26 @@ include __DIR__ . '/includes/header.php';
         if (!empty($alliesImages[$index])) {
           $imagePath = $rootPath . '/inicio/aliados/' . rawurlencode(basename($alliesImages[$index]));
         }
+        $delay = $index * 60;
       ?>
-        <div class="<?php echo $cardClass; ?>">
+        <div class="<?php echo $cardClass; ?>" data-aos="zoom-in" data-aos-delay="<?php echo $delay; ?>">
           <img src="<?php echo htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
           <span><?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
       <?php endforeach; ?>
     </section>
 
-    <section class="home-services">
-      <div class="section-heading">
-        <h2>Servicios para operaciones industriales críticas</h2>
-        <p>Integramos construcción, logística, mantenimiento, talento humano y seguridad industrial para garantizar continuidad operativa en refinerías, puertos, minería, agroindustria y proyectos de energía.</p>
+    <section class="home-services" data-aos="fade-up" data-aos-offset="180">
+      <div class="section-heading" data-aos="fade-up">
+        <h2 data-aos="fade-up">Servicios para operaciones industriales críticas</h2>
+        <p data-aos="fade-up" data-aos-delay="120">Integramos construcción, logística, mantenimiento, talento humano y seguridad industrial para garantizar continuidad operativa en refinerías, puertos, minería, agroindustria y proyectos de energía.</p>
       </div>
       <div class="services-grid">
-        <?php foreach ($featuredServices as $service):
+        <?php foreach ($featuredServices as $serviceIndex => $service):
           $serviceImage = $rootPath . '/inicio/servicios/' . $service['image'];
+          $serviceDelay = 160 + ($serviceIndex * 80);
         ?>
-          <a class="service-card" href="<?php echo htmlspecialchars($service['link'], ENT_QUOTES, 'UTF-8'); ?>">
+          <a class="service-card" data-aos="fade-up" data-aos-delay="<?php echo $serviceDelay; ?>" href="<?php echo htmlspecialchars($service['link'], ENT_QUOTES, 'UTF-8'); ?>">
             <picture>
               <img src="<?php echo htmlspecialchars($serviceImage, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('Servicio de ' . $service['title'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
             </picture>
@@ -192,20 +194,21 @@ include __DIR__ . '/includes/header.php';
         <?php endforeach; ?>
       </div>
       <div class="home-services__cta">
-        <a class="home-services__link" href="<?php echo $rootPath; ?>/servicios/">Ver todos los servicios</a>
+        <a class="home-services__link" data-aos="zoom-in" data-aos-delay="360" href="<?php echo $rootPath; ?>/servicios/">Ver todos los servicios</a>
       </div>
     </section>
 
-    <section class="home-clients" id="clientes">
-      <div class="section-heading">
-        <h2>Clientes que confían en Global Induprod</h2>
-        <p>Respaldamos operaciones públicas y privadas con suministros, ingeniería y soporte técnico integral para mantener en marcha proyectos energéticos, industriales y de infraestructura en toda Venezuela.</p>
+    <section class="home-clients" id="clientes" data-aos="fade-up" data-aos-offset="180">
+      <div class="section-heading" data-aos="fade-up">
+        <h2 data-aos="fade-up">Clientes que confían en Global Induprod</h2>
+        <p data-aos="fade-up" data-aos-delay="120">Respaldamos operaciones públicas y privadas con suministros, ingeniería y soporte técnico integral para mantener en marcha proyectos energéticos, industriales y de infraestructura en toda Venezuela.</p>
       </div>
       <div class="clients-grid">
-        <?php foreach ($clientsList as $client):
+        <?php foreach ($clientsList as $clientIndex => $client):
           $logoPath = $rootPath . '/inicio/clientes/' . $client['logo'];
+          $clientDelay = 140 + ($clientIndex * 60);
         ?>
-          <article class="client-card">
+          <article class="client-card" data-aos="fade-up" data-aos-delay="<?php echo $clientDelay; ?>">
             <div class="client-card__logo">
               <img src="<?php echo htmlspecialchars($logoPath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('Logo de ' . $client['name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
             </div>

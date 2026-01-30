@@ -46,6 +46,7 @@
     </div>
   </footer>
   <button class="scroll-top" type="button" aria-label="Ir arriba" data-scroll-top>↑</button>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
   <script src="<?php echo $assetPath; ?>/js/main.js" defer></script>
 </body>
 </html>

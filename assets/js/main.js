@@ -130,4 +130,65 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  const assignAosDefaults = () => {
+    const applyAnimation = (selector, animation, options = {}) => {
+      const {
+        delayStep = 0,
+        baseDelay = 0,
+        duration,
+        easing,
+        offset,
+      } = options;
+      const elements = document.querySelectorAll(selector);
+      if (!elements.length) {
+        return;
+      }
+      elements.forEach((element, index) => {
+        if (!element.hasAttribute('data-aos')) {
+          element.setAttribute('data-aos', animation);
+        }
+        if (delayStep || baseDelay) {
+          const delayValue = baseDelay + index * delayStep;
+          if (!element.hasAttribute('data-aos-delay')) {
+            element.setAttribute('data-aos-delay', String(delayValue));
+          }
+        }
+        if (duration && !element.hasAttribute('data-aos-duration')) {
+          element.setAttribute('data-aos-duration', String(duration));
+        }
+        if (typeof easing === 'string' && !element.hasAttribute('data-aos-easing')) {
+          element.setAttribute('data-aos-easing', easing);
+        }
+        if (typeof offset === 'number' && !element.hasAttribute('data-aos-offset')) {
+          element.setAttribute('data-aos-offset', String(offset));
+        }
+      });
+    };
+
+    applyAnimation('main section', 'fade-up', { offset: 160 });
+    applyAnimation('.hero .hero-content > *', 'fade-up', { delayStep: 120, duration: 800 });
+    applyAnimation('.section-heading', 'fade-up', { delayStep: 100 });
+    applyAnimation('.brand-grid .brand-card', 'zoom-in', { delayStep: 70, baseDelay: 70, duration: 650 });
+    applyAnimation('.services-grid .service-card', 'fade-up', { delayStep: 90, baseDelay: 180, duration: 720 });
+    applyAnimation('.clients-grid .client-card', 'fade-up', { delayStep: 70, baseDelay: 140, duration: 680 });
+    applyAnimation('.home-services__cta .home-services__link, .cta, .button.is-primary', 'zoom-in', { baseDelay: 320, duration: 620 });
+    applyAnimation('main .card, main article', 'fade-up', { delayStep: 80, offset: 140 });
+  };
+
+  assignAosDefaults();
+
+  if (window.AOS && typeof window.AOS.init === 'function') {
+    window.AOS.init({
+      duration: 750,
+      easing: 'ease-out-cubic',
+      offset: 120,
+      once: true,
+    });
+    window.addEventListener('load', () => {
+      if (window.AOS && typeof window.AOS.refreshHard === 'function') {
+        window.AOS.refreshHard();
+      }
+    });
+  }
 });
