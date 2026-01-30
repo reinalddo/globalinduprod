@@ -200,12 +200,22 @@ a {
   min-height: 48px;
   padding: 0 8px;
   width: 100%;
-  transition: color 0.2s ease;
+  background-color: transparent;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
 }
 
-.site-header .navbar-item.is-active,
-.site-header .navbar-item:hover {
+.site-header .navbar-item.is-active {
   color: var(--color-primary);
+}
+
+.site-header .navbar-item:hover,
+.site-header .navbar-item:focus-visible {
+  color: #ffffff;
+  background-color: transparent;
+  text-decoration: underline;
+  text-decoration-color: #ffffff;
+  text-underline-offset: 8px;
+  outline: none;
 }
 
 .site-header .navbar-actions {
