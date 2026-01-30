@@ -4,13 +4,15 @@
   font-display: swap;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&display=swap');
+
 :root {
   --color-primary: #f5c400;
   --color-primary-dark: #cfa300;
   --color-secondary: #111111;
   --color-accent: #f5c400;
   --text-light: #f7f7f7;
-  --font-base: 'Poppins', 'Segoe UI', sans-serif;
+  --font-base: 'Source Sans 3', 'Segoe UI', sans-serif;
   --font-heading: 'Evil Empire', 'Times New Roman', serif;
   --container-max-width: 1120px;
   --header-offset: 148px;
@@ -25,6 +27,8 @@
 body {
   margin: 0;
   font-family: var(--font-base);
+  font-size: 1.5rem;
+  line-height: 1.7;
   background: transparent;
   color: #191919;
   padding-top: var(--header-offset);
@@ -62,7 +66,9 @@ img {
 }
 
 a {
-  color: inherit;
+  font-family: var(--font-base);
+  font-size: 1.5rem;
+  line-height: 1.7;
   text-decoration: none;
 }
 
@@ -743,9 +749,7 @@ a {
 }
 
 .hero p {
-  font-size: 1.05rem;
   letter-spacing: 0.02em;
-  line-height: 1.6;
   margin: 0;
   color: #e4e4e4;
 }
@@ -764,7 +768,6 @@ a {
 .section-heading p {
   margin: 0;
   color: #5c5c5c;
-  line-height: 1.6;
 }
 
 .brand-grid {
@@ -1019,7 +1022,6 @@ a {
 
 .services-overview__intro p {
   margin: 0;
-  line-height: 1.7;
   color: #4a4a4a;
 }
 
@@ -1150,7 +1152,6 @@ a {
 
 .service-detail__header p {
   margin: 0;
-  line-height: 1.7;
 }
 .service-hero-gallery {
   display: grid;
