@@ -131,6 +131,7 @@ a {
 .site-header .navbar-burger {
   color: var(--text-light);
   margin-left: auto;
+  margin-right: 12px;
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
@@ -419,6 +420,16 @@ a {
     padding: 0 20px;
   }
 
+  .site-header .navbar-brand {
+    flex: 0 0 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .brand-logo img {
+    max-height: 44px;
+  }
+
   .site-header .navbar-menu {
     border-radius: 0 0 20px 20px;
   }
@@ -653,7 +664,11 @@ a {
   }
 
   .hero-content h1 {
-    font-size: clamp(2.2rem, 5.6vw, 2.8rem);
+    font-size: clamp(1.45rem, 5vw, 1.8rem);
+  }
+
+  .hero-content p {
+    font-size: clamp(0.95rem, 3.3vw, 1.15rem);
   }
 
   .hero-slider__control {
@@ -1012,6 +1027,16 @@ a {
   letter-spacing: 0.02em;
   margin: 0;
   color: #e4e4e4;
+}
+
+@media (max-width: 720px) {
+  .hero h1 {
+    font-size: clamp(1.1rem, 3.2vw, 1.6rem);
+  }
+
+  .page-hero-content h1 {
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+  }
 }
 
 .section-heading {
