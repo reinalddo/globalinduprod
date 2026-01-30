@@ -52,6 +52,27 @@ $featuredServices = [
     'link' => $rootPath . '/servicios/seguridad-industrial/',
   ],
 ];
+$heroImageBase = $rootPath === '.' ? '/inicio/hero/' : $rootPath . '/inicio/hero/';
+$heroSlides = [
+  [
+    'image' => $heroImageBase . 'hero.png',
+    'tagline' => 'Proveedor global',
+    'title' => 'Repuestos y soluciones para maquinaria pesada',
+    'copy' => 'Distribuimos componentes originales y alternativos para flotas de minería, construcción y agricultura. Cobertura mundial, logística ágil y asesoría técnica especializada.',
+  ],
+  [
+    'image' => $heroImageBase . 'hero-02.svg',
+    'tagline' => 'Integración industrial',
+    'title' => 'Ingeniería, mantenimiento y talento técnico 360°',
+    'copy' => 'Coordinamos proyectos EPC, planes predictivos y formación especializada para maximizar la disponibilidad operativa en refinerías, puertos y plantas de proceso.',
+  ],
+  [
+    'image' => $heroImageBase . 'hero-03.svg',
+    'tagline' => 'Cobertura latinoamericana',
+    'title' => 'Logística binacional y respuesta inmediata',
+    'copy' => 'Centros de distribución en América y alianzas estratégicas que aseguran inventarios críticos, embarques puerta a puerta y soporte en sitio 24/7.',
+  ],
+];
 $clientsList = [
   [
     'name' => 'Petroquímica de Venezuela, C.A.',
@@ -141,11 +162,32 @@ $clientsList = [
 include __DIR__ . '/includes/header.php';
 ?>
   <main>
-    <section class="hero" data-aos="fade-up" data-aos-duration="900" data-aos-easing="ease-out-cubic">
-      <div class="hero-content">
-        <p data-aos="fade-up" data-aos-delay="0" style="letter-spacing:0.08em; text-transform:uppercase; font-size:0.95rem; color:#f1c75b; margin-bottom:12px;">Proveedor global</p>
-        <h1 data-aos="fade-up" data-aos-delay="120">Repuestos y soluciones para maquinaria pesada</h1>
-        <p data-aos="fade-up" data-aos-delay="220">Distribuimos componentes originales y alternativos para flotas de minería, construcción y agricultura. Cobertura mundial, logística ágil y asesoría técnica especializada.</p>
+    <section class="hero hero-slider" data-hero-slider data-aos="fade-up" data-aos-duration="900" data-aos-easing="ease-out-cubic">
+      <div class="hero-slider__track" data-hero-track>
+        <?php foreach ($heroSlides as $index => $slide):
+          $isActive = $index === 0;
+          $delayBase = $index * 120;
+        ?>
+          <article class="hero-slide<?php echo $isActive ? ' is-active' : ''; ?>" data-hero-slide style="--hero-image: url('<?php echo htmlspecialchars($slide['image'], ENT_QUOTES, 'UTF-8'); ?>');">
+            <div class="hero-slide__media" aria-hidden="true"></div>
+            <div class="hero-content">
+              <p data-aos="fade-up" data-aos-delay="<?php echo $delayBase; ?>" class="hero-content__tagline"><?php echo htmlspecialchars($slide['tagline'], ENT_QUOTES, 'UTF-8'); ?></p>
+              <h1 data-aos="fade-up" data-aos-delay="<?php echo $delayBase + 120; ?>"><?php echo htmlspecialchars($slide['title'], ENT_QUOTES, 'UTF-8'); ?></h1>
+              <p data-aos="fade-up" data-aos-delay="<?php echo $delayBase + 240; ?>"><?php echo htmlspecialchars($slide['copy'], ENT_QUOTES, 'UTF-8'); ?></p>
+            </div>
+          </article>
+        <?php endforeach; ?>
+      </div>
+      <button class="hero-slider__control hero-slider__control--prev" type="button" aria-label="Anterior" data-hero-prev>
+        <span aria-hidden="true">&#10094;</span>
+      </button>
+      <button class="hero-slider__control hero-slider__control--next" type="button" aria-label="Siguiente" data-hero-next>
+        <span aria-hidden="true">&#10095;</span>
+      </button>
+      <div class="hero-slider__dots" data-hero-dots>
+        <?php foreach ($heroSlides as $index => $_): ?>
+          <button type="button" class="hero-slider__dot<?php echo $index === 0 ? ' is-active' : ''; ?>" aria-label="Ir al slide <?php echo $index + 1; ?>" data-hero-dot></button>
+        <?php endforeach; ?>
       </div>
     </section>
 
