@@ -469,8 +469,6 @@ a {
 
 .page-hero-content p {
   margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.7;
   color: #e4e4e4;
 }
 
@@ -1023,8 +1021,8 @@ a {
   text-align: center;
   display: grid;
   gap: 16px;
-  max-width: 780px;
-  margin: 0 auto;
+  width: min(1200px, 92vw);
+  margin: 0 auto 32px;
 }
 
 .services-overview__intro h2 {

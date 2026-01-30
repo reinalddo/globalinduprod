@@ -15,12 +15,6 @@ include dirname(__DIR__) . '/includes/header.php';
     </section>
 
     <section class="main-content">
-      <nav class="breadcrumb">
-        <a href="<?php echo $rootPath; ?>/">Inicio</a>
-        <span>/</span>
-        <span>Contacto</span>
-      </nav>
-
       <div class="contact-layout" style="margin-top:32px;">
         <article class="contact-card">
           <h2>Oficinas principales</h2>

@@ -15,12 +15,6 @@ include dirname(__DIR__) . '/includes/header.php';
     </section>
 
     <section class="main-content">
-      <nav class="breadcrumb">
-        <a href="<?php echo $rootPath; ?>/">Inicio</a>
-        <span>/</span>
-        <span>Nosotros</span>
-      </nav>
-
       <h2 style="margin-top:32px;">Quiénes somos</h2>
       <p>Global Induprod RL es una asociación cooperativa fundada en 2010 por un equipo de profesionales yaracuyanos convencidos de que la logística integral es un motor para el desarrollo industrial. Desde nuestros inicios hemos acompañado operaciones petroleras, mineras, agroindustriales y de infraestructura con una propuesta que combina suministros críticos, logística 24/7 y servicios múltiples especializados.</p>
       <p>Trabajamos como un aliado outsourcing enfocándonos en resolver necesidades técnicas, de mantenimiento y de fabricación con personal propio en campo, soporte administrativo y gestión documental completa. La apertura de Global Induprod International LLC en Miami en 2016 nos permite consolidar cadenas de suministro binacionales, acelerar procesos de importación y ofrecer repuesta inmediata con estándares OEM.</p>
