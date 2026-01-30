@@ -820,7 +820,11 @@ a {
 
 .home-clients .section-heading {
   margin: 0 auto;
-  max-width: 760px;
+  width: 100%;
+}
+
+.home-clients .section-heading p {
+  max-width: none;
 }
 
 .clients-grid {
