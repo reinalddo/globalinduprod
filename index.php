@@ -52,7 +52,7 @@ $featuredServices = [
     'link' => $rootPath . '/servicios/seguridad-industrial/',
   ],
 ];
-$heroImageBase = $rootPath === '.' ? '/inicio/hero/' : $rootPath . '/inicio/hero/';
+$heroImageBase = rtrim($rootPath, '/') . '/inicio/hero/';
 $heroSlides = [
   [
     'image' => $heroImageBase . 'hero.png',
