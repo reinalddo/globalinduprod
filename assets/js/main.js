@@ -9,6 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const siteHeader = document.querySelector('.site-header');
   const languageLinks = document.querySelectorAll('.nav-languages__link');
 
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
+  }
+
+  window.addEventListener('load', () => {
+    if (!window.location.hash) {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  });
+
   if (scrollTopBtn) {
     window.addEventListener('scroll', () => {
       scrollTopBtn.classList.toggle('is-visible', window.scrollY > 360);
