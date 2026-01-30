@@ -1,3 +1,15 @@
+.page-nosotros .main-content h3,
+.page-nosotros .parallax-block h3,
+.page-nosotros .clients-card h3,
+.page-nosotros .service-stats h3,
+.page-nosotros .parallax-grid h3 {
+  font-family: var(--font-heading);
+  color: var(--color-primary-dark);
+  font-size: clamp(2.2rem, 3vw, 3.1rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
 @font-face {
   font-family: 'Evil Empire';
   src: url('../fonts/Evil%20Empire.otf') format('opentype');
@@ -1603,6 +1615,16 @@ a {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
   display: grid;
   gap: 16px;
+}
+
+.contact-card h3 {
+  margin: 12px 0 4px;
+  font-family: var(--font-heading);
+  color: var(--color-primary-dark);
+  font-size: clamp(2.2rem, 3vw, 3.1rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
 }
 
 .contact-form {

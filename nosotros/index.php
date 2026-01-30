@@ -3,6 +3,7 @@ $pageTitle = 'Nosotros';
 $rootPath = '..';
 $assetPath = $rootPath . '/assets';
 $activeNav = 'nosotros';
+$bodyClass = 'page-nosotros';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
   <main>

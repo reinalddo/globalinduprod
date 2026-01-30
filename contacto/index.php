@@ -3,6 +3,7 @@ $pageTitle = 'Contáctenos';
 $rootPath = '..';
 $assetPath = $rootPath . '/assets';
 $activeNav = 'contacto';
+$bodyClass = 'page-contacto';
 include dirname(__DIR__) . '/includes/header.php';
 ?>
   <main>
