@@ -6,19 +6,80 @@ if (isset($_SESSION['admin_authenticated']) && $_SESSION['admin_authenticated'] 
     exit;
 }
 
+require_once __DIR__ . '/config.php';
+
 $error = '';
+$oldUsername = '';
+
+if (isset($_SESSION['admin_flash'])) {
+    $error = $_SESSION['admin_flash']['error'] ?? '';
+    $oldUsername = $_SESSION['admin_flash']['username'] ?? '';
+    unset($_SESSION['admin_flash']);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-    if ($username === 'admin' && $password === 'admin123') {
-        $_SESSION['admin_authenticated'] = true;
-        header('Location: dashboard.php');
+    $storeError = function (string $message) use ($username): void {
+        $_SESSION['admin_flash'] = [
+            'error' => $message,
+            'username' => $username
+        ];
+        header('Location: index.php');
         exit;
+    };
+
+    if ($username === '' || $password === '') {
+        $storeError('Debes completar ambos campos.');
     }
 
-    $error = 'Usuario o contraseña incorrectos.';
+    try {
+        $db = getAdminDb();
+        $stmt = $db->prepare('SELECT id, username, password_hash, full_name, role, is_active FROM admin_users WHERE username = ? LIMIT 1');
+
+        if ($stmt === false) {
+            throw new RuntimeException('No se pudo preparar la consulta.');
+        }
+
+        $stmt->bind_param('s', $username);
+
+        if (!$stmt->execute()) {
+            throw new RuntimeException('No se pudo ejecutar la consulta.');
+        }
+
+        $stmt->store_result();
+
+        if ($stmt->num_rows !== 1) {
+            $stmt->close();
+            $storeError('Usuario o contraseña incorrectos.');
+        }
+
+        $stmt->bind_result($id, $dbUsername, $passwordHash, $fullName, $role, $isActive);
+        $stmt->fetch();
+        $stmt->close();
+
+        if ((int) $isActive !== 1) {
+            $storeError('Usuario o contraseña incorrectos.');
+        }
+
+        if (!password_verify($password, $passwordHash)) {
+            $storeError('Usuario o contraseña incorrectos.');
+        }
+
+        session_regenerate_id(true);
+        $_SESSION['admin_authenticated'] = true;
+        $_SESSION['admin_user'] = [
+            'id' => (int) $id,
+            'username' => $dbUsername,
+            'full_name' => $fullName,
+            'role' => $role
+        ];
+        header('Location: dashboard.php');
+        exit;
+    } catch (Throwable $exception) {
+        $storeError('No se pudo iniciar sesión. Intenta nuevamente.');
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -100,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
             <form class="login-form" method="post" novalidate>
                 <label for="username">Usuario</label>
-                <input type="text" name="username" id="username" required autocomplete="username">
+                <input type="text" name="username" id="username" required autocomplete="username" value="<?php echo htmlspecialchars($oldUsername, ENT_QUOTES, 'UTF-8'); ?>">
 
                 <label for="password">Contraseña</label>
                 <input type="password" name="password" id="password" required autocomplete="current-password">

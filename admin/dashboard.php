@@ -43,6 +43,14 @@ if (!isset($_SESSION['admin_authenticated']) || $_SESSION['admin_authenticated']
             flex-direction: column;
             gap: 28px;
         }
+        .sidebar__spacer {
+            flex: 1;
+        }
+        .sidebar__footer {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
         .sidebar__brand {
             font-size: 1.3rem;
             font-weight: bold;
@@ -193,6 +201,15 @@ if (!isset($_SESSION['admin_authenticated']) || $_SESSION['admin_authenticated']
                     <span>Pie de página</span>
                 </a>
             </nav>
+            <div class="sidebar__spacer"></div>
+            <div class="sidebar__footer">
+                <a class="sidebar__link" href="logout.php">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 4h7a2 2 0 0 1 2 2v3h-2V6H5v12h7v-3h2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm11.59 5.59L14.17 12l2.42 2.41L15 15.99 11 12l4-4 1.59 1.59Z"/>
+                    </svg>
+                    <span>Cerrar sesión</span>
+                </a>
+            </div>
         </aside>
         <main class="content">
             <header>
