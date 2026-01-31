@@ -21,7 +21,7 @@ try {
 <section>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap;">
         <p style="margin:0;color:#4b5563;">Agrega o actualiza los logos mostrados en la sección de clientes.</p>
-        <a class="btn btn-primary" href="home/clientes/crear">Añadir cliente</a>
+        <a class="btn btn-primary" href="<?php echo adminUrl('home/clientes/crear'); ?>">Añadir cliente</a>
     </div>
 
     <?php if ($errorMessage): ?>
@@ -29,7 +29,7 @@ try {
     <?php elseif (empty($clients)): ?>
         <div class="empty-state">
             <p style="margin:0 0 12px;">Aún no se han registrado clientes destacados.</p>
-            <a class="btn btn-primary" href="home/clientes/crear">Agregar cliente</a>
+            <a class="btn btn-primary" href="<?php echo adminUrl('home/clientes/crear'); ?>">Agregar cliente</a>
         </div>
     <?php else: ?>
         <div style="overflow-x:auto;">
@@ -56,8 +56,8 @@ try {
                             <td><?php echo htmlspecialchars($client['updated_at'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td>
                                 <div class="table-actions">
-                                    <a class="btn btn-outline" style="padding:8px 12px;font-size:12px;" href="home/clientes/editar/<?php echo (int) $client['id']; ?>">Editar</a>
-                                    <form action="home/clientes/eliminar/<?php echo (int) $client['id']; ?>" method="post" onsubmit="return confirm('¿Eliminar este cliente?');">
+                                    <a class="btn btn-outline" style="padding:8px 12px;font-size:12px;" href="<?php echo adminUrl('home/clientes/editar/' . (int) $client['id']); ?>">Editar</a>
+                                    <form action="<?php echo adminUrl('home/clientes/eliminar/' . (int) $client['id']); ?>" method="post" onsubmit="return confirm('¿Eliminar este cliente?');">
                                         <button class="btn btn-outline" style="padding:8px 12px;font-size:12px;" type="submit">Eliminar</button>
                                     </form>
                                 </div>

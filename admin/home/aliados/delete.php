@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../includes/auth.php';
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if ($id <= 0 || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../aliados');
+    header('Location: ' . adminUrl('home/aliados'));
     exit;
 }
 
@@ -19,5 +19,5 @@ try {
     // Se puede registrar el error con error_log
 }
 
-header('Location: ../aliados');
+header('Location: ' . adminUrl('home/aliados'));
 exit;
