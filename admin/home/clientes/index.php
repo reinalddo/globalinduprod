@@ -50,7 +50,11 @@ try {
                             <td><?php echo (int) $client['id']; ?></td>
                             <td><?php echo htmlspecialchars($client['name'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td style="max-width:200px;word-break:break-all;">
-                                <span style="font-size:12px;color:#6b7280;"><?php echo htmlspecialchars($client['logo_path'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <?php $logoUrl = adminAssetUrl((string) $client['logo_path']); ?>
+                                <?php if ($logoUrl): ?>
+                                    <img src="<?php echo htmlspecialchars($logoUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="Logo cliente" style="width:100%;max-width:160px;height:80px;object-fit:contain;background:#ffffff;border:1px solid #e5e7eb;border-radius:6px;display:block;padding:6px;">
+                                <?php endif; ?>
+                                <span style="display:block;font-size:12px;color:#6b7280;margin-top:6px;">&nbsp;<?php echo htmlspecialchars((string) $client['logo_path'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </td>
                             <td><?php echo (int) $client['sort_order']; ?></td>
                             <td><?php echo htmlspecialchars($client['updated_at'], ENT_QUOTES, 'UTF-8'); ?></td>

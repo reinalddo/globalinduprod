@@ -50,9 +50,13 @@ try {
                         <tr>
                             <td><?php echo (int) $ally['id']; ?></td>
                             <td><?php echo htmlspecialchars($ally['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td style="max-width:200px;word-break:break-all;">
-                                <span style="font-size:12px;color:#6b7280;"><?php echo htmlspecialchars($ally['logo_path'], ENT_QUOTES, 'UTF-8'); ?></span>
-                            </td>
+                                <td style="max-width:200px;word-break:break-all;">
+                                    <?php $logoUrl = adminAssetUrl((string) $ally['logo_path']); ?>
+                                    <?php if ($logoUrl): ?>
+                                        <img src="<?php echo htmlspecialchars($logoUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="Logo aliado" style="width:100%;max-width:160px;height:80px;object-fit:contain;background:#ffffff;border:1px solid #e5e7eb;border-radius:6px;display:block;padding:6px;">
+                                    <?php endif; ?>
+                                    <span style="display:block;font-size:12px;color:#6b7280;margin-top:6px;">&nbsp;<?php echo htmlspecialchars((string) $ally['logo_path'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                </td>
                             <td>
                                 <?php if ((int) $ally['is_primary'] === 1): ?>
                                     <span class="badge badge-success">Principal</span>

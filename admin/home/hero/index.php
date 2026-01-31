@@ -37,7 +37,7 @@ try {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Preview</th>
+                        <th>Imagen</th>
                         <th>Mensaje</th>
                         <th>Título</th>
                         <th>Orden</th>
@@ -50,11 +50,15 @@ try {
                     <?php foreach ($slides as $slide): ?>
                         <tr>
                             <td><?php echo (int) $slide['id']; ?></td>
-                            <td style="max-width:160px;">
-                                <span style="display:block;font-size:12px;color:#6b7280;word-break:break-all;"><?php echo htmlspecialchars($slide['image_path'], ENT_QUOTES, 'UTF-8'); ?></span>
+                            <td style="max-width:220px;">
+                                <?php $imageUrl = adminAssetUrl((string) $slide['image_path']); ?>
+                                <?php if ($imageUrl): ?>
+                                    <img src="<?php echo htmlspecialchars($imageUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="Diapositiva" style="width:100%;max-width:200px;height:110px;object-fit:cover;border-radius:6px;display:block;border:1px solid #e5e7eb;background:#f3f4f6;">
+                                <?php endif; ?>
+                                <span style="display:block;font-size:12px;color:#6b7280;word-break:break-all;margin-top:6px;"><?php echo htmlspecialchars((string) $slide['image_path'], ENT_QUOTES, 'UTF-8'); ?></span>
                             </td>
-                            <td><?php echo htmlspecialchars((string) $slide['message_small'], ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td><?php echo htmlspecialchars((string) $slide['title'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td style="max-width:220px;"><?php echo htmlspecialchars((string) $slide['message_small'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td style="max-width:220px;"><?php echo htmlspecialchars((string) $slide['title'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td><?php echo (int) $slide['sort_order']; ?></td>
                             <td>
                                 <?php if ((int) $slide['is_active'] === 1): ?>
