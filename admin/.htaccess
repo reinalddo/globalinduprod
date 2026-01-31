@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /admin/
+
+RewriteRule ^$ login [L,R=301]
+RewriteRule ^login/?$ index.php [L,QSA]
+RewriteRule ^dashboard/?$ dashboard.php [L,QSA]
+RewriteRule ^logout/?$ logout.php [L,QSA]
+RewriteRule ^test-db/?$ test_db.php [L,QSA]
+RewriteRule ^reset-admin-password/?$ reset_admin_password.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php [L,QSA]

@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['admin_authenticated']) || $_SESSION['admin_authenticated'] !== true) {
-    header('Location: index.php');
+    header('Location: login');
     exit;
 }
 ?>
@@ -203,7 +203,7 @@ if (!isset($_SESSION['admin_authenticated']) || $_SESSION['admin_authenticated']
             </nav>
             <div class="sidebar__spacer"></div>
             <div class="sidebar__footer">
-                <a class="sidebar__link" href="logout.php">
+                <a class="sidebar__link" href="logout">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M5 4h7a2 2 0 0 1 2 2v3h-2V6H5v12h7v-3h2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm11.59 5.59L14.17 12l2.42 2.41L15 15.99 11 12l4-4 1.59 1.59Z"/>
                     </svg>
