@@ -2,11 +2,12 @@
 session_start();
 
 if (isset($_SESSION['admin_authenticated']) && $_SESSION['admin_authenticated'] === true) {
-    header('Location: dashboard');
+    header('Location: ' . adminUrl('dashboard'));
     exit;
 }
 
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/includes/helpers.php';
 
 $error = '';
 $oldUsername = '';
@@ -26,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'error' => $message,
             'username' => $username
         ];
-        header('Location: login');
+        header('Location: ' . adminUrl('login'));
         exit;
     };
 
@@ -75,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'full_name' => $fullName,
             'role' => $role
         ];
-        header('Location: dashboard');
+        header('Location: ' . adminUrl('dashboard'));
         exit;
     } catch (Throwable $exception) {
         $storeError('No se pudo iniciar sesión. Intenta nuevamente.');
