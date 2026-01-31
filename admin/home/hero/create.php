@@ -14,7 +14,6 @@ $formData = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $formData['image_path'] = trim($_POST['image_path'] ?? '');
     $formData['message_small'] = trim($_POST['message_small'] ?? '');
     $formData['title'] = trim($_POST['title'] ?? '');
     $formData['description'] = trim($_POST['description'] ?? '');
@@ -23,11 +22,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formData['sort_order'] = (int) ($_POST['sort_order'] ?? 0);
     $formData['is_active'] = isset($_POST['is_active']) ? 1 : 0;
 
-    if ($formData['image_path'] === '') {
-        $errors[] = 'La ruta de la imagen es obligatoria.';
+    $uploadedImage = $_FILES['image_file'] ?? null;
+
+    if (!$uploadedImage || $uploadedImage['error'] === UPLOAD_ERR_NO_FILE) {
+        $errors[] = 'Debes seleccionar una imagen.';
     }
+    if ($uploadedImage && $uploadedImage['error'] !== UPLOAD_ERR_OK && $uploadedImage['error'] !== UPLOAD_ERR_NO_FILE) {
+        $errors[] = 'No se pudo cargar la imagen. Intenta nuevamente.';
+    }
+
     if ($formData['title'] === '') {
         $errors[] = 'El título es obligatorio.';
+    }
+
+    if (empty($errors)) {
+        try {
+            $formData['image_path'] = saveOptimizedHeroImage($uploadedImage);
+        } catch (Throwable $exception) {
+            $errors[] = $exception->getMessage();
+        }
     }
 
     if (empty($errors)) {
@@ -57,6 +70,131 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+function saveOptimizedHeroImage(array $file): string
+{
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('No se pudo procesar la imagen enviada.');
+    }
+
+    if (!is_uploaded_file($file['tmp_name'])) {
+        throw new RuntimeException('La carga de la imagen no es válida.');
+    }
+
+    $allowedMimes = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp'
+    ];
+
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime = $finfo ? finfo_file($finfo, $file['tmp_name']) : false;
+    if ($finfo) {
+        finfo_close($finfo);
+    }
+
+    if (!$mime || !isset($allowedMimes[$mime])) {
+        throw new RuntimeException('El archivo seleccionado debe ser una imagen JPG, PNG o WebP.');
+    }
+
+    switch ($mime) {
+        case 'image/jpeg':
+            $image = imagecreatefromjpeg($file['tmp_name']);
+            break;
+        case 'image/png':
+            $image = imagecreatefrompng($file['tmp_name']);
+            break;
+        case 'image/webp':
+            if (!function_exists('imagecreatefromwebp')) {
+                throw new RuntimeException('El servidor no soporta imágenes WebP.');
+            }
+            $image = imagecreatefromwebp($file['tmp_name']);
+            break;
+        default:
+            $image = false;
+    }
+
+    if (!$image) {
+        throw new RuntimeException('No se pudo leer la imagen enviada.');
+    }
+
+    $width = imagesx($image);
+    $height = imagesy($image);
+    $maxWidth = 1600;
+    $maxHeight = 900;
+
+    $targetWidth = $width;
+    $targetHeight = $height;
+
+    if ($targetWidth > $maxWidth) {
+        $targetHeight = (int) ceil($targetHeight * ($maxWidth / $targetWidth));
+        $targetWidth = $maxWidth;
+    }
+
+    if ($targetHeight > $maxHeight) {
+        $targetWidth = (int) ceil($targetWidth * ($maxHeight / $targetHeight));
+        $targetHeight = $maxHeight;
+    }
+
+    if ($targetWidth !== $width || $targetHeight !== $height) {
+        $optimized = imagecreatetruecolor($targetWidth, $targetHeight);
+        if ($mime === 'image/png' || $mime === 'image/webp') {
+            imagealphablending($optimized, false);
+            imagesavealpha($optimized, true);
+        }
+        imagecopyresampled($optimized, $image, 0, 0, 0, 0, $targetWidth, $targetHeight, $width, $height);
+        imagedestroy($image);
+        $image = $optimized;
+    }
+
+    if ($mime === 'image/png' || $mime === 'image/webp') {
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+    }
+
+    $projectRoot = dirname(__DIR__, 3);
+    $relativeDir = 'uploads/home/hero';
+    $absoluteDir = $projectRoot . '/' . $relativeDir;
+
+    if (!is_dir($absoluteDir)) {
+        if (!mkdir($absoluteDir, 0775, true) && !is_dir($absoluteDir)) {
+            throw new RuntimeException('No se pudo preparar la carpeta de imágenes.');
+        }
+    }
+
+    try {
+        $filename = 'hero-' . time() . '-' . bin2hex(random_bytes(4)) . '.' . $allowedMimes[$mime];
+    } catch (Throwable $exception) {
+        imagedestroy($image);
+        throw new RuntimeException('No se pudo generar el nombre del archivo.');
+    }
+
+    $targetPath = $absoluteDir . '/' . $filename;
+
+    switch ($mime) {
+        case 'image/jpeg':
+            imagejpeg($image, $targetPath, 82);
+            break;
+        case 'image/png':
+            imagepng($image, $targetPath, 7);
+            break;
+        case 'image/webp':
+            if (!function_exists('imagewebp')) {
+                imagedestroy($image);
+                throw new RuntimeException('El servidor no soporta optimizar imágenes WebP.');
+            }
+            imagewebp($image, $targetPath, 80);
+            break;
+    }
+
+    imagedestroy($image);
+
+    if (!file_exists($targetPath)) {
+        throw new RuntimeException('No se pudo guardar la imagen optimizada.');
+    }
+
+    return $relativeDir . '/' . $filename;
+}
+
 $pageTitle = 'Nueva diapositiva | Inicio';
 $pageHeader = 'Crear diapositiva';
 $activeNav = 'home';
@@ -73,9 +211,9 @@ require_once __DIR__ . '/../../includes/page-top.php';
         </div>
         <div style="height:16px;"></div>
     <?php endif; ?>
-    <form method="post">
-        <label for="image_path">Imagen (ruta o URL)</label>
-        <input type="text" name="image_path" id="image_path" value="<?php echo htmlspecialchars($formData['image_path'], ENT_QUOTES, 'UTF-8'); ?>" required>
+    <form method="post" enctype="multipart/form-data">
+        <label for="image_file">Imagen</label>
+        <input type="file" name="image_file" id="image_file" accept="image/*" required>
 
         <label for="message_small">Mensaje pequeño</label>
         <input type="text" name="message_small" id="message_small" value="<?php echo htmlspecialchars($formData['message_small'], ENT_QUOTES, 'UTF-8'); ?>">
