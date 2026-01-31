@@ -1,13 +1,13 @@
 <?php
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/includes/helpers.php';
+
 session_start();
 
 if (isset($_SESSION['admin_authenticated']) && $_SESSION['admin_authenticated'] === true) {
     header('Location: ' . adminUrl('dashboard'));
     exit;
 }
-
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/includes/helpers.php';
 
 $error = '';
 $oldUsername = '';

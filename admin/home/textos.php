@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="form-actions">
             <button class="btn btn-primary" type="submit">Guardar cambios</button>
-            <a class="btn btn-outline" href="home">Volver</a>
+            <a class="btn btn-outline" href="<?php echo adminUrl('home'); ?>">Volver</a>
         </div>
     </form>
 </section>

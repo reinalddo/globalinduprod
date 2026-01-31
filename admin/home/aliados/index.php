@@ -21,7 +21,7 @@ try {
 <section>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap;">
         <p style="margin:0;color:#4b5563;">Carga logos principales y adicionales para la sección de aliados.</p>
-        <a class="btn btn-primary" href="home/aliados/crear">Añadir aliado</a>
+        <a class="btn btn-primary" href="<?php echo adminUrl('home/aliados/crear'); ?>">Añadir aliado</a>
     </div>
 
     <?php if ($errorMessage): ?>
@@ -29,7 +29,7 @@ try {
     <?php elseif (empty($allies)): ?>
         <div class="empty-state">
             <p style="margin:0 0 12px;">Aún no se han registrado aliados.</p>
-            <a class="btn btn-primary" href="home/aliados/crear">Agregar aliado</a>
+            <a class="btn btn-primary" href="<?php echo adminUrl('home/aliados/crear'); ?>">Agregar aliado</a>
         </div>
     <?php else: ?>
         <div style="overflow-x:auto;">
@@ -64,8 +64,8 @@ try {
                             <td><?php echo htmlspecialchars($ally['updated_at'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td>
                                 <div class="table-actions">
-                                    <a class="btn btn-outline" style="padding:8px 12px;font-size:12px;" href="home/aliados/editar/<?php echo (int) $ally['id']; ?>">Editar</a>
-                                    <form action="home/aliados/eliminar/<?php echo (int) $ally['id']; ?>" method="post" onsubmit="return confirm('¿Eliminar este aliado?');">
+                                    <a class="btn btn-outline" style="padding:8px 12px;font-size:12px;" href="<?php echo adminUrl('home/aliados/editar/' . (int) $ally['id']); ?>">Editar</a>
+                                    <form action="<?php echo adminUrl('home/aliados/eliminar/' . (int) $ally['id']); ?>" method="post" onsubmit="return confirm('¿Eliminar este aliado?');">
                                         <button class="btn btn-outline" style="padding:8px 12px;font-size:12px;" type="submit">Eliminar</button>
                                     </form>
                                 </div>
