@@ -619,173 +619,231 @@
             </div>
         <?php endif; ?>
 
-        <div style="display:grid;gap:32px;">
-            <div id="hero">
-                <h2 style="margin:0 0 16px;">Hero de Nosotros</h2>
-                <p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Carga una sola imagen optimizada y edita el texto principal de la cabecera.</p>
-                <?php if ($formErrors['hero']): ?>
-                    <div class="empty-state" style="background:#fee2e2;color:#b91c1c;margin-bottom:16px;text-align:left;">
-                        <ul style="margin:0;padding-left:18px;">
-                            <?php foreach ($formErrors['hero'] as $error): ?>
-                                <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
-                <form method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="form_type" value="hero">
-
-                    <label for="message_small">Mensaje pequeño</label>
-                    <input type="text" name="message_small" id="message_small" value="<?php echo htmlspecialchars($heroData['message_small'], ENT_QUOTES, 'UTF-8'); ?>">
-
-                    <label for="title">Título</label>
-                    <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($heroData['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
-
-                    <label for="description">Párrafo</label>
-                    <textarea name="description" id="description" required><?php echo htmlspecialchars($heroData['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-
-                    <label for="hero_image">Imagen</label>
-                    <input type="file" name="hero_image" id="hero_image" accept="image/*">
-                    <?php if ($heroData['image_path']): ?>
-                        <?php $heroUrl = adminAssetUrl($heroData['image_path']); ?>
-                        <?php if ($heroUrl): ?>
-                            <img src="<?php echo htmlspecialchars($heroUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="Hero actual" style="width:100%;max-width:320px;height:180px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;margin:12px 0;display:block;">
-                        <?php endif; ?>
-                        <span style="display:block;font-size:12px;color:#6b7280;word-break:break-all;margin-bottom:18px;">Ruta actual: <?php echo htmlspecialchars($heroData['image_path'], ENT_QUOTES, 'UTF-8'); ?></span>
+        <div class="tabs-container">
+            <div class="tabs-header" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;">
+                <button type="button" class="tab-button js-tab-button" data-tab="hero" style="padding:10px 18px;border:1px solid #e5e7eb;border-radius:999px;background:#111827;color:#ffffff;font-weight:600;cursor:pointer;">Hero de Nosotros</button>
+                <button type="button" class="tab-button js-tab-button" data-tab="sections" style="padding:10px 18px;border:1px solid #e5e7eb;border-radius:999px;background:#f3f4f6;color:#111827;font-weight:600;cursor:pointer;">Bloques de texto</button>
+                <button type="button" class="tab-button js-tab-button" data-tab="presence" style="padding:10px 18px;border:1px solid #e5e7eb;border-radius:999px;background:#f3f4f6;color:#111827;font-weight:600;cursor:pointer;">Tarjetas Sección Nosotros</button>
+            </div>
+            <div class="tabs-body" style="border:1px solid #e5e7eb;border-radius:12px;padding:24px;background:#ffffff;">
+                <div id="hero" class="js-tab-panel" data-tab="hero">
+                    <h2 style="margin:0 0 16px;">Hero de Nosotros</h2>
+                    <p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Carga una sola imagen optimizada y edita el texto principal de la cabecera.</p>
+                    <?php if ($formErrors['hero']): ?>
+                        <div class="empty-state" style="background:#fee2e2;color:#b91c1c;margin-bottom:16px;text-align:left;">
+                            <ul style="margin:0;padding-left:18px;">
+                                <?php foreach ($formErrors['hero'] as $error): ?>
+                                    <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
                     <?php endif; ?>
+                    <form method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="form_type" value="hero">
 
-                    <div class="form-actions">
-                        <button class="btn btn-primary" type="submit">Guardar hero</button>
-                    </div>
-                </form>
-            </div>
+                        <label for="message_small">Mensaje pequeño</label>
+                        <input type="text" name="message_small" id="message_small" value="<?php echo htmlspecialchars($heroData['message_small'], ENT_QUOTES, 'UTF-8'); ?>">
 
-            <div id="sections">
-                <h2 style="margin:0 0 16px;">Bloques de texto</h2>
-                <p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Actualiza los títulos y párrafos de cada bloque de la página Nosotros.</p>
-                <?php if ($formErrors['sections']): ?>
-                    <div class="empty-state" style="background:#fee2e2;color:#b91c1c;margin-bottom:16px;text-align:left;">
-                        <ul style="margin:0;padding-left:18px;">
-                            <?php foreach ($formErrors['sections'] as $error): ?>
-                                <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
-                <form method="post">
-                    <input type="hidden" name="form_type" value="sections">
-                    <?php $sectionIndex = 1; ?>
-                    <?php foreach ($sectionDefinitions as $slug => $meta): ?>
-                        <?php $legendLabel = 'Encabezado ' . $sectionIndex; ?>
-                        <fieldset style="border:1px solid #e5e7eb;border-radius:10px;padding:18px;margin-bottom:20px;">
-                            <legend style="padding:0 8px;font-weight:600;color:#111827;"><?php echo htmlspecialchars($legendLabel, ENT_QUOTES, 'UTF-8'); ?></legend>
-                            <label for="section-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Título</label>
-                            <input type="text" name="sections[<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>][title]" id="section-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($sectionData[$slug]['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <label for="title">Título</label>
+                        <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($heroData['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
 
-                            <label for="section-body-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Texto</label>
-                            <textarea name="sections[<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>][body]" id="section-body-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" required><?php echo htmlspecialchars($sectionData[$slug]['body'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-                        </fieldset>
-                        <?php $sectionIndex++; ?>
-                    <?php endforeach; ?>
-                    <div class="form-actions">
-                        <button class="btn btn-primary" type="submit">Guardar bloques</button>
-                    </div>
-                </form>
-            </div>
+                        <label for="description">Párrafo</label>
+                        <textarea name="description" id="description" required><?php echo htmlspecialchars($heroData['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
 
-            <div id="presence">
-                <h2 style="margin:0 0 16px;">Tarjetas Sección Nosotros</h2>
-                <p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Cada tarjeta requiere imagen optimizada, título y texto.</p>
-                <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
-                    <?php foreach ($presenceDefinitions as $slug => $meta): ?>
-                        <?php $card = $presenceCards[$slug]; ?>
-                        <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;">
-                            <h3 style="margin:0 0 12px;font-size:16px;color:#111827;"><?php echo htmlspecialchars($meta['label'], ENT_QUOTES, 'UTF-8'); ?></h3>
-                            <?php if (!empty($formErrors['presence'][$slug])): ?>
-                                <div class="empty-state" style="background:#fee2e2;color:#b91c1c;margin-bottom:14px;text-align:left;">
-                                    <ul style="margin:0;padding-left:18px;">
-                                        <?php foreach ($formErrors['presence'][$slug] as $error): ?>
-                                            <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </div>
+                        <label for="hero_image">Imagen</label>
+                        <input type="file" name="hero_image" id="hero_image" accept="image/*">
+                        <?php if ($heroData['image_path']): ?>
+                            <?php $heroUrl = adminAssetUrl($heroData['image_path']); ?>
+                            <?php if ($heroUrl): ?>
+                                <img src="<?php echo htmlspecialchars($heroUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="Hero actual" style="width:100%;max-width:320px;height:180px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;margin:12px 0;display:block;">
                             <?php endif; ?>
-                            <div class="form-status js-card-status" aria-live="polite" style="display:none;margin-bottom:12px;"></div>
-                            <form method="post" enctype="multipart/form-data" class="js-ajax-card-form" data-card-type="presence" data-card-slug="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
-                                <input type="hidden" name="form_type" value="presence_card">
-                                <input type="hidden" name="card_slug" value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
+                            <span style="display:block;font-size:12px;color:#6b7280;word-break:break-all;margin-bottom:18px;">Ruta actual: <?php echo htmlspecialchars($heroData['image_path'], ENT_QUOTES, 'UTF-8'); ?></span>
+                        <?php endif; ?>
 
-                                <label for="presence-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Título</label>
-                                <input type="text" name="title" id="presence-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($card['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" type="submit">Guardar hero</button>
+                        </div>
+                    </form>
+                </div>
 
-                                <label for="presence-description-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Texto</label>
-                                <textarea name="description" id="presence-description-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" required><?php echo htmlspecialchars($card['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                <div id="sections" class="js-tab-panel" data-tab="sections">
+                    <h2 style="margin:0 0 16px;">Bloques de texto</h2>
+                    <p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Actualiza los títulos y párrafos de cada bloque de la página Nosotros.</p>
+                    <?php if ($formErrors['sections']): ?>
+                        <div class="empty-state" style="background:#fee2e2;color:#b91c1c;margin-bottom:16px;text-align:left;">
+                            <ul style="margin:0;padding-left:18px;">
+                                <?php foreach ($formErrors['sections'] as $error): ?>
+                                    <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                    <form method="post">
+                        <input type="hidden" name="form_type" value="sections">
+                        <?php $sectionIndex = 1; ?>
+                        <?php foreach ($sectionDefinitions as $slug => $meta): ?>
+                            <?php $legendLabel = 'Encabezado ' . $sectionIndex; ?>
+                            <fieldset style="border:1px solid #e5e7eb;border-radius:10px;padding:18px;margin-bottom:20px;">
+                                <legend style="padding:0 8px;font-weight:600;color:#111827;"><?php echo htmlspecialchars($legendLabel, ENT_QUOTES, 'UTF-8'); ?></legend>
+                                <label for="section-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Título</label>
+                                <input type="text" name="sections[<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>][title]" id="section-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($sectionData[$slug]['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
 
-                                <label for="presence-image-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Imagen</label>
-                                <input type="file" name="image_file" id="presence-image-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" accept="image/*">
-                                <?php if ($card['image_path']): ?>
-                                    <?php $cardUrl = adminAssetUrl($card['image_path']); ?>
-                                    <?php if ($cardUrl): ?>
-                                        <img src="<?php echo htmlspecialchars($cardUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="Imagen actual" class="js-card-preview" style="width:100%;max-width:220px;height:140px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;margin:12px 0;display:block;">
-                                    <?php endif; ?>
-                                    <span class="js-card-path" style="display:block;font-size:12px;color:#6b7280;word-break:break-all;margin-bottom:12px;">Ruta actual: <?php echo htmlspecialchars($card['image_path'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <label for="section-body-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Texto</label>
+                                <textarea name="sections[<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>][body]" id="section-body-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" required><?php echo htmlspecialchars($sectionData[$slug]['body'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+                            </fieldset>
+                            <?php $sectionIndex++; ?>
+                        <?php endforeach; ?>
+                        <div class="form-actions">
+                            <button class="btn btn-primary" type="submit">Guardar bloques</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="presence" class="js-tab-panel" data-tab="presence">
+                    <h2 style="margin:0 0 16px;">Tarjetas Sección Nosotros</h2>
+                    <p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Cada tarjeta requiere imagen optimizada, título y texto.</p>
+                    <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+                        <?php foreach ($presenceDefinitions as $slug => $meta): ?>
+                            <?php $card = $presenceCards[$slug]; ?>
+                            <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;">
+                                <h3 style="margin:0 0 12px;font-size:16px;color:#111827;"><?php echo htmlspecialchars($meta['label'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                                <?php if (!empty($formErrors['presence'][$slug])): ?>
+                                    <div class="empty-state" style="background:#fee2e2;color:#b91c1c;margin-bottom:14px;text-align:left;">
+                                        <ul style="margin:0;padding-left:18px;">
+                                            <?php foreach ($formErrors['presence'][$slug] as $error): ?>
+                                                <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
                                 <?php endif; ?>
+                                <div class="form-status js-card-status" aria-live="polite" style="display:none;margin-bottom:12px;"></div>
+                                <form method="post" enctype="multipart/form-data" class="js-ajax-card-form" data-card-type="presence" data-card-slug="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
+                                    <input type="hidden" name="form_type" value="presence_card">
+                                    <input type="hidden" name="card_slug" value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
 
-                                <div class="form-actions">
-                                    <button class="btn btn-primary" type="submit">Guardar tarjeta</button>
+                                    <label for="presence-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Título</label>
+                                    <input type="text" name="title" id="presence-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($card['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
+
+                                    <label for="presence-description-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Texto</label>
+                                    <textarea name="description" id="presence-description-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" required><?php echo htmlspecialchars($card['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+
+                                    <label for="presence-image-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Imagen</label>
+                                    <input type="file" name="image_file" id="presence-image-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" accept="image/*">
+                                    <?php if ($card['image_path']): ?>
+                                        <?php $cardUrl = adminAssetUrl($card['image_path']); ?>
+                                        <?php if ($cardUrl): ?>
+                                            <img src="<?php echo htmlspecialchars($cardUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="Imagen actual" class="js-card-preview" style="width:100%;max-width:220px;height:140px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;margin:12px 0;display:block;">
+                                        <?php endif; ?>
+                                        <span class="js-card-path" style="display:block;font-size:12px;color:#6b7280;word-break:break-all;margin-bottom:12px;">Ruta actual: <?php echo htmlspecialchars($card['image_path'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <?php endif; ?>
+
+                                    <div class="form-actions">
+                                        <button class="btn btn-primary" type="submit">Guardar tarjeta</button>
+                                    </div>
+                                </form>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <div id="highlights" style="margin-top:32px;">
+                        <h2 style="margin:0 0 16px;">Tarjetas inferiores</h2>
+                        <p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Misión, objetivo y cobertura se editan por separado.</p>
+                        <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+                            <?php foreach ($highlightDefinitions as $slug => $meta): ?>
+                                <?php $card = $highlightCards[$slug]; ?>
+                                <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;">
+                                    <h3 style="margin:0 0 12px;font-size:16px;color:#111827;"><?php echo htmlspecialchars($meta['label'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                                    <?php if (!empty($formErrors['highlights'][$slug])): ?>
+                                        <div class="empty-state" style="background:#fee2e2;color:#b91c1c;margin-bottom:14px;text-align:left;">
+                                            <ul style="margin:0;padding-left:18px;">
+                                                <?php foreach ($formErrors['highlights'][$slug] as $error): ?>
+                                                    <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="form-status js-card-status" aria-live="polite" style="display:none;margin-bottom:12px;"></div>
+                                    <form method="post" class="js-ajax-card-form" data-card-type="highlight" data-card-slug="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="hidden" name="form_type" value="highlight_card">
+                                        <input type="hidden" name="card_slug" value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
+
+                                        <label for="highlight-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Título</label>
+                                        <input type="text" name="title" id="highlight-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($card['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
+
+                                        <label for="highlight-description-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Texto</label>
+                                        <textarea name="description" id="highlight-description-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" required><?php echo htmlspecialchars($card['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+
+                                        <div class="form-actions">
+                                            <button class="btn btn-primary" type="submit">Guardar tarjeta</button>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                            <?php endforeach; ?>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
+
+                    <div style="margin-top:24px;">
+                        <p style="margin:0;color:#6b7280;font-size:13px;">Los servicios destacados se mostrarán con un indicador cuando se implemente su propio CRUD.</p>
+                    </div>
                 </div>
-            </div>
-
-            <div id="highlights">
-                <h2 style="margin:0 0 16px;">Tarjetas inferiores</h2>
-                <p style="margin:0 0 18px;color:#6b7280;font-size:14px;">Misión, objetivo y cobertura se editan por separado.</p>
-                <div style="display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
-                    <?php foreach ($highlightDefinitions as $slug => $meta): ?>
-                        <?php $card = $highlightCards[$slug]; ?>
-                        <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;">
-                            <h3 style="margin:0 0 12px;font-size:16px;color:#111827;"><?php echo htmlspecialchars($meta['label'], ENT_QUOTES, 'UTF-8'); ?></h3>
-                            <?php if (!empty($formErrors['highlights'][$slug])): ?>
-                                <div class="empty-state" style="background:#fee2e2;color:#b91c1c;margin-bottom:14px;text-align:left;">
-                                    <ul style="margin:0;padding-left:18px;">
-                                        <?php foreach ($formErrors['highlights'][$slug] as $error): ?>
-                                            <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </div>
-                            <?php endif; ?>
-                            <div class="form-status js-card-status" aria-live="polite" style="display:none;margin-bottom:12px;"></div>
-                            <form method="post" class="js-ajax-card-form" data-card-type="highlight" data-card-slug="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
-                                <input type="hidden" name="form_type" value="highlight_card">
-                                <input type="hidden" name="card_slug" value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
-
-                                <label for="highlight-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Título</label>
-                                <input type="text" name="title" id="highlight-title-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($card['title'], ENT_QUOTES, 'UTF-8'); ?>" required>
-
-                                <label for="highlight-description-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">Texto</label>
-                                <textarea name="description" id="highlight-description-<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>" required><?php echo htmlspecialchars($card['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
-
-                                <div class="form-actions">
-                                    <button class="btn btn-primary" type="submit">Guardar tarjeta</button>
-                                </div>
-                            </form>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <div>
-                <p style="margin:0;color:#6b7280;font-size:13px;">Los servicios destacados se mostrarán con un indicador cuando se implemente su propio CRUD.</p>
             </div>
         </div>
     </section>
     <script>
     (function () {
+        const tabButtons = document.querySelectorAll('.js-tab-button');
+        const tabPanels = document.querySelectorAll('.js-tab-panel');
+        const tabAliases = { highlights: 'presence' };
+
+        function resolveTab(value) {
+            const raw = (value || '').toString().replace(/^#/, '').toLowerCase();
+            const candidate = tabAliases[raw] || raw;
+            const exists = Array.prototype.some.call(tabPanels, function (panel) {
+                return panel.dataset.tab === candidate;
+            });
+            if (exists) {
+                return candidate;
+            }
+            return tabButtons.length ? tabButtons[0].dataset.tab : '';
+        }
+
+        function renderTab(activeTab) {
+            if (!activeTab) {
+                return;
+            }
+            tabButtons.forEach(function (button) {
+                const isActive = button.dataset.tab === activeTab;
+                button.style.background = isActive ? '#111827' : '#f3f4f6';
+                button.style.color = isActive ? '#ffffff' : '#111827';
+                button.style.borderColor = isActive ? '#111827' : '#e5e7eb';
+            });
+            tabPanels.forEach(function (panel) {
+                panel.style.display = panel.dataset.tab === activeTab ? 'block' : 'none';
+            });
+        }
+
+        if (tabButtons.length && tabPanels.length) {
+            const initialTab = resolveTab(window.location.hash);
+            renderTab(initialTab);
+
+            tabButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    const targetTab = resolveTab(button.dataset.tab);
+                    renderTab(targetTab);
+                    if (targetTab && window.location.hash !== '#' + targetTab) {
+                        window.location.hash = targetTab;
+                    }
+                });
+            });
+
+            window.addEventListener('hashchange', function () {
+                const targetTab = resolveTab(window.location.hash);
+                renderTab(targetTab);
+            });
+        }
+
         const forms = document.querySelectorAll('.js-ajax-card-form');
-        if (!forms.length || !window.fetch || !window.FormData) {
+        if (!(forms.length && window.fetch && window.FormData)) {
             return;
         }
 
