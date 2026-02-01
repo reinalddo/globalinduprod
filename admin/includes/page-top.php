@@ -311,6 +311,10 @@ if (!function_exists('adminNavActiveClass')) {
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18h16v2H4Zm0-4h10v2H4Zm0-8h16v6H4Z"/></svg>
                     <span>Pie de página</span>
                 </a>
+                <a class="sidebar__link<?php echo adminNavActiveClass('account', $activeNav); ?>" href="<?php echo adminUrl('datos'); ?>">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 1 1-5 5 5 5 0 0 1 5-5Zm0 12c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5Zm7.5-4h-1.09a6.97 6.97 0 0 0-1.1-2.65l.77-.77-1.4-1.41-.77.77A6.97 6.97 0 0 0 13 4.59V3h-2v1.09a6.97 6.97 0 0 0-2.65 1.1l-.77-.77-1.41 1.4.77.77A6.97 6.97 0 0 0 4.59 9H3v2h1.09a6.97 6.97 0 0 0 1.1 2.65l-.77.77 1.4 1.41.77-.77A6.97 6.97 0 0 0 11 17.41V18h2v-1.09a6.97 6.97 0 0 0 2.65-1.1l.77.77 1.41-1.4-.77-.77A6.97 6.97 0 0 0 20.41 11H21v-2Z"/></svg>
+                    <span>Datos Admin</span>
+                </a>
             </nav>
             <div class="sidebar__spacer"></div>
             <div class="sidebar__footer">
