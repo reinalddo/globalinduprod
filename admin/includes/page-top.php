@@ -164,6 +164,13 @@ if (!function_exists('adminNavActiveClass')) {
             background: var(--color-black);
             color: #ffffff;
         }
+        .btn-danger {
+            background: #dc2626;
+            color: #ffffff;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
         .badge {
             display: inline-block;
             padding: 4px 8px;
