@@ -400,9 +400,19 @@ require_once __DIR__ . '/../includes/page-top.php';
             <label for="service_content_html">Descripción en HTML</label>
             <textarea name="content_html" id="service_content_html" rows="10" required><?php echo htmlspecialchars($service['content_html'], ENT_QUOTES, 'UTF-8'); ?></textarea>
 
-            <label for="service_gallery_images">Añadir imágenes a la galería</label>
-            <input type="file" name="gallery_images[]" id="service_gallery_images" accept="image/*" multiple>
-            <p style="margin:-10px 0 18px;font-size:0.9rem;color:#6b7280;">Puedes seleccionar varias imágenes a la vez. Se optimizarán automáticamente.</p>
+            <label for="service_gallery_input_0">Añadir imágenes a la galería</label>
+            <div data-gallery-inputs>
+                <div style="margin-bottom:12px;">
+                    <input type="file" name="gallery_images[]" id="service_gallery_input_0" accept="image/*" multiple>
+                </div>
+            </div>
+            <button class="btn btn-outline" type="button" data-add-gallery-input>Añadir otra imagen</button>
+            <p style="margin:12px 0 18px;font-size:0.9rem;color:#6b7280;">Puedes cargar imágenes desde distintas carpetas; cada nueva fila permite elegir otro archivo. Se optimizarán automáticamente.</p>
+            <template id="service-gallery-input-template">
+                <div style="margin-bottom:12px;">
+                    <input type="file" name="gallery_images[]" accept="image/*" multiple>
+                </div>
+            </template>
 
             <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;">
                 <label style="display:flex;align-items:center;gap:8px;margin:0;">
@@ -464,4 +474,53 @@ require_once __DIR__ . '/../includes/page-top.php';
         </div>
     <?php endif; ?>
 </section>
+<script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addButton = document.querySelector('[data-add-gallery-input]');
+        const inputsContainer = document.querySelector('[data-gallery-inputs]');
+        const template = document.getElementById('service-gallery-input-template');
+
+        if (!addButton || !inputsContainer || !template) {
+            return;
+        }
+
+        let counter = inputsContainer.querySelectorAll('input[type="file"]').length;
+
+        addButton.addEventListener('click', function () {
+            const fragment = template.content.cloneNode(true);
+            const newInput = fragment.querySelector('input[type="file"]');
+            if (!newInput) {
+                return;
+            }
+
+            counter += 1;
+            newInput.id = 'service_gallery_input_' + counter;
+
+            inputsContainer.appendChild(fragment);
+            newInput.focus();
+        });
+
+        if (typeof ClassicEditor !== 'undefined') {
+            ClassicEditor.create(document.querySelector('#service_content_html'), {
+                toolbar: [
+                    'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo'
+                ],
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Párrafo', class: 'ck-heading_paragraph' },
+                        { model: 'heading2', view: 'h2', title: 'Encabezado 2', class: 'ck-heading_heading2' },
+                        { model: 'heading3', view: 'h3', title: 'Encabezado 3', class: 'ck-heading_heading3' }
+                    ]
+                }
+            }).then(function (editor) {
+                editor.editing.view.change(function (writer) {
+                    writer.setStyle('min-height', '360px', editor.editing.view.document.getRoot());
+                });
+            }).catch(function (error) {
+                console.error('No se pudo inicializar el editor:', error);
+            });
+        }
+    });
+</script>
 <?php require_once __DIR__ . '/../includes/page-bottom.php'; ?>
