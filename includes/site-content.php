@@ -55,6 +55,83 @@ if (!function_exists('normalizeFrontAssetPath')) {
     }
 }
 
+if (!function_exists('getContactPageSettings')) {
+    function getContactPageSettings(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $defaults = [
+            'hero_title' => 'Estamos listos para apoyar su próximo proyecto',
+            'hero_kicker' => 'Atención 24/7',
+            'hero_description' => 'Comparta los números de parte, modelo de equipo y requerimientos logísticos. Nuestro equipo responderá con disponibilidad, tiempos de entrega y alternativas compatibles.',
+            'content_html' => '<p><strong>Venezuela</strong><br>Global Induprod RL<br>Urbanización Colinas del Yurubí, Calle Polígono de Tiro, diagonal Hospital Pediátrico "Niño Jesús". Centro Profesional Spasso, Planta Baja Oficinas 02 y 03.<br>San Felipe, Yaracuy - Venezuela.</p><p><strong>Teléfonos:</strong> 0412-762.25.47 / 0424-574.04.08 / 0424-312.7477 / 0412-268.2883</p><p><strong>Correo:</strong> <a href="mailto:mauro@induprod.com">mauro@induprod.com</a></p>',
+            'phone_placeholder' => '+58 412-0000000',
+            'map_embed' => '',
+            'contact_email' => 'mauro@induprod.com',
+            'smtp_host' => '',
+            'smtp_port' => 587,
+            'smtp_username' => '',
+            'smtp_password' => '',
+            'smtp_encryption' => '',
+            'smtp_auth' => 1,
+            'smtp_from_email' => '',
+            'smtp_from_name' => 'Formulario de Contacto',
+            'email_subject' => 'Nuevo mensaje desde el sitio web',
+            'email_logo_path' => null,
+            'email_logo_url' => null,
+            'email_logo_absolute' => null,
+        ];
+
+        try {
+            $db = getAdminDb();
+        } catch (Throwable $exception) {
+            $cache = $defaults;
+            return $cache;
+        }
+
+        try {
+            $sql = 'SELECT hero_title, hero_kicker, hero_description, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path FROM contact_page_settings ORDER BY id ASC LIMIT 1';
+            if ($result = $db->query($sql)) {
+                if ($row = $result->fetch_assoc()) {
+                    foreach (['hero_title','hero_kicker','hero_description','content_html','phone_placeholder','map_embed','contact_email','smtp_host','smtp_username','smtp_password','smtp_encryption','smtp_from_email','smtp_from_name','email_subject'] as $field) {
+                        if (isset($row[$field]) && trim((string) $row[$field]) !== '') {
+                            $defaults[$field] = (string) $row[$field];
+                        }
+                    }
+                    if (isset($row['smtp_port'])) {
+                        $defaults['smtp_port'] = (int) $row['smtp_port'];
+                    }
+                    if (isset($row['smtp_auth'])) {
+                        $defaults['smtp_auth'] = (int) $row['smtp_auth'] === 1 ? 1 : 0;
+                    }
+
+                    if (!empty($row['email_logo_path'])) {
+                        $normalized = normalizeFrontAssetPath($row['email_logo_path']);
+                        if ($normalized) {
+                            $defaults['email_logo_path'] = $row['email_logo_path'];
+                            $defaults['email_logo_url'] = $normalized;
+                            $absolute = dirname(__DIR__) . '/' . ltrim($row['email_logo_path'], '/');
+                            if (is_file($absolute)) {
+                                $defaults['email_logo_absolute'] = $absolute;
+                            }
+                        }
+                    }
+                }
+                $result->free();
+            }
+        } catch (Throwable $exception) {
+            // Se mantienen los valores por defecto si falla la consulta.
+        }
+
+        $cache = $defaults;
+        return $cache;
+    }
+}
+
 if (!function_exists('getAboutPageContent')) {
     function getAboutPageContent(): array
     {
