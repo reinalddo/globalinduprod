@@ -82,6 +82,41 @@ if (!function_exists('getSiteFooterSettings')) {
     }
 }
 
+if (!function_exists('getSiteBrandAssets')) {
+    function getSiteBrandAssets(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $cache = [
+            'favicon_path' => null,
+            'updated_at' => null
+        ];
+
+        try {
+            $db = getAdminDb();
+            $sql = 'SELECT favicon_path, updated_at FROM site_brand_assets ORDER BY id ASC LIMIT 1';
+            if ($result = $db->query($sql)) {
+                if ($row = $result->fetch_assoc()) {
+                    $faviconPath = isset($row['favicon_path']) ? trim((string) $row['favicon_path']) : '';
+                    $cache['favicon_path'] = $faviconPath !== '' ? $faviconPath : null;
+                    if (isset($row['updated_at'])) {
+                        $cache['updated_at'] = (string) $row['updated_at'];
+                    }
+                }
+                $result->free();
+            }
+        } catch (Throwable $exception) {
+            // Se mantiene el valor por defecto si ocurre un error.
+        }
+
+        return $cache;
+    }
+}
+
 if (!function_exists('getSiteFooterSocials')) {
     function getSiteFooterSocials(): array
     {

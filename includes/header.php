@@ -6,6 +6,7 @@ $activeNav = $activeNav ?? 'home';
 
 require_once __DIR__ . '/site-content.php';
 $headerSettings = getSiteHeaderSettings();
+$brandAssets = getSiteBrandAssets();
 $navLogoPath = $headerSettings['logo_path'] ?? null;
 $navLogoLabel = $headerSettings['logo_label'] ?? null;
 $navLogoUrl = $rootPath . '/logo.png';
@@ -15,6 +16,20 @@ if ($navLogoPath) {
 }
 
 $navLogoAlt = $navLogoLabel ? 'Logo de ' . $navLogoLabel : 'Logo Global Induprod';
+
+$faviconUrl = $rootPath . '/logo.png';
+$faviconType = 'image/png';
+if (!empty($brandAssets['favicon_path'])) {
+  $faviconUrl = $rootPath . '/' . ltrim($brandAssets['favicon_path'], '/');
+  $extension = strtolower(pathinfo($brandAssets['favicon_path'], PATHINFO_EXTENSION));
+  if ($extension === 'ico') {
+    $faviconType = 'image/x-icon';
+  } elseif ($extension === 'svg') {
+    $faviconType = 'image/svg+xml';
+  } elseif ($extension === 'webp') {
+    $faviconType = 'image/webp';
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -22,7 +37,7 @@ $navLogoAlt = $navLogoLabel ? 'Logo de ' . $navLogoLabel : 'Logo Global Induprod
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
-  <link rel="icon" type="image/png" sizes="32x32" href="<?php echo $rootPath; ?>/logo.png">
+  <link rel="icon" type="<?php echo htmlspecialchars($faviconType, ENT_QUOTES, 'UTF-8'); ?>" href="<?php echo htmlspecialchars($faviconUrl, ENT_QUOTES, 'UTF-8'); ?>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
   <link rel="stylesheet" href="<?php echo $assetPath; ?>/css/style.css">

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/brand.php';
 
 $adminUser = $_SESSION['admin_user'] ?? null;
 $pageTitle = $pageTitle ?? 'Panel administrativo';
@@ -12,6 +13,22 @@ if (!function_exists('adminNavActiveClass')) {
         return $key === $active ? ' sidebar__link--active active' : '';
     }
 }
+
+brandEnsureSchema($db);
+$brandSettings = brandFetchSettings($db);
+$adminFaviconUrl = adminAssetUrl('logo.png');
+$adminFaviconType = 'image/png';
+if (!empty($brandSettings['favicon_path'])) {
+    $adminFaviconUrl = adminAssetUrl($brandSettings['favicon_path']);
+    $extension = strtolower(pathinfo($brandSettings['favicon_path'], PATHINFO_EXTENSION));
+    if ($extension === 'ico') {
+        $adminFaviconType = 'image/x-icon';
+    } elseif ($extension === 'svg') {
+        $adminFaviconType = 'image/svg+xml';
+    } elseif ($extension === 'webp') {
+        $adminFaviconType = 'image/webp';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -19,6 +36,7 @@ if (!function_exists('adminNavActiveClass')) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></title>
+    <link rel="icon" type="<?php echo htmlspecialchars($adminFaviconType, ENT_QUOTES, 'UTF-8'); ?>" href="<?php echo htmlspecialchars($adminFaviconUrl, ENT_QUOTES, 'UTF-8'); ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
         :root {

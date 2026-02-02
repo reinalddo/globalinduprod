@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/brand.php';
 
 $pageTitle = 'Datos Admin | Administración';
 $pageHeader = 'Configuración de la cuenta administrador';
@@ -57,7 +58,8 @@ $canCreateAdmins = strtolower((string) $currentAdmin['role']) === 'superadmin';
 $feedback = [
     'profile' => ['success' => '', 'errors' => []],
     'password' => ['success' => '', 'errors' => []],
-    'create' => ['success' => '', 'errors' => []]
+    'create' => ['success' => '', 'errors' => []],
+    'branding' => ['success' => '', 'errors' => []]
 ];
 
 $createOld = [
@@ -69,7 +71,7 @@ $createOld = [
 if (isset($_SESSION['admin_account_flash'])) {
     $flash = $_SESSION['admin_account_flash'];
     unset($_SESSION['admin_account_flash']);
-    foreach (['profile', 'password', 'create'] as $key) {
+    foreach (['profile', 'password', 'create', 'branding'] as $key) {
         if (isset($flash[$key]['success'])) {
             $feedback[$key]['success'] = (string) $flash[$key]['success'];
         }
@@ -81,6 +83,9 @@ if (isset($_SESSION['admin_account_flash'])) {
         $createOld = array_merge($createOld, $flash['create']['old']);
     }
 }
+
+brandEnsureSchema($db);
+$brandSettings = brandFetchSettings($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formType = $_POST['form_type'] ?? '';
@@ -214,6 +219,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
         header('Location: ' . adminUrl('datos'));
         exit;
+    } elseif ($formType === 'update_favicon') {
+        $faviconFile = $_FILES['favicon_file'] ?? null;
+        $errors = [];
+
+        if (!$faviconFile || $faviconFile['error'] === UPLOAD_ERR_NO_FILE) {
+            $errors[] = 'Debes seleccionar un archivo de favicon.';
+        }
+
+        $temporaryFavicon = null;
+        if (!$errors) {
+            try {
+                $temporaryFavicon = brandSaveFaviconFile($faviconFile);
+            } catch (Throwable $exception) {
+                $errors[] = $exception->getMessage();
+            }
+        }
+
+        if ($errors) {
+            if ($temporaryFavicon) {
+                brandDeleteStoredFavicon($temporaryFavicon);
+            }
+            $_SESSION['admin_account_flash'] = [
+                'branding' => ['errors' => $errors]
+            ];
+            header('Location: ' . adminUrl('datos') . '#branding');
+            exit;
+        }
+
+        try {
+            $currentPath = $brandSettings['favicon_path'] ?? '';
+
+            if (!empty($brandSettings['id'])) {
+                $stmt = $db->prepare('UPDATE site_brand_assets SET favicon_path = ?, updated_at = NOW() WHERE id = ? LIMIT 1');
+                if ($stmt === false) {
+                    throw new RuntimeException('No se pudo guardar el favicon.');
+                }
+                $stmt->bind_param('si', $temporaryFavicon, $brandSettings['id']);
+                $stmt->execute();
+                $stmt->close();
+            } else {
+                $stmt = $db->prepare('INSERT INTO site_brand_assets (favicon_path) VALUES (?)');
+                if ($stmt === false) {
+                    throw new RuntimeException('No se pudo registrar el favicon.');
+                }
+                $stmt->bind_param('s', $temporaryFavicon);
+                $stmt->execute();
+                $stmt->close();
+            }
+
+            if ($currentPath && $currentPath !== $temporaryFavicon) {
+                brandDeleteStoredFavicon($currentPath);
+            }
+
+            $_SESSION['admin_account_flash'] = [
+                'branding' => ['success' => 'Favicon actualizado correctamente.']
+            ];
+            header('Location: ' . adminUrl('datos') . '#branding');
+            exit;
+        } catch (Throwable $exception) {
+            if ($temporaryFavicon) {
+                brandDeleteStoredFavicon($temporaryFavicon);
+            }
+            $_SESSION['admin_account_flash'] = [
+                'branding' => ['errors' => ['No se pudo guardar el favicon. Intenta nuevamente.']]
+            ];
+            header('Location: ' . adminUrl('datos') . '#branding');
+            exit;
+        }
     } elseif ($formType === 'create_admin' && $canCreateAdmins) {
         $newUsername = trim($_POST['new_username'] ?? '');
         $newFullName = trim($_POST['new_full_name'] ?? '');
@@ -401,6 +474,53 @@ require_once __DIR__ . '/../includes/page-top.php';
                 </div>
             </form>
         </div>
+    </div>
+
+    <div id="branding" style="margin-top:40px;max-width:420px;">
+        <h2 style="margin:0 0 16px;">Favicon del sitio</h2>
+        <p style="margin:0 0 18px;color:#6b7280;font-size:0.95rem;">Actualiza el icono que se muestra en las pestañas del navegador tanto del sitio público como del panel administrativo.</p>
+        <?php if ($feedback['branding']['success']): ?>
+            <div style="background:#ecfdf5;color:#065f46;border:1px solid #34d399;padding:14px 16px;border-radius:8px;margin-bottom:16px;">
+                <?php echo htmlspecialchars($feedback['branding']['success'], ENT_QUOTES, 'UTF-8'); ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($feedback['branding']['errors']): ?>
+            <div style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:14px 16px;border-radius:8px;margin-bottom:16px;">
+                <ul style="margin:0;padding-left:18px;">
+                    <?php foreach ($feedback['branding']['errors'] as $error): ?>
+                        <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+        <form method="post" enctype="multipart/form-data" autocomplete="off" style="display:flex;flex-direction:column;gap:14px;">
+            <input type="hidden" name="form_type" value="update_favicon">
+
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <label for="favicon_file">Seleccionar favicon</label>
+                <input type="file" name="favicon_file" id="favicon_file" accept="image/png,image/x-icon,image/vnd.microsoft.icon,image/svg+xml,image/webp" required>
+            </div>
+
+            <?php if (!empty($brandSettings['favicon_path'])): ?>
+                <div style="display:flex;align-items:center;gap:16px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:12px 16px;">
+                    <span style="display:inline-flex;width:40px;height:40px;border-radius:10px;background:#ffffff;border:1px solid #e5e7eb;align-items:center;justify-content:center;">
+                        <img src="<?php echo htmlspecialchars(adminAssetUrl($brandSettings['favicon_path']), ENT_QUOTES, 'UTF-8'); ?>" alt="Favicon actual" style="width:24px;height:24px;object-fit:contain;">
+                    </span>
+                    <div style="display:flex;flex-direction:column;gap:4px;">
+                        <span style="font-size:0.85rem;color:#111111;">Archivo actual: <?php echo htmlspecialchars($brandSettings['favicon_path'], ENT_QUOTES, 'UTF-8'); ?></span>
+                        <?php if (!empty($brandSettings['updated_at'])): ?>
+                            <span style="font-size:0.75rem;color:#6b7280;">Última actualización: <?php echo htmlspecialchars($brandSettings['updated_at'], ENT_QUOTES, 'UTF-8'); ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <p style="margin:0;color:#6b7280;font-size:0.8rem;">Usa un PNG, WEBP, SVG o ICO cuadrado de hasta 1024px de lado y máximo 500KB.</p>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Actualizar favicon</button>
+            </div>
+        </form>
     </div>
 
     <?php if ($canCreateAdmins): ?>
