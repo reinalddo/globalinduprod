@@ -30,6 +30,10 @@ if (!empty($brandAssets['favicon_path'])) {
     $faviconType = 'image/webp';
   }
 }
+$currentSearchQuery = '';
+if (isset($_GET['q'])) {
+  $currentSearchQuery = trim((string) $_GET['q']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -71,16 +75,16 @@ if (!empty($brandAssets['favicon_path'])) {
               <span class="sr-only">Abrir buscador</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3a7.5 7.5 0 015.926 12.137l5.218 5.219a1 1 0 01-1.414 1.414l-5.219-5.218A7.5 7.5 0 1110.5 3zm0 2a5.5 5.5 0 100 11 5.5 5.5 0 000-11z"/></svg>
             </button>
-            <form class="nav-search__form" id="nav-search-form" role="search" hidden>
-              <label for="header-search" class="sr-only">Buscar</label>
-              <input id="header-search" type="search" placeholder="buscar..." autocomplete="off">
+            <form class="nav-search__form" id="nav-search-form" role="search" action="<?php echo $rootPath; ?>/servicios/" method="get" hidden>
+              <label for="header-search" class="sr-only">Buscar servicios</label>
+              <input id="header-search" name="q" type="search" placeholder="Buscar servicios..." value="<?php echo htmlspecialchars($currentSearchQuery, ENT_QUOTES, 'UTF-8'); ?>" autocomplete="off" required>
             </form>
           </div>
           <div class="nav-languages" role="group" aria-label="Cambiar idioma">
             <a href="#" class="nav-languages__link is-active" data-lang="es">ES</a>
             <a href="#" class="nav-languages__link" data-lang="en">EN</a>
           </div>
-          <a class="nav-quote" href="#cotizar">cotizar</a>
+          <a class="nav-quote" href="<?php echo $rootPath; ?>/contacto/">cotizar</a>
         </div>
       </div>
     </nav>

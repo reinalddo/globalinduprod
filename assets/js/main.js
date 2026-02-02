@@ -106,6 +106,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (searchForm && searchInput) {
+    searchForm.addEventListener('submit', (event) => {
+      const value = searchInput.value ? searchInput.value.trim() : '';
+      if (value === '') {
+        event.preventDefault();
+        searchInput.value = '';
+        searchInput.focus();
+        return;
+      }
+      searchInput.value = value;
+      closeSearch();
+    });
+  }
+
   if (siteHeader) {
     const syncHeaderStyle = () => {
       siteHeader.classList.toggle('is-condensed', window.scrollY > 60);

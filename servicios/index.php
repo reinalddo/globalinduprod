@@ -1,6 +1,11 @@
 <?php
 require_once dirname(__DIR__) . '/includes/site-content.php';
 
+$searchQuery = '';
+if (isset($_GET['q'])) {
+  $searchQuery = trim((string) $_GET['q']);
+}
+
 $requestSlug = '';
 if (isset($_GET['slug'])) {
   $requestSlug = trim((string) $_GET['slug']);
@@ -21,12 +26,14 @@ if (isset($_GET['slug'])) {
 $rootPath = $requestSlug !== '' ? '../..' : '..';
 $assetPath = $rootPath . '/assets';
 $activeNav = 'servicios';
+$isSearchMode = $searchQuery !== '' && $requestSlug === '';
 
 $servicesHero = [];
 $servicesList = [];
 $serviceDetail = null;
 $serviceGallery = [];
 $relatedServices = [];
+$searchResults = [];
 
 if ($requestSlug !== '') {
   $serviceDetail = getServiceBySlug($requestSlug);
@@ -44,9 +51,18 @@ if ($requestSlug !== '') {
     $pageTitle = 'Servicio no encontrado';
   }
 } else {
-  $pageTitle = 'Servicios';
   $servicesHero = getServicesPageHeroContent();
-  $servicesList = getServicesListData();
+  if ($isSearchMode) {
+    $pageTitle = 'Resultados de búsqueda';
+    $servicesHero['title'] = 'Resultados de búsqueda';
+    $servicesHero['description'] = sprintf('Mostrando coincidencias para "%s".', $searchQuery);
+    $servicesHero['listing_title'] = 'Coincidencias encontradas';
+    $servicesHero['listing_description'] = 'Lista de servicios que cumplen con tu búsqueda.';
+    $searchResults = searchServices($searchQuery);
+  } else {
+    $pageTitle = 'Servicios';
+    $servicesList = getServicesListData();
+  }
 }
 
 include dirname(__DIR__) . '/includes/header.php';
@@ -199,33 +215,99 @@ include dirname(__DIR__) . '/includes/header.php';
         </div>
       </section>
 
-      <section class="main-content services-overview">
+      <section class="main-content services-overview<?php echo $isSearchMode ? ' services-overview--search' : ''; ?>">
         <header class="services-overview__intro">
-          <h2><?php echo htmlspecialchars($servicesHero['listing_title'], ENT_QUOTES, 'UTF-8'); ?></h2>
-          <p><?php echo htmlspecialchars($servicesHero['listing_description'], ENT_QUOTES, 'UTF-8'); ?></p>
-        </header>
-        <div class="services-grid">
-          <?php if (!$servicesList): ?>
-            <p>No hay servicios publicados en este momento.</p>
+          <?php if ($isSearchMode): ?>
+            <?php $matchesCount = count($searchResults); ?>
+            <?php $searchTermHtml = htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8'); ?>
+            <h2>
+              <?php if ($matchesCount === 0): ?>
+                Sin coincidencias
+              <?php elseif ($matchesCount === 1): ?>
+                1 coincidencia encontrada
+              <?php else: ?>
+                <?php echo $matchesCount; ?> coincidencias encontradas
+              <?php endif; ?>
+            </h2>
+            <p>
+              <?php if ($matchesCount === 0): ?>
+                No encontramos resultados para "<?php echo $searchTermHtml; ?>". Revisa la ortografía o explora todos los servicios disponibles.
+              <?php else: ?>
+                Resultados para "<?php echo $searchTermHtml; ?>".
+              <?php endif; ?>
+            </p>
           <?php else: ?>
-            <?php foreach ($servicesList as $service): ?>
-              <?php $serviceUrl = $rootPath . '/servicios/' . rawurlencode($service['slug']) . '/'; ?>
-              <a class="service-card" href="<?php echo htmlspecialchars($serviceUrl, ENT_QUOTES, 'UTF-8'); ?>">
-                <picture>
-                  <img src="<?php echo htmlspecialchars($service['image_path'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
-                </picture>
-                <div class="service-card__body">
-                  <?php if (!empty($service['kicker'])): ?>
-                    <span class="service-card__kicker"><?php echo htmlspecialchars($service['kicker'], ENT_QUOTES, 'UTF-8'); ?></span>
-                  <?php endif; ?>
-                  <h3><?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
-                  <p><?php echo htmlspecialchars($service['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
-                  <span class="service-card__cta">Ver servicio</span>
-                </div>
-              </a>
-            <?php endforeach; ?>
+            <h2><?php echo htmlspecialchars($servicesHero['listing_title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+            <p><?php echo htmlspecialchars($servicesHero['listing_description'], ENT_QUOTES, 'UTF-8'); ?></p>
           <?php endif; ?>
-        </div>
+        </header>
+
+        <?php if ($isSearchMode): ?>
+          <?php if ($searchResults): ?>
+            <?php $searchTermEscaped = htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8'); ?>
+            <div class="services-grid">
+              <?php foreach ($searchResults as $service): ?>
+                <?php
+                  $serviceUrl = $rootPath . '/servicios/' . rawurlencode($service['slug']) . '/';
+                  $descriptionSource = $service['excerpt'] !== '' ? $service['excerpt'] : ($service['summary'] ?? '');
+                  $descriptionHtml = '';
+                  if ($descriptionSource !== '') {
+                    $descriptionHtml = htmlspecialchars($descriptionSource, ENT_QUOTES, 'UTF-8');
+                    if ($service['excerpt'] !== '' && $searchTermEscaped !== '') {
+                      $pattern = '/' . preg_quote($searchTermEscaped, '/') . '/iu';
+                      $descriptionHtml = preg_replace($pattern, '<mark>$0</mark>', $descriptionHtml);
+                    }
+                  }
+                ?>
+                <a class="service-card" href="<?php echo htmlspecialchars($serviceUrl, ENT_QUOTES, 'UTF-8'); ?>">
+                  <?php if (!empty($service['image_path'])): ?>
+                    <picture>
+                      <img src="<?php echo htmlspecialchars($service['image_path'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                    </picture>
+                  <?php endif; ?>
+                  <div class="service-card__body">
+                    <?php if (!empty($service['kicker'])): ?>
+                      <span class="service-card__kicker"><?php echo htmlspecialchars($service['kicker'], ENT_QUOTES, 'UTF-8'); ?></span>
+                    <?php endif; ?>
+                    <h3><?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                    <?php if ($descriptionHtml !== ''): ?>
+                      <p><?php echo $descriptionHtml; ?></p>
+                    <?php endif; ?>
+                    <span class="service-card__cta">Ver servicio</span>
+                  </div>
+                </a>
+              <?php endforeach; ?>
+            </div>
+          <?php else: ?>
+            <p>No se encontraron servicios que coincidan con la búsqueda.</p>
+          <?php endif; ?>
+          <div class="services-overview__actions">
+            <a class="button is-primary" href="<?php echo $rootPath; ?>/servicios/">Ver todos los servicios</a>
+          </div>
+        <?php else: ?>
+          <div class="services-grid">
+            <?php if (!$servicesList): ?>
+              <p>No hay servicios publicados en este momento.</p>
+            <?php else: ?>
+              <?php foreach ($servicesList as $service): ?>
+                <?php $serviceUrl = $rootPath . '/servicios/' . rawurlencode($service['slug']) . '/'; ?>
+                <a class="service-card" href="<?php echo htmlspecialchars($serviceUrl, ENT_QUOTES, 'UTF-8'); ?>">
+                  <picture>
+                    <img src="<?php echo htmlspecialchars($service['image_path'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                  </picture>
+                  <div class="service-card__body">
+                    <?php if (!empty($service['kicker'])): ?>
+                      <span class="service-card__kicker"><?php echo htmlspecialchars($service['kicker'], ENT_QUOTES, 'UTF-8'); ?></span>
+                    <?php endif; ?>
+                    <h3><?php echo htmlspecialchars($service['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                    <p><?php echo htmlspecialchars($service['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
+                    <span class="service-card__cta">Ver servicio</span>
+                  </div>
+                </a>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
       </section>
     <?php endif; ?>
   </main>

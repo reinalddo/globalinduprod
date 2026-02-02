@@ -513,6 +513,146 @@ if (!function_exists('getServicesListData')) {
     }
 }
 
+if (!function_exists('searchServices')) {
+    function searchServices(string $query): array
+    {
+        $normalized = trim($query);
+        if ($normalized === '') {
+            return [];
+        }
+
+        $buildExcerpt = static function (string $source) use ($normalized): string {
+            $clean = trim(preg_replace('/\s+/u', ' ', strip_tags($source)) ?? '');
+            if ($clean === '') {
+                return '';
+            }
+
+            $lowerSource = mb_strtolower($clean, 'UTF-8');
+            $lowerQuery = mb_strtolower($normalized, 'UTF-8');
+            $position = mb_strpos($lowerSource, $lowerQuery, 0, 'UTF-8');
+            if ($position === false) {
+                $position = 0;
+            }
+
+            $window = 220;
+            $start = $position > 80 ? $position - 80 : 0;
+            $excerpt = mb_substr($clean, $start, $window, 'UTF-8');
+
+            if ($start > 0) {
+                $excerpt = '…' . ltrim($excerpt);
+            }
+
+            if ($start + $window < mb_strlen($clean, 'UTF-8')) {
+                $excerpt = rtrim($excerpt) . '…';
+            }
+
+            return $excerpt;
+        };
+
+        $normalizeRow = static function (array $row) use ($buildExcerpt, $normalized): ?array {
+            $slug = isset($row['slug']) ? trim((string) $row['slug']) : '';
+            $title = isset($row['title']) ? trim((string) $row['title']) : '';
+            if ($slug === '' || $title === '') {
+                return null;
+            }
+
+            $summary = isset($row['summary']) ? trim((string) $row['summary']) : '';
+            $kicker = isset($row['kicker']) ? trim((string) $row['kicker']) : '';
+            $imagePath = isset($row['hero_image_path']) ? trim((string) $row['hero_image_path']) : '';
+            $contentHtml = isset($row['content_html']) ? (string) $row['content_html'] : '';
+
+            $normalizedImage = null;
+            if ($imagePath !== '') {
+                $normalizedImage = preg_match('/^https?:\/\//i', $imagePath) || str_starts_with($imagePath, 'data:')
+                    ? $imagePath
+                    : '/' . ltrim($imagePath, '/');
+            }
+
+            $excerptSource = $summary !== '' ? $summary : $contentHtml;
+            $excerpt = $buildExcerpt($excerptSource);
+            if ($excerpt === '' && $kicker !== '') {
+                $excerpt = $buildExcerpt($kicker);
+            }
+
+            return [
+                'slug' => $slug,
+                'title' => $title,
+                'summary' => $summary,
+                'image_path' => $normalizedImage,
+                'kicker' => $kicker,
+                'excerpt' => $excerpt,
+            ];
+        };
+
+        $collectFallback = static function () use ($normalizeRow, $normalized): array {
+            $matches = [];
+            $services = getServicesListData();
+            if (!$services) {
+                return $matches;
+            }
+
+            foreach ($services as $service) {
+                $haystack = implode(' ', [
+                    $service['title'] ?? '',
+                    $service['summary'] ?? '',
+                    $service['kicker'] ?? '',
+                ]);
+                if (mb_stripos($haystack, $normalized, 0, 'UTF-8') === false) {
+                    continue;
+                }
+
+                $matches[] = [
+                    'slug' => $service['slug'],
+                    'title' => $service['title'],
+                    'summary' => $service['summary'],
+                    'image_path' => $service['image_path'],
+                    'kicker' => $service['kicker'],
+                    'excerpt' => $service['summary'],
+                ];
+            }
+
+            return $matches;
+        };
+
+        try {
+            $db = getAdminDb();
+        } catch (Throwable $exception) {
+            return $collectFallback();
+        }
+
+        $sql = 'SELECT slug, title, summary, hero_image_path, kicker, content_html FROM services WHERE title LIKE ? OR summary LIKE ? OR content_html LIKE ? OR kicker LIKE ? ORDER BY title ASC';
+        $stmt = $db->prepare($sql);
+        if ($stmt === false) {
+            return $collectFallback();
+        }
+
+        $like = '%' . $normalized . '%';
+        $stmt->bind_param('ssss', $like, $like, $like, $like);
+
+        $results = [];
+        if ($stmt->execute()) {
+            $queryResult = $stmt->get_result();
+            if ($queryResult) {
+                while ($row = $queryResult->fetch_assoc()) {
+                    $normalizedRow = $normalizeRow($row);
+                    if ($normalizedRow !== null) {
+                        $results[] = $normalizedRow;
+                    }
+                }
+                $queryResult->free();
+            }
+        }
+
+        $stmt->close();
+
+        if ($results) {
+            return $results;
+        }
+
+        return $collectFallback();
+    }
+}
+
 if (!function_exists('getServiceBySlug')) {
     function getServiceBySlug(string $slug): ?array
     {
