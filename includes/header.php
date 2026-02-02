@@ -3,6 +3,18 @@ $pageTitle = $pageTitle ?? 'AGA Parts Demo';
 $rootPath = $rootPath ?? '.';
 $assetPath = $assetPath ?? $rootPath . '/assets';
 $activeNav = $activeNav ?? 'home';
+
+require_once __DIR__ . '/site-content.php';
+$headerSettings = getSiteHeaderSettings();
+$navLogoPath = $headerSettings['logo_path'] ?? null;
+$navLogoLabel = $headerSettings['logo_label'] ?? null;
+$navLogoUrl = $rootPath . '/logo.png';
+
+if ($navLogoPath) {
+  $navLogoUrl = $rootPath . '/' . ltrim($navLogoPath, '/');
+}
+
+$navLogoAlt = $navLogoLabel ? 'Logo de ' . $navLogoLabel : 'Logo Global Induprod';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -20,7 +32,10 @@ $activeNav = $activeNav ?? 'home';
     <nav class="navbar transparent-nav" role="navigation" aria-label="Menú principal">
       <div class="navbar-brand">
         <a class="navbar-item brand-logo" href="<?php echo $rootPath; ?>/">
-          <img src="<?php echo $rootPath; ?>/logo.png" alt="Logo Global Induprod" loading="lazy">
+          <img src="<?php echo htmlspecialchars($navLogoUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($navLogoAlt, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+          <?php if ($navLogoLabel): ?>
+            <span class="brand-logo__label"><?php echo htmlspecialchars($navLogoLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+          <?php endif; ?>
         </a>
         <a role="button" class="navbar-burger" aria-label="Abrir menú" aria-expanded="false" data-nav-toggle>
           <span aria-hidden="true"></span>
