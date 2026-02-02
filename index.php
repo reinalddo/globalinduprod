@@ -14,6 +14,38 @@ if ($alliesImages === false) {
   natsort($alliesImages);
   $alliesImages = array_values($alliesImages);
 }
+
+if (!function_exists('resolveFrontAssetPath')) {
+  function resolveFrontAssetPath(string $path, string $rootPath): string
+  {
+    if ($path === '') {
+      return '';
+    }
+
+    if (preg_match('/^https?:\/\//i', $path) || str_starts_with($path, 'data:') || preg_match('/^[a-z0-9.+-]+:/i', $path)) {
+      return $path;
+    }
+
+    $trimmed = ltrim($path, '/');
+
+    if (!empty($_SERVER['HTTP_HOST'])) {
+      $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+      $scheme = $isHttps ? 'https://' : 'http://';
+      $scriptDir = dirname($_SERVER['SCRIPT_NAME'] ?? '') ?: '';
+      $scriptDir = str_replace('\\', '/', $scriptDir);
+      $scriptDir = $scriptDir === '/' ? '' : rtrim($scriptDir, '/');
+      $baseUrl = rtrim($scheme . $_SERVER['HTTP_HOST'] . $scriptDir, '/');
+      return $baseUrl . '/' . $trimmed;
+    }
+
+    if ($rootPath === '.' || $rootPath === './') {
+      return '/' . $trimmed;
+    }
+
+    return rtrim($rootPath, '/') . '/' . $trimmed;
+  }
+}
+
 $featuredServices = [
   [
     'title' => 'Logística y Suministros',
@@ -50,36 +82,6 @@ $featuredServices = [
     'excerpt' => 'Sistemas de protección, dotación de EPP y vigilancia especializada para operaciones críticas.',
     'image' => 'seguridad.jpg',
     'link' => $rootPath . '/servicios/seguridad-industrial/',
-  ],
-];
-$heroImageBase = rtrim($rootPath, '/') . '/inicio/hero/';
-if (!empty($_SERVER['HTTP_HOST'])) {
-  $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-  $scheme = $isHttps ? 'https://' : 'http://';
-  $scriptDir = dirname($_SERVER['SCRIPT_NAME'] ?? '') ?: '';
-  $scriptDir = str_replace('\\', '/', $scriptDir);
-  $scriptDir = ($scriptDir === '/' ? '' : rtrim($scriptDir, '/'));
-  $baseUrl = $scheme . $_SERVER['HTTP_HOST'] . $scriptDir;
-  $heroImageBase = rtrim($baseUrl, '/') . '/inicio/hero/';
-}
-$heroSlides = [
-  [
-    'image' => $heroImageBase . 'hero.png',
-    'tagline' => 'Proveedor global',
-    'title' => 'Repuestos y soluciones para maquinaria pesada',
-    'copy' => 'Distribuimos componentes originales y alternativos para flotas de minería, construcción y agricultura. Cobertura mundial, logística ágil y asesoría técnica especializada.',
-  ],
-  [
-    'image' => $heroImageBase . 'hero-02.svg',
-    'tagline' => 'Integración industrial',
-    'title' => 'Ingeniería, mantenimiento y talento técnico 360°',
-    'copy' => 'Coordinamos proyectos EPC, planes predictivos y formación especializada para maximizar la disponibilidad operativa en refinerías, puertos y plantas de proceso.',
-  ],
-  [
-    'image' => $heroImageBase . 'hero-03.svg',
-    'tagline' => 'Cobertura latinoamericana',
-    'title' => 'Logística binacional y respuesta inmediata',
-    'copy' => 'Centros de distribución en América y alianzas estratégicas que aseguran inventarios críticos, embarques puerta a puerta y soporte en sitio 24/7.',
   ],
 ];
 $clientsList = [
@@ -169,22 +171,48 @@ $clientsList = [
   ],
 ];
 require_once __DIR__ . '/includes/site-content.php';
+$homeHeroSlides = getHomeHeroSlides();
 $homeHighlightCopy = getHomeHighlightCopy();
 include __DIR__ . '/includes/header.php';
 ?>
   <main>
     <section class="hero hero-slider" data-hero-slider data-aos="fade-up" data-aos-duration="900" data-aos-easing="ease-out-cubic">
       <div class="hero-slider__track" data-hero-track>
-        <?php foreach ($heroSlides as $index => $slide):
+        <?php foreach ($homeHeroSlides as $index => $slide):
+          $rawImage = isset($slide['image']) ? trim((string) $slide['image']) : '';
+          $imageSource = resolveFrontAssetPath($rawImage, $rootPath);
+          if ($imageSource === '') {
+            continue;
+          }
           $isActive = $index === 0;
           $delayBase = $index * 120;
+          $ctaHref = '';
+          $ctaAttributes = '';
+          if (!empty($slide['cta_url'])) {
+            $rawCta = trim((string) $slide['cta_url']);
+            if ($rawCta !== '' && $rawCta[0] !== '#') {
+              $ctaHref = resolveFrontAssetPath($rawCta, $rootPath);
+              $ctaAttributes = ' target="_blank" rel="noopener noreferrer"';
+            } else {
+              $ctaHref = $rawCta;
+            }
+          }
         ?>
-          <article class="hero-slide<?php echo $isActive ? ' is-active' : ''; ?>" data-hero-slide style="--hero-image: url('<?php echo htmlspecialchars($slide['image'], ENT_QUOTES, 'UTF-8'); ?>');">
+          <article class="hero-slide<?php echo $isActive ? ' is-active' : ''; ?>" data-hero-slide style="--hero-image: url('<?php echo htmlspecialchars($imageSource, ENT_QUOTES, 'UTF-8'); ?>');">
             <div class="hero-slide__media" aria-hidden="true"></div>
             <div class="hero-content">
-              <p data-aos="fade-up" data-aos-delay="<?php echo $delayBase; ?>" class="hero-content__tagline"><?php echo htmlspecialchars($slide['tagline'], ENT_QUOTES, 'UTF-8'); ?></p>
+              <?php if (!empty($slide['tagline'])): ?>
+                <p data-aos="fade-up" data-aos-delay="<?php echo $delayBase; ?>" class="hero-content__tagline"><?php echo htmlspecialchars($slide['tagline'], ENT_QUOTES, 'UTF-8'); ?></p>
+              <?php endif; ?>
               <h1 data-aos="fade-up" data-aos-delay="<?php echo $delayBase + 120; ?>"><?php echo htmlspecialchars($slide['title'], ENT_QUOTES, 'UTF-8'); ?></h1>
-              <p data-aos="fade-up" data-aos-delay="<?php echo $delayBase + 240; ?>"><?php echo htmlspecialchars($slide['copy'], ENT_QUOTES, 'UTF-8'); ?></p>
+              <?php if (!empty($slide['copy'])): ?>
+                <p data-aos="fade-up" data-aos-delay="<?php echo $delayBase + 240; ?>"><?php echo htmlspecialchars($slide['copy'], ENT_QUOTES, 'UTF-8'); ?></p>
+              <?php endif; ?>
+              <?php if (!empty($slide['cta_label']) && $ctaHref !== ''): ?>
+                <div data-aos="fade-up" data-aos-delay="<?php echo $delayBase + 360; ?>">
+                  <a class="hero-content__cta" href="<?php echo htmlspecialchars($ctaHref, ENT_QUOTES, 'UTF-8'); ?>"<?php echo $ctaAttributes; ?>><?php echo htmlspecialchars($slide['cta_label'], ENT_QUOTES, 'UTF-8'); ?></a>
+                </div>
+              <?php endif; ?>
             </div>
           </article>
         <?php endforeach; ?>
@@ -196,7 +224,7 @@ include __DIR__ . '/includes/header.php';
         <span aria-hidden="true">&#10095;</span>
       </button>
       <div class="hero-slider__dots" data-hero-dots>
-        <?php foreach ($heroSlides as $index => $_): ?>
+        <?php foreach ($homeHeroSlides as $index => $_): ?>
           <button type="button" class="hero-slider__dot<?php echo $index === 0 ? ' is-active' : ''; ?>" aria-label="Ir al slide <?php echo $index + 1; ?>" data-hero-dot></button>
         <?php endforeach; ?>
       </div>

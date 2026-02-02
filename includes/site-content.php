@@ -226,3 +226,85 @@ if (!function_exists('getHomeHighlightCopy')) {
         return $cache;
     }
 }
+
+if (!function_exists('getHomeHeroSlides')) {
+    function getHomeHeroSlides(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $defaults = [
+            [
+                'image' => 'inicio/hero/hero.png',
+                'tagline' => 'Proveedor global',
+                'title' => 'Repuestos y soluciones para maquinaria pesada',
+                'copy' => 'Distribuimos componentes originales y alternativos para flotas de minería, construcción y agricultura. Cobertura mundial, logística ágil y asesoría técnica especializada.',
+                'cta_label' => null,
+                'cta_url' => null,
+            ],
+            [
+                'image' => 'inicio/hero/hero-02.svg',
+                'tagline' => 'Integración industrial',
+                'title' => 'Ingeniería, mantenimiento y talento técnico 360°',
+                'copy' => 'Coordinamos proyectos EPC, planes predictivos y formación especializada para maximizar la disponibilidad operativa en refinerías, puertos y plantas de proceso.',
+                'cta_label' => null,
+                'cta_url' => null,
+            ],
+            [
+                'image' => 'inicio/hero/hero-03.svg',
+                'tagline' => 'Cobertura latinoamericana',
+                'title' => 'Logística binacional y respuesta inmediata',
+                'copy' => 'Centros de distribución en América y alianzas estratégicas que aseguran inventarios críticos, embarques puerta a puerta y soporte en sitio 24/7.',
+                'cta_label' => null,
+                'cta_url' => null,
+            ],
+        ];
+
+        $cache = $defaults;
+
+        try {
+            $db = getAdminDb();
+            $sql = 'SELECT image_path, message_small, title, description, cta_label, cta_url FROM home_hero_slides WHERE is_active = 1 ORDER BY sort_order ASC, id ASC';
+            if ($result = $db->query($sql)) {
+                $rows = [];
+                while ($row = $result->fetch_assoc()) {
+                    $image = isset($row['image_path']) ? trim((string) $row['image_path']) : '';
+                    $title = isset($row['title']) ? trim((string) $row['title']) : '';
+                    if ($image === '' || $title === '') {
+                        continue;
+                    }
+
+                    $tagline = isset($row['message_small']) ? trim((string) $row['message_small']) : '';
+                    $description = isset($row['description']) ? trim((string) $row['description']) : '';
+                    $ctaLabel = isset($row['cta_label']) ? trim((string) $row['cta_label']) : '';
+                    $ctaUrl = isset($row['cta_url']) ? trim((string) $row['cta_url']) : '';
+
+                    if (!preg_match('/^https?:\/\//i', $image) && !str_starts_with($image, 'data:')) {
+                        $image = '/' . ltrim($image, '/');
+                    }
+
+                    $rows[] = [
+                        'image' => $image,
+                        'tagline' => $tagline !== '' ? $tagline : null,
+                        'title' => $title,
+                        'copy' => $description !== '' ? $description : null,
+                        'cta_label' => $ctaLabel !== '' ? $ctaLabel : null,
+                        'cta_url' => $ctaUrl !== '' ? $ctaUrl : null,
+                    ];
+                }
+                $result->free();
+
+                if ($rows) {
+                    $cache = $rows;
+                }
+            }
+        } catch (Throwable $exception) {
+            // Se usan los valores predeterminados si falla la consulta.
+        }
+
+        return $cache;
+    }
+}

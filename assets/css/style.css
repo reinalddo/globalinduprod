@@ -581,6 +581,29 @@ a {
   margin-bottom: 18px;
 }
 
+.hero-content__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28px;
+  padding: 14px 32px;
+  border-radius: 999px;
+  background: rgba(250, 204, 21, 0.92);
+  color: #0f172a;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.hero-content__cta:hover,
+.hero-content__cta:focus-visible {
+  background: rgba(250, 204, 21, 1);
+  color: #111827;
+  transform: translateY(-2px);
+  outline: none;
+}
+
 .hero-slider__control {
   position: absolute;
   top: 50%;
