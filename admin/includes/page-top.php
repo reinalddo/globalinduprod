@@ -282,6 +282,10 @@ if (!empty($brandSettings['favicon_path'])) {
         <aside class="sidebar d-flex flex-column" aria-label="Menú de navegación del panel" role="navigation">
             <h1 class="sidebar__brand text-uppercase">Administrador</h1>
             <nav class="sidebar__nav nav flex-column gap-2">
+                <a class="sidebar__link nav-link<?php echo adminNavActiveClass('dashboard', $activeNav); ?>" href="<?php echo adminUrl('dashboard'); ?>">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h8v8H4Zm12 0h4v8h-4ZM4 14h8v6H4Zm12 0h4v6h-4Z"/></svg>
+                    <span>Dashboard</span>
+                </a>
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('home', $activeNav); ?>" href="<?php echo adminUrl('home'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10h2v10h5V15h4v5h5V10h2Z"/></svg>
                     <span>Inicio</span>

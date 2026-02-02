@@ -1,7 +1,7 @@
 <?php
 $pageTitle = 'Panel administrativo';
 $pageHeader = 'Panel administrativo';
-$activeNav = '';
+$activeNav = 'dashboard';
 require_once __DIR__ . '/includes/page-top.php';
 ?>
 <section>
