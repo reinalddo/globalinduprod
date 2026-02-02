@@ -171,6 +171,39 @@ $clientsList = [
   ],
 ];
 require_once __DIR__ . '/includes/site-content.php';
+$homeAllies = getHomeAllies();
+$alliesForDisplay = [];
+
+// Prefer the allies configured in the admin; fall back to the bundled brand list if empty.
+if (!empty($homeAllies)) {
+  foreach ($homeAllies as $ally) {
+    $logoUrl = resolveFrontAssetPath($ally['logo_path'], $rootPath);
+    if ($logoUrl === '') {
+      continue;
+    }
+
+    $alliesForDisplay[] = [
+      'name' => $ally['name'],
+      'image' => $logoUrl,
+      'featured' => !empty($ally['is_primary']),
+    ];
+  }
+}
+
+if (empty($alliesForDisplay)) {
+  foreach ($brands as $index => $brand) {
+    $imagePath = $assetPath . '/img/brands/' . $brand['image'];
+    if (!empty($alliesImages[$index])) {
+      $imagePath = $rootPath . '/inicio/aliados/' . rawurlencode(basename($alliesImages[$index]));
+    }
+
+    $alliesForDisplay[] = [
+      'name' => $brand['name'],
+      'image' => $imagePath,
+      'featured' => !empty($brand['featured']),
+    ];
+  }
+}
 $homeHeroSlides = getHomeHeroSlides();
 $homeHighlightCopy = getHomeHighlightCopy();
 include __DIR__ . '/includes/header.php';
@@ -236,18 +269,13 @@ include __DIR__ . '/includes/header.php';
     </section>
 
     <section class="brand-grid" data-aos="fade-up" data-aos-offset="180">
-      <?php foreach ($brands as $index => $brand):
-        $isFeatured = !empty($brand['featured']);
-        $cardClass = $isFeatured ? 'brand-card featured' : 'brand-card';
-        $imagePath = $assetPath . '/img/brands/' . $brand['image'];
-        if (!empty($alliesImages[$index])) {
-          $imagePath = $rootPath . '/inicio/aliados/' . rawurlencode(basename($alliesImages[$index]));
-        }
+      <?php foreach ($alliesForDisplay as $index => $ally):
+        $cardClass = !empty($ally['featured']) ? 'brand-card featured' : 'brand-card';
         $delay = $index * 60;
       ?>
         <div class="<?php echo $cardClass; ?>" data-aos="zoom-in" data-aos-delay="<?php echo $delay; ?>">
-          <img src="<?php echo htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
-          <span><?php echo htmlspecialchars($brand['name'], ENT_QUOTES, 'UTF-8'); ?></span>
+          <img src="<?php echo htmlspecialchars($ally['image'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars('Logo de ' . $ally['name'], ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+          <span><?php echo htmlspecialchars($ally['name'], ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
       <?php endforeach; ?>
     </section>

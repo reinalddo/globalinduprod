@@ -227,6 +227,46 @@ if (!function_exists('getHomeHighlightCopy')) {
     }
 }
 
+if (!function_exists('getHomeAllies')) {
+    function getHomeAllies(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $cache = [];
+
+        try {
+            $db = getAdminDb();
+            $sql = 'SELECT name, logo_path, is_primary, sort_order FROM home_allies ORDER BY is_primary DESC, sort_order ASC, id ASC';
+            if ($result = $db->query($sql)) {
+                while ($row = $result->fetch_assoc()) {
+                    $name = isset($row['name']) ? trim((string) $row['name']) : '';
+                    $logoPath = isset($row['logo_path']) ? trim((string) $row['logo_path']) : '';
+
+                    if ($name === '' || $logoPath === '') {
+                        continue;
+                    }
+
+                    $cache[] = [
+                        'name' => $name,
+                        'logo_path' => $logoPath,
+                        'is_primary' => (int) ($row['is_primary'] ?? 0) === 1,
+                        'sort_order' => (int) ($row['sort_order'] ?? 0),
+                    ];
+                }
+                $result->free();
+            }
+        } catch (Throwable $exception) {
+            // Se devuelve la lista vacía si la consulta falla.
+        }
+
+        return $cache;
+    }
+}
+
 if (!function_exists('getHomeHeroSlides')) {
     function getHomeHeroSlides(): array
     {
