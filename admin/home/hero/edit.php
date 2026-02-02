@@ -1,14 +1,12 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+require_once __DIR__ . '/helpers.php';
+
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if ($id <= 0) {
     header('Location: ../hero');
     exit;
 }
-
-$pageTitle = 'Editar diapositiva | Inicio';
-$pageHeader = 'Editar diapositiva';
-$activeNav = 'home';
-require_once __DIR__ . '/../../includes/page-top.php';
 
 $errors = [];
 $formData = null;
@@ -42,6 +40,10 @@ try {
 }
 
 if (!$formData) {
+    $pageTitle = 'Editar diapositiva | Inicio';
+    $pageHeader = 'Editar diapositiva';
+    $activeNav = 'home';
+    require_once __DIR__ . '/../../includes/page-top.php';
     echo '<div class="empty-state">La diapositiva solicitada no existe.</div>';
     echo '<div style="margin-top:18px;"><a class="btn btn-outline" href="../hero">Volver</a></div>';
     require_once __DIR__ . '/../../includes/page-bottom.php';
@@ -49,6 +51,8 @@ if (!$formData) {
 }
 
 $formData['is_active'] = (int) $formData['is_active'];
+$originalImagePath = $formData['image_path'];
+$newImagePath = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formData['image_path'] = trim($_POST['image_path'] ?? '');
@@ -59,6 +63,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formData['cta_url'] = trim($_POST['cta_url'] ?? '');
     $formData['sort_order'] = (int) ($_POST['sort_order'] ?? 0);
     $formData['is_active'] = isset($_POST['is_active']) ? 1 : 0;
+
+    $uploadedImage = $_FILES['image_file'] ?? null;
+    if ($uploadedImage && $uploadedImage['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($uploadedImage['error'] !== UPLOAD_ERR_OK) {
+            $errors[] = 'No se pudo cargar la imagen. Intenta nuevamente.';
+        } else {
+            try {
+                $newImagePath = saveHeroSlideImage($uploadedImage);
+            } catch (Throwable $exception) {
+                $errors[] = $exception->getMessage();
+            }
+        }
+    }
+
+    if ($newImagePath !== null) {
+        $formData['image_path'] = $newImagePath;
+    }
 
     if ($formData['image_path'] === '') {
         $errors[] = 'La ruta de la imagen es obligatoria.';
@@ -87,6 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             $stmt->execute();
             $stmt->close();
+            if ($newImagePath !== null && $originalImagePath !== $newImagePath) {
+                deleteHeroSlideImage($originalImagePath);
+            }
             header('Location: ../hero');
             exit;
         } catch (Throwable $exception) {
@@ -94,6 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$pageTitle = 'Editar diapositiva | Inicio';
+$pageHeader = 'Editar diapositiva';
+$activeNav = 'home';
+require_once __DIR__ . '/../../includes/page-top.php';
 ?>
 <section>
     <?php if ($errors): ?>
@@ -106,9 +135,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div style="height:16px;"></div>
     <?php endif; ?>
-    <form method="post">
-        <label for="image_path">Imagen (ruta o URL)</label>
-        <input type="text" name="image_path" id="image_path" value="<?php echo htmlspecialchars($formData['image_path'], ENT_QUOTES, 'UTF-8'); ?>" required>
+    <form method="post" enctype="multipart/form-data">
+        <label for="image_path">Imagen actual (ruta o URL)</label>
+        <input type="text" name="image_path" id="image_path" value="<?php echo htmlspecialchars($formData['image_path'], ENT_QUOTES, 'UTF-8'); ?>">
+        <?php if ($formData['image_path']): ?>
+            <div style="margin:12px 0 18px;">
+                <img src="<?php echo htmlspecialchars(adminAssetUrl($formData['image_path']), ENT_QUOTES, 'UTF-8'); ?>" alt="Vista previa de la diapositiva" style="max-width:260px;border-radius:12px;box-shadow:0 8px 24px rgba(15,23,42,0.18);height:auto;display:block;">
+            </div>
+        <?php endif; ?>
+
+        <label for="image_file">Reemplazar imagen</label>
+        <input type="file" name="image_file" id="image_file" accept="image/*">
 
         <label for="message_small">Mensaje pequeño</label>
         <input type="text" name="message_small" id="message_small" value="<?php echo htmlspecialchars($formData['message_small'], ENT_QUOTES, 'UTF-8'); ?>">
