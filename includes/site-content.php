@@ -35,6 +35,204 @@ if (!function_exists('getSiteHeaderSettings')) {
     }
 }
 
+if (!function_exists('getServicesPageHeroContent')) {
+    function getServicesPageHeroContent(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $cache = [
+            'kicker' => 'Portafolio integral',
+            'title' => 'Soluciones industriales para cada etapa de su operación',
+            'description' => 'Coordinamos logística binacional y ejecutamos servicios técnicos certificados para petróleo, minería, energía, puertos y agroindustria.',
+            'listing_title' => 'Nuestros pilares de servicio',
+            'listing_description' => 'Seleccionamos nueve líneas estratégicas que integran construcción, mantenimiento, logística, seguridad y talento humano para garantizar operaciones continuas en entornos críticos.',
+            'image_path' => null,
+        ];
+
+        try {
+            $db = getAdminDb();
+            $sql = 'SELECT kicker, title, description, listing_title, listing_description, image_path FROM services_page_hero ORDER BY id ASC LIMIT 1';
+            if ($result = $db->query($sql)) {
+                if ($row = $result->fetch_assoc()) {
+                    $kicker = isset($row['kicker']) ? trim((string) $row['kicker']) : '';
+                    $title = isset($row['title']) ? trim((string) $row['title']) : '';
+                    $description = isset($row['description']) ? trim((string) $row['description']) : '';
+                    $listingTitle = isset($row['listing_title']) ? trim((string) $row['listing_title']) : '';
+                    $listingDescription = isset($row['listing_description']) ? trim((string) $row['listing_description']) : '';
+                    $imagePath = isset($row['image_path']) ? trim((string) $row['image_path']) : '';
+
+                    if ($kicker !== '') {
+                        $cache['kicker'] = $kicker;
+                    }
+                    if ($title !== '') {
+                        $cache['title'] = $title;
+                    }
+                    if ($description !== '') {
+                        $cache['description'] = $description;
+                    }
+                    if ($listingTitle !== '') {
+                        $cache['listing_title'] = $listingTitle;
+                    }
+                    if ($listingDescription !== '') {
+                        $cache['listing_description'] = $listingDescription;
+                    }
+                    if ($imagePath !== '') {
+                        $cache['image_path'] = preg_match('/^https?:\/\//i', $imagePath) || str_starts_with($imagePath, 'data:')
+                            ? $imagePath
+                            : '/' . ltrim($imagePath, '/');
+                    }
+                }
+                $result->free();
+            }
+        } catch (Throwable $exception) {
+            // Se mantienen los valores predeterminados si ocurre un error.
+        }
+
+        return $cache;
+    }
+}
+
+if (!function_exists('getServicesListData')) {
+    function getServicesListData(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $cache = [];
+
+        try {
+            $db = getAdminDb();
+            $sql = 'SELECT slug, title, summary, hero_image_path, kicker FROM services ORDER BY title ASC';
+            if ($result = $db->query($sql)) {
+                while ($row = $result->fetch_assoc()) {
+                    $slug = isset($row['slug']) ? trim((string) $row['slug']) : '';
+                    $title = isset($row['title']) ? trim((string) $row['title']) : '';
+                    $summary = isset($row['summary']) ? trim((string) $row['summary']) : '';
+                    $imagePath = isset($row['hero_image_path']) ? trim((string) $row['hero_image_path']) : '';
+
+                    if ($slug === '' || $title === '' || $summary === '' || $imagePath === '') {
+                        continue;
+                    }
+
+                    $normalizedImage = preg_match('/^https?:\/\//i', $imagePath) || str_starts_with($imagePath, 'data:')
+                        ? $imagePath
+                        : '/' . ltrim($imagePath, '/');
+
+                    $cache[] = [
+                        'slug' => $slug,
+                        'title' => $title,
+                        'summary' => $summary,
+                        'image_path' => $normalizedImage,
+                        'kicker' => isset($row['kicker']) ? trim((string) $row['kicker']) : '',
+                    ];
+                }
+                $result->free();
+            }
+        } catch (Throwable $exception) {
+            // Se devuelve la lista vacía si ocurre un error.
+        }
+
+        return $cache;
+    }
+}
+
+if (!function_exists('getServiceBySlug')) {
+    function getServiceBySlug(string $slug): ?array
+    {
+        $normalizedSlug = trim($slug);
+        if ($normalizedSlug === '') {
+            return null;
+        }
+
+        try {
+            $db = getAdminDb();
+        } catch (Throwable $exception) {
+            return null;
+        }
+
+        $stmt = $db->prepare('SELECT id, slug, kicker, title, summary, hero_image_path, content_html FROM services WHERE slug = ? LIMIT 1');
+        if ($stmt === false) {
+            return null;
+        }
+
+        $stmt->bind_param('s', $normalizedSlug);
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return null;
+        }
+
+        $stmt->bind_result($id, $storedSlug, $kicker, $title, $summary, $heroImage, $contentHtml);
+        $service = null;
+        if ($stmt->fetch()) {
+            $path = trim((string) $heroImage);
+            $heroPath = null;
+            if ($path !== '') {
+                $heroPath = preg_match('/^https?:\/\//i', $path) || str_starts_with($path, 'data:')
+                    ? $path
+                    : '/' . ltrim($path, '/');
+            }
+
+            $service = [
+                'id' => (int) $id,
+                'slug' => (string) $storedSlug,
+                'kicker' => (string) ($kicker ?? ''),
+                'title' => (string) ($title ?? ''),
+                'summary' => (string) ($summary ?? ''),
+                'hero_image_path' => $heroPath,
+                'content_html' => (string) ($contentHtml ?? '')
+            ];
+        }
+
+        $stmt->close();
+        return $service;
+    }
+}
+
+if (!function_exists('getServiceGalleryImages')) {
+    function getServiceGalleryImages(int $serviceId): array
+    {
+        if ($serviceId <= 0) {
+            return [];
+        }
+
+        try {
+            $db = getAdminDb();
+        } catch (Throwable $exception) {
+            return [];
+        }
+
+        $stmt = $db->prepare('SELECT image_path FROM service_gallery_images WHERE service_id = ? ORDER BY sort_order ASC, id ASC');
+        if ($stmt === false) {
+            return [];
+        }
+
+        $stmt->bind_param('i', $serviceId);
+        $gallery = [];
+        if ($stmt->execute()) {
+            $stmt->bind_result($imagePath);
+            while ($stmt->fetch()) {
+                $stored = trim((string) $imagePath);
+                if ($stored === '') {
+                    continue;
+                }
+                $gallery[] = preg_match('/^https?:\/\//i', $stored) || str_starts_with($stored, 'data:')
+                    ? $stored
+                    : '/' . ltrim($stored, '/');
+            }
+        }
+        $stmt->close();
+
+        return $gallery;
+    }
+}
+
 if (!function_exists('getSiteFooterSettings')) {
     function getSiteFooterSettings(): array
     {

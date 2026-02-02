@@ -1,19 +1,66 @@
 <?php
+if (!function_exists('servicesEnsureColumn')) {
+    function servicesEnsureColumn(mysqli $db, string $table, string $column, string $definition): void
+    {
+        // Prevent injection by only allowing expected characters in identifiers
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $table) || !preg_match('/^[a-zA-Z0-9_]+$/', $column)) {
+            throw new InvalidArgumentException('Identificador de tabla o columna no válido.');
+        }
+
+        $stmt = $db->prepare('SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ? LIMIT 1');
+        if ($stmt === false) {
+            return;
+        }
+
+        $stmt->bind_param('ss', $table, $column);
+        if ($stmt->execute()) {
+            $stmt->store_result();
+            $exists = $stmt->num_rows > 0;
+            $stmt->close();
+            if ($exists) {
+                return;
+            }
+        } else {
+            $stmt->close();
+            return;
+        }
+
+        $sql = sprintf('ALTER TABLE `%s` ADD COLUMN `%s` %s', $table, $column, $definition);
+
+        try {
+            $db->query($sql);
+        } catch (Throwable $exception) {
+            // Resultado ignorado: la columna podría haber sido creada en una carrera concurrente.
+        }
+    }
+}
+
 if (!function_exists('servicesEnsureSchema')) {
     function servicesEnsureSchema(mysqli $db): void
     {
         $pageHeroSql = <<<SQL
-CREATE TABLE IF NOT EXISTS services_page_hero (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    kicker VARCHAR(120) NOT NULL DEFAULT '',
-    title VARCHAR(200) NOT NULL,
-    description TEXT NOT NULL,
-    image_path VARCHAR(255) NOT NULL DEFAULT '',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-SQL;
+    CREATE TABLE IF NOT EXISTS services_page_hero (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        kicker VARCHAR(120) NOT NULL DEFAULT '',
+        title VARCHAR(200) NOT NULL,
+        description TEXT NOT NULL,
+        listing_title VARCHAR(200) NOT NULL DEFAULT '',
+        listing_description TEXT NOT NULL,
+        image_path VARCHAR(255) NOT NULL DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    SQL;
         $db->query($pageHeroSql);
+
+        servicesEnsureColumn($db, 'services_page_hero', 'listing_title', "VARCHAR(200) NOT NULL DEFAULT ''");
+        servicesEnsureColumn($db, 'services_page_hero', 'listing_description', 'TEXT');
+        try {
+            $db->query("UPDATE services_page_hero SET listing_description = '' WHERE listing_description IS NULL");
+            $db->query('ALTER TABLE `services_page_hero` MODIFY COLUMN `listing_description` TEXT NOT NULL');
+        } catch (Throwable $exception) {
+            // Si falla (p.ej. MySQL antiguo), se mantiene como nullable y se maneja en PHP.
+        }
 
         $serviceSql = <<<SQL
 CREATE TABLE IF NOT EXISTS services (
@@ -55,16 +102,22 @@ if (!function_exists('servicesFetchHero')) {
             'kicker' => '',
             'title' => '',
             'description' => '',
+            'listing_title' => '',
+            'listing_description' => '',
             'image_path' => ''
         ];
 
-        if ($result = $db->query('SELECT id, kicker, title, description, image_path FROM services_page_hero ORDER BY id ASC LIMIT 1')) {
+        $sql = 'SELECT id, kicker, title, description, listing_title, listing_description, image_path FROM services_page_hero ORDER BY id ASC LIMIT 1';
+
+        if ($result = $db->query($sql)) {
             if ($row = $result->fetch_assoc()) {
                 $hero = [
                     'id' => (int) $row['id'],
                     'kicker' => (string) $row['kicker'],
                     'title' => (string) $row['title'],
                     'description' => (string) $row['description'],
+                    'listing_title' => (string) ($row['listing_title'] ?? ''),
+                    'listing_description' => (string) ($row['listing_description'] ?? ''),
                     'image_path' => (string) $row['image_path']
                 ];
             }

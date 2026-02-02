@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteBase /servicios/
+
+# Allow existing files or directories to resolve normally
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route friendly slugs to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/?$ index.php?slug=$1 [L,QSA]

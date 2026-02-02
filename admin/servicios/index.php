@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $heroData['kicker'] = trim($_POST['kicker'] ?? '');
         $heroData['title'] = trim($_POST['title'] ?? '');
         $heroData['description'] = trim($_POST['description'] ?? '');
+        $heroData['listing_title'] = trim($_POST['listing_title'] ?? '');
+        $heroData['listing_description'] = trim($_POST['listing_description'] ?? '');
 
         $uploadedImage = $_FILES['hero_image'] ?? null;
         $replacingImage = $uploadedImage && $uploadedImage['error'] !== UPLOAD_ERR_NO_FILE;
@@ -44,6 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if ($heroData['description'] === '') {
             $heroErrors[] = 'El párrafo de la cabecera es obligatorio.';
+        }
+        if ($heroData['listing_title'] === '') {
+            $heroErrors[] = 'El título antes del listado es obligatorio.';
+        }
+        if ($heroData['listing_description'] === '') {
+            $heroErrors[] = 'La descripción antes del listado es obligatoria.';
         }
         if (!$heroData['image_path'] && !$replacingImage) {
             $heroErrors[] = 'Debes cargar una imagen para la cabecera.';
@@ -69,19 +77,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 if ($heroData['id']) {
-                    $stmt = $db->prepare('UPDATE services_page_hero SET kicker = ?, title = ?, description = ?, image_path = ?, updated_at = NOW() WHERE id = ? LIMIT 1');
+                    $stmt = $db->prepare('UPDATE services_page_hero SET kicker = ?, title = ?, description = ?, listing_title = ?, listing_description = ?, image_path = ?, updated_at = NOW() WHERE id = ? LIMIT 1');
                     if ($stmt === false) {
                         throw new RuntimeException('No se pudo preparar la actualización de la cabecera.');
                     }
-                    $stmt->bind_param('ssssi', $heroData['kicker'], $heroData['title'], $heroData['description'], $newImagePath, $heroData['id']);
+                    $stmt->bind_param('ssssssi', $heroData['kicker'], $heroData['title'], $heroData['description'], $heroData['listing_title'], $heroData['listing_description'], $newImagePath, $heroData['id']);
                     $stmt->execute();
                     $stmt->close();
                 } else {
-                    $stmt = $db->prepare('INSERT INTO services_page_hero (kicker, title, description, image_path) VALUES (?, ?, ?, ?)');
+                    $stmt = $db->prepare('INSERT INTO services_page_hero (kicker, title, description, listing_title, listing_description, image_path) VALUES (?, ?, ?, ?, ?, ?)');
                     if ($stmt === false) {
                         throw new RuntimeException('No se pudo preparar el registro de la cabecera.');
                     }
-                    $stmt->bind_param('ssss', $heroData['kicker'], $heroData['title'], $heroData['description'], $newImagePath);
+                    $stmt->bind_param('ssssss', $heroData['kicker'], $heroData['title'], $heroData['description'], $heroData['listing_title'], $heroData['listing_description'], $newImagePath);
                     $stmt->execute();
                     $heroData['id'] = (int) $stmt->insert_id;
                     $stmt->close();
@@ -191,6 +199,12 @@ require_once __DIR__ . '/../includes/page-top.php';
 
         <label for="services_description">Párrafo</label>
         <textarea name="description" id="services_description" rows="4" required><?php echo htmlspecialchars($heroData['description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+
+        <label for="services_listing_title">Título antes del listado</label>
+        <input type="text" name="listing_title" id="services_listing_title" value="<?php echo htmlspecialchars($heroData['listing_title'], ENT_QUOTES, 'UTF-8'); ?>" required maxlength="200">
+
+        <label for="services_listing_description">Descripción antes del listado</label>
+        <textarea name="listing_description" id="services_listing_description" rows="3" required><?php echo htmlspecialchars($heroData['listing_description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
 
         <label for="services_hero_image">Imagen de cabecera</label>
         <input type="file" name="hero_image" id="services_hero_image" accept="image/*">
