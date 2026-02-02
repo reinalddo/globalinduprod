@@ -84,7 +84,7 @@ $featuredServices = [
     'link' => $rootPath . '/servicios/seguridad-industrial/',
   ],
 ];
-$clientsList = [
+$clientsFallback = [
   [
     'name' => 'Petroquímica de Venezuela, C.A.',
     'logo' => 'petroquimica-de-venezuela-ca.svg',
@@ -174,6 +174,10 @@ require_once __DIR__ . '/includes/site-content.php';
 $homeAllies = getHomeAllies();
 $alliesForDisplay = [];
 
+// Clientes configurados desde el administrador.
+$homeClients = getHomeClients();
+$clientsForDisplay = [];
+
 // Prefer the allies configured in the admin; fall back to the bundled brand list if empty.
 if (!empty($homeAllies)) {
   foreach ($homeAllies as $ally) {
@@ -201,6 +205,30 @@ if (empty($alliesForDisplay)) {
       'name' => $brand['name'],
       'image' => $imagePath,
       'featured' => !empty($brand['featured']),
+    ];
+  }
+}
+
+if (!empty($homeClients)) {
+  foreach ($homeClients as $client) {
+    $logoUrl = resolveFrontAssetPath($client['logo_path'], $rootPath);
+    if ($logoUrl === '') {
+      continue;
+    }
+
+    $clientsForDisplay[] = [
+      'name' => $client['name'],
+      'logo_url' => $logoUrl,
+    ];
+  }
+}
+
+if (empty($clientsForDisplay)) {
+  foreach ($clientsFallback as $client) {
+    $logoPath = $rootPath . '/inicio/clientes/' . $client['logo'];
+    $clientsForDisplay[] = [
+      'name' => $client['name'],
+      'logo_url' => $logoPath,
     ];
   }
 }
@@ -313,8 +341,8 @@ include __DIR__ . '/includes/header.php';
         <p data-aos="fade-up" data-aos-delay="120"><?php echo htmlspecialchars($homeHighlightCopy['clients']['body'], ENT_QUOTES, 'UTF-8'); ?></p>
       </div>
       <div class="clients-grid">
-        <?php foreach ($clientsList as $clientIndex => $client):
-          $logoPath = $rootPath . '/inicio/clientes/' . $client['logo'];
+        <?php foreach ($clientsForDisplay as $clientIndex => $client):
+          $logoPath = $client['logo_url'];
           $clientDelay = 140 + ($clientIndex * 60);
         ?>
           <article class="client-card" data-aos="fade-up" data-aos-delay="<?php echo $clientDelay; ?>">
