@@ -46,7 +46,7 @@ if (!function_exists('resolveFrontAssetPath')) {
   }
 }
 
-$featuredServices = [
+$servicesFallback = [
   [
     'title' => 'Logística y Suministros',
     'excerpt' => 'Inventarios espejo binacionales, nacionalización express y entregas puerta a puerta para repuestos críticos.',
@@ -178,6 +178,10 @@ $alliesForDisplay = [];
 $homeClients = getHomeClients();
 $clientsForDisplay = [];
 
+// Servicios destacados configurados desde el administrador.
+$homeServices = getHomeServices();
+$servicesForDisplay = [];
+
 // Prefer the allies configured in the admin; fall back to the bundled brand list if empty.
 if (!empty($homeAllies)) {
   foreach ($homeAllies as $ally) {
@@ -207,6 +211,38 @@ if (empty($alliesForDisplay)) {
       'featured' => !empty($brand['featured']),
     ];
   }
+}
+
+if (!empty($homeServices)) {
+  foreach ($homeServices as $service) {
+    $imageUrl = resolveFrontAssetPath($service['hero_image_path'], $rootPath);
+    if ($imageUrl === '') {
+      continue;
+    }
+
+    $servicesForDisplay[] = [
+      'title' => $service['title'],
+      'excerpt' => $service['summary'],
+      'image_url' => $imageUrl,
+      'link' => $rootPath . '/servicios/' . rawurlencode($service['slug']) . '/',
+    ];
+  }
+}
+
+if (empty($servicesForDisplay)) {
+  foreach ($servicesFallback as $service) {
+    $imageUrl = $rootPath . '/inicio/servicios/' . $service['image'];
+    $servicesForDisplay[] = [
+      'title' => $service['title'],
+      'excerpt' => $service['excerpt'],
+      'image_url' => $imageUrl,
+      'link' => $service['link'],
+    ];
+  }
+}
+
+if (count($servicesForDisplay) > 6) {
+  $servicesForDisplay = array_slice($servicesForDisplay, 0, 6);
 }
 
 if (!empty($homeClients)) {
@@ -314,8 +350,8 @@ include __DIR__ . '/includes/header.php';
         <p data-aos="fade-up" data-aos-delay="120"><?php echo htmlspecialchars($homeHighlightCopy['services']['body'], ENT_QUOTES, 'UTF-8'); ?></p>
       </div>
       <div class="services-grid">
-        <?php foreach ($featuredServices as $serviceIndex => $service):
-          $serviceImage = $rootPath . '/inicio/servicios/' . $service['image'];
+        <?php foreach ($servicesForDisplay as $serviceIndex => $service):
+          $serviceImage = $service['image_url'];
           $serviceDelay = 160 + ($serviceIndex * 80);
         ?>
           <a class="service-card" data-aos="fade-up" data-aos-delay="<?php echo $serviceDelay; ?>" href="<?php echo htmlspecialchars($service['link'], ENT_QUOTES, 'UTF-8'); ?>">
@@ -340,6 +376,7 @@ include __DIR__ . '/includes/header.php';
         <h2 data-aos="fade-up"><?php echo htmlspecialchars($homeHighlightCopy['clients']['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
         <p data-aos="fade-up" data-aos-delay="120"><?php echo htmlspecialchars($homeHighlightCopy['clients']['body'], ENT_QUOTES, 'UTF-8'); ?></p>
       </div>
+
       <div class="clients-grid">
         <?php foreach ($clientsForDisplay as $clientIndex => $client):
           $logoPath = $client['logo_url'];

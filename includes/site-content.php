@@ -306,6 +306,49 @@ if (!function_exists('getHomeClients')) {
     }
 }
 
+if (!function_exists('getHomeServices')) {
+    function getHomeServices(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $cache = [];
+
+        try {
+            $db = getAdminDb();
+            $sql = 'SELECT slug, title, summary, hero_image_path, kicker FROM services WHERE is_featured_home = 1 ORDER BY updated_at DESC, title ASC';
+            if ($result = $db->query($sql)) {
+                while ($row = $result->fetch_assoc()) {
+                    $slug = isset($row['slug']) ? trim((string) $row['slug']) : '';
+                    $title = isset($row['title']) ? trim((string) $row['title']) : '';
+                    $summary = isset($row['summary']) ? trim((string) $row['summary']) : '';
+                    $imagePath = isset($row['hero_image_path']) ? trim((string) $row['hero_image_path']) : '';
+
+                    if ($slug === '' || $title === '' || $summary === '' || $imagePath === '') {
+                        continue;
+                    }
+
+                    $cache[] = [
+                        'slug' => $slug,
+                        'title' => $title,
+                        'summary' => $summary,
+                        'hero_image_path' => $imagePath,
+                        'kicker' => isset($row['kicker']) ? trim((string) $row['kicker']) : '',
+                    ];
+                }
+                $result->free();
+            }
+        } catch (Throwable $exception) {
+            // Se devuelve la lista vacía si ocurre algún error.
+        }
+
+        return $cache;
+    }
+}
+
 if (!function_exists('getHomeHeroSlides')) {
     function getHomeHeroSlides(): array
     {
