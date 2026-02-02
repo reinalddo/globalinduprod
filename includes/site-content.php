@@ -170,3 +170,59 @@ if (!function_exists('getSiteFooterSocials')) {
         return $cache;
     }
 }
+
+if (!function_exists('getHomeHighlightCopy')) {
+    function getHomeHighlightCopy(): array
+    {
+        static $cache = null;
+
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $defaults = [
+            'allies' => [
+                'title' => 'Nuestros Aliados Estratégicos',
+                'body' => 'Contamos con más de 300 aliados estratégicos comerciales alrededor del mundo, los cuales nos han dado su representación y nos brindan respaldo total para nuestros clientes, a su vez, damos mayor capacidad de respuesta a nivel nacional e internacional.'
+            ],
+            'services' => [
+                'title' => 'Servicios para operaciones industriales críticas',
+                'body' => 'Integramos construcción, logística, mantenimiento, talento humano y seguridad industrial para garantizar continuidad operativa en refinerías, puertos, minería, agroindustria y proyectos de energía.'
+            ],
+            'clients' => [
+                'title' => 'Clientes que confían en Global Induprod',
+                'body' => 'Respaldamos operaciones públicas y privadas con suministros, ingeniería y soporte técnico integral para mantener en marcha proyectos energéticos, industriales y de infraestructura en toda Venezuela.'
+            ],
+        ];
+
+        $cache = $defaults;
+
+        try {
+            $db = getAdminDb();
+            $sql = 'SELECT section_key, title, body FROM home_section_copy';
+            if ($result = $db->query($sql)) {
+                while ($row = $result->fetch_assoc()) {
+                    $key = isset($row['section_key']) ? trim((string) $row['section_key']) : '';
+                    if ($key === '' || !isset($cache[$key])) {
+                        continue;
+                    }
+
+                    $title = isset($row['title']) ? trim((string) $row['title']) : '';
+                    $body = isset($row['body']) ? trim((string) $row['body']) : '';
+
+                    if ($title !== '') {
+                        $cache[$key]['title'] = $title;
+                    }
+                    if ($body !== '') {
+                        $cache[$key]['body'] = $body;
+                    }
+                }
+                $result->free();
+            }
+        } catch (Throwable $exception) {
+            // Se mantienen los valores por defecto si ocurre un error.
+        }
+
+        return $cache;
+    }
+}

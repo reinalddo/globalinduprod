@@ -168,6 +168,8 @@ $clientsList = [
     'logo' => 'global-furniture-ca.svg',
   ],
 ];
+require_once __DIR__ . '/includes/site-content.php';
+$homeHighlightCopy = getHomeHighlightCopy();
 include __DIR__ . '/includes/header.php';
 ?>
   <main>
@@ -201,8 +203,8 @@ include __DIR__ . '/includes/header.php';
     </section>
 
     <section class="section-heading" data-aos="fade-up">
-      <h2 data-aos="fade-up">Nuestros Aliados Estratégicos</h2>
-      <p data-aos="fade-up" data-aos-delay="120">Contamos con más de 300 aliados estratégicos comerciales alrededor del mundo, los cuales nos han dado su representación y nos brindan respaldo total para nuestros clientes, a su vez, damos mayor capacidad de respuesta a nivel nacional e internacional.</p>
+      <h2 data-aos="fade-up"><?php echo htmlspecialchars($homeHighlightCopy['allies']['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+      <p data-aos="fade-up" data-aos-delay="120"><?php echo htmlspecialchars($homeHighlightCopy['allies']['body'], ENT_QUOTES, 'UTF-8'); ?></p>
     </section>
 
     <section class="brand-grid" data-aos="fade-up" data-aos-offset="180">
@@ -224,8 +226,8 @@ include __DIR__ . '/includes/header.php';
 
     <section class="home-services" data-aos="fade-up" data-aos-offset="180">
       <div class="section-heading" data-aos="fade-up">
-        <h2 data-aos="fade-up">Servicios para operaciones industriales críticas</h2>
-        <p data-aos="fade-up" data-aos-delay="120">Integramos construcción, logística, mantenimiento, talento humano y seguridad industrial para garantizar continuidad operativa en refinerías, puertos, minería, agroindustria y proyectos de energía.</p>
+        <h2 data-aos="fade-up"><?php echo htmlspecialchars($homeHighlightCopy['services']['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+        <p data-aos="fade-up" data-aos-delay="120"><?php echo htmlspecialchars($homeHighlightCopy['services']['body'], ENT_QUOTES, 'UTF-8'); ?></p>
       </div>
       <div class="services-grid">
         <?php foreach ($featuredServices as $serviceIndex => $service):
@@ -251,8 +253,8 @@ include __DIR__ . '/includes/header.php';
 
     <section class="home-clients" id="clientes" data-aos="fade-up" data-aos-offset="180">
       <div class="section-heading" data-aos="fade-up">
-        <h2 data-aos="fade-up">Clientes que confían en Global Induprod</h2>
-        <p data-aos="fade-up" data-aos-delay="120">Respaldamos operaciones públicas y privadas con suministros, ingeniería y soporte técnico integral para mantener en marcha proyectos energéticos, industriales y de infraestructura en toda Venezuela.</p>
+        <h2 data-aos="fade-up"><?php echo htmlspecialchars($homeHighlightCopy['clients']['title'], ENT_QUOTES, 'UTF-8'); ?></h2>
+        <p data-aos="fade-up" data-aos-delay="120"><?php echo htmlspecialchars($homeHighlightCopy['clients']['body'], ENT_QUOTES, 'UTF-8'); ?></p>
       </div>
       <div class="clients-grid">
         <?php foreach ($clientsList as $clientIndex => $client):
