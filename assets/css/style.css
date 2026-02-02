@@ -1002,6 +1002,11 @@ a {
   line-height: 1.7;
 }
 
+.parallax-grid--services .parallax-block__inner h3 {
+  font-size: clamp(0.7rem, 1vw, 1.2rem);
+  line-height: 1.3;
+}
+
 .parallax-block--about-logistics {
   background-image: url('../../nosotros/resumen/resumen-operadores-industriales.jpg');
 }
