@@ -134,7 +134,7 @@ if ($languageActive['es'] === '' && $languageActive['en'] === '') {
           </div>
   
           <div class="nav-languages" role="group" aria-label="<?php echo htmlspecialchars($languageSwitcherLabel, ENT_QUOTES, 'UTF-8'); ?>">
-            <a href="https://globalinduprod.com" class="nav-languages__link<?php echo $languageActive['es']; ?>" data-lang="es"><?php echo htmlspecialchars($languageLabels['es'], ENT_QUOTES, 'UTF-8'); ?></a>
+            <a href="https://globalinduprod.com" class="nav-languages__link<?php echo $languageActive['es']; ?>" data-lang="es" target="_blank" rel="noopener noreferrer"><?php echo htmlspecialchars($languageLabels['es'], ENT_QUOTES, 'UTF-8'); ?></a>
             <a href="https://globalinduprodinternational.com" class="nav-languages__link<?php echo $languageActive['en']; ?>" data-lang="en"><?php echo htmlspecialchars($languageLabels['en'], ENT_QUOTES, 'UTF-8'); ?></a>
           </div>
           <a class="nav-quote" href="<?php echo $rootPath; ?>/contacto/"><?php echo htmlspecialchars($navQuoteLabel, ENT_QUOTES, 'UTF-8'); ?></a>
