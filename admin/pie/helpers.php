@@ -170,15 +170,11 @@ if (!function_exists('footerSaveLogoImage')) {
             imagesavealpha($image, true);
         }
 
-        $projectRoot = dirname(__DIR__, 2);
-        $relativeDir = 'uploads/site/footer';
-        $absoluteDir = $projectRoot . '/' . $relativeDir;
-
-        if (!is_dir($absoluteDir)) {
-            if (!mkdir($absoluteDir, 0775, true) && !is_dir($absoluteDir)) {
-                imagedestroy($image);
-                throw new RuntimeException('No se pudo preparar la carpeta para logos del pie.');
-            }
+        try {
+            [$relativeDir, $absoluteDir] = tenantEnsureUploadsDirectory('site/footer');
+        } catch (Throwable $exception) {
+            imagedestroy($image);
+            throw $exception;
         }
 
         try {
@@ -241,15 +237,7 @@ if (!function_exists('footerSaveCustomIcon')) {
             throw new RuntimeException('El icono debe ser PNG, SVG o WebP.');
         }
 
-        $projectRoot = dirname(__DIR__, 2);
-        $relativeDir = 'uploads/site/footer';
-        $absoluteDir = $projectRoot . '/' . $relativeDir;
-
-        if (!is_dir($absoluteDir)) {
-            if (!mkdir($absoluteDir, 0775, true) && !is_dir($absoluteDir)) {
-                throw new RuntimeException('No se pudo preparar la carpeta para iconos del pie.');
-            }
-        }
+        [$relativeDir, $absoluteDir] = tenantEnsureUploadsDirectory('site/footer');
 
         try {
             $filename = 'social-icon-' . time() . '-' . bin2hex(random_bytes(4)) . '.' . $allowedMimes[$mime];
@@ -273,17 +261,11 @@ if (!function_exists('footerDeleteStoredLogo')) {
         if (!$relativePath) {
             return;
         }
-        $projectRoot = dirname(__DIR__, 2);
-        $absolute = realpath($projectRoot . '/' . ltrim($relativePath, '/'));
-        $uploads = realpath($projectRoot . '/uploads/site/footer');
-        if (!$absolute || !$uploads) {
+        $normalized = ltrim($relativePath, '/');
+        if (!tenantUploadsIsWithin($normalized, 'site/footer')) {
             return;
         }
-        $absoluteNorm = strtolower(str_replace('\\', '/', $absolute));
-        $uploadsNorm = strtolower(str_replace('\\', '/', $uploads));
-        if (!str_starts_with($absoluteNorm, $uploadsNorm)) {
-            return;
-        }
+        $absolute = tenantUploadsAbsolutePath($normalized);
         if (is_file($absolute)) {
             @unlink($absolute);
         }

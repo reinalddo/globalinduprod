@@ -2,24 +2,14 @@
 if (!function_exists('heroUploadsBasePaths')) {
     function heroUploadsBasePaths(): array
     {
-        $relative = 'uploads/home/hero';
-        $absolute = dirname(__DIR__, 3) . '/' . $relative;
-        return [$relative, $absolute];
+        return tenantUploadsPair('home/hero');
     }
 }
 
 if (!function_exists('ensureHeroUploadsDirectory')) {
     function ensureHeroUploadsDirectory(): array
     {
-        [$relative, $absolute] = heroUploadsBasePaths();
-
-        if (!is_dir($absolute)) {
-            if (!mkdir($absolute, 0775, true) && !is_dir($absolute)) {
-                throw new RuntimeException('No se pudo preparar la carpeta de imágenes.');
-            }
-        }
-
-        return [$relative, $absolute];
+        return tenantEnsureUploadsDirectory('home/hero');
     }
 }
 
@@ -151,13 +141,11 @@ if (!function_exists('deleteHeroSlideImage')) {
         }
 
         $normalized = ltrim($relativePath, '/');
-        [$relativeDir] = heroUploadsBasePaths();
-        $prefix = $relativeDir . '/';
-        if (strpos($normalized, $prefix) !== 0) {
+        if (!tenantUploadsIsWithin($normalized, 'home/hero')) {
             return;
         }
 
-        $absolutePath = dirname(__DIR__, 3) . '/' . $normalized;
+        $absolutePath = tenantUploadsAbsolutePath($normalized);
         if (is_file($absolutePath)) {
             @unlink($absolutePath);
         }

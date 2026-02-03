@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     };
 
     if ($username === '' || $password === '') {
-        $storeError('Debes completar ambos campos.');
+        $storeError(tenantText('admin.login.error.missing', 'Debes completar ambos campos.'));
     }
 
     try {
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->num_rows !== 1) {
             $stmt->close();
-            $storeError('Usuario o contraseña incorrectos.');
+            $storeError(tenantText('admin.login.error.invalid', 'Usuario o contraseña incorrectos.'));
         }
 
         $stmt->bind_result($id, $dbUsername, $passwordHash, $fullName, $role, $isActive);
@@ -61,11 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
 
         if ((int) $isActive !== 1) {
-            $storeError('Usuario o contraseña incorrectos.');
+            $storeError(tenantText('admin.login.error.invalid', 'Usuario o contraseña incorrectos.'));
         }
 
         if (!password_verify($password, $passwordHash)) {
-            $storeError('Usuario o contraseña incorrectos.');
+            $storeError(tenantText('admin.login.error.invalid', 'Usuario o contraseña incorrectos.'));
         }
 
         session_regenerate_id(true);
@@ -79,16 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ' . adminUrl('dashboard'));
         exit;
     } catch (Throwable $exception) {
-        $storeError('No se pudo iniciar sesión. Intenta nuevamente.');
+        $storeError(tenantText('admin.login.error.general', 'No se pudo iniciar sesión. Intenta nuevamente.'));
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo htmlspecialchars(tenantLanguageCode(), ENT_QUOTES, 'UTF-8'); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel administrativo - Iniciar sesión</title>
+    <title><?php echo htmlspecialchars(tenantText('admin.login.title', 'Panel administrativo - Iniciar sesión'), ENT_QUOTES, 'UTF-8'); ?></title>
     <style>
         body {
             margin: 0;
@@ -156,18 +156,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="login-wrapper">
         <div class="login-box">
-            <h1 class="login-title">Panel administrativo</h1>
+            <h1 class="login-title"><?php echo htmlspecialchars(tenantText('admin.login.heading', 'Panel administrativo'), ENT_QUOTES, 'UTF-8'); ?></h1>
             <?php if (!empty($error)) : ?>
                 <div class="login-error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
             <?php endif; ?>
             <form class="login-form" method="post" novalidate>
-                <label for="username">Usuario</label>
+                <label for="username"><?php echo htmlspecialchars(tenantText('admin.login.username', 'Usuario'), ENT_QUOTES, 'UTF-8'); ?></label>
                 <input type="text" name="username" id="username" required autocomplete="username" value="<?php echo htmlspecialchars($oldUsername, ENT_QUOTES, 'UTF-8'); ?>">
 
-                <label for="password">Contraseña</label>
+                <label for="password"><?php echo htmlspecialchars(tenantText('admin.login.password', 'Contraseña'), ENT_QUOTES, 'UTF-8'); ?></label>
                 <input type="password" name="password" id="password" required autocomplete="current-password">
 
-                <button type="submit">Ingresar</button>
+                <button type="submit"><?php echo htmlspecialchars(tenantText('admin.login.submit', 'Ingresar'), ENT_QUOTES, 'UTF-8'); ?></button>
             </form>
         </div>
     </div>

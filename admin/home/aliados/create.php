@@ -86,14 +86,11 @@ if (!function_exists('saveOptimizedAllyLogo')) {
             imagesavealpha($image, true);
         }
 
-        $projectRoot = dirname(__DIR__, 3);
-        $relativeDir = 'uploads/home/aliados';
-        $absoluteDir = $projectRoot . '/' . $relativeDir;
-
-        if (!is_dir($absoluteDir)) {
-            if (!mkdir($absoluteDir, 0775, true) && !is_dir($absoluteDir)) {
-                throw new RuntimeException('No se pudo preparar la carpeta para logos.');
-            }
+        try {
+            [$relativeDir, $absoluteDir] = tenantEnsureUploadsDirectory('home/aliados');
+        } catch (Throwable $exception) {
+            imagedestroy($image);
+            throw $exception;
         }
 
         try {
@@ -177,8 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } catch (Throwable $exception) {
             if ($formData['logo_path'] !== '') {
-                $storedPath = dirname(__DIR__, 3) . '/' . $formData['logo_path'];
-                if (is_file($storedPath)) {
+                $storedPath = tenantUploadsAbsolutePath($formData['logo_path']);
+                if (tenantUploadsIsWithin($formData['logo_path'], 'home/aliados') && is_file($storedPath)) {
                     @unlink($storedPath);
                 }
                 $formData['logo_path'] = '';

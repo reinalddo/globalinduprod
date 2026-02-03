@@ -131,9 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (languageLinks.length) {
     languageLinks.forEach((link) => {
       link.addEventListener('click', (event) => {
-        event.preventDefault();
-        languageLinks.forEach((item) => item.classList.remove('is-active'));
-        event.currentTarget.classList.add('is-active');
+        const href = link.getAttribute('href');
+        if (!href || href === '#') {
+          event.preventDefault();
+          languageLinks.forEach((item) => item.classList.remove('is-active'));
+          event.currentTarget.classList.add('is-active');
+        }
       });
     });
   }

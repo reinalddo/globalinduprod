@@ -76,15 +76,7 @@ if (!function_exists('brandSaveFaviconFile')) {
             throw new RuntimeException('El favicon no debe superar los 500KB.');
         }
 
-        $projectRoot = dirname(__DIR__, 2);
-        $relativeDir = 'uploads/site/brand';
-        $absoluteDir = $projectRoot . '/' . $relativeDir;
-
-        if (!is_dir($absoluteDir)) {
-            if (!mkdir($absoluteDir, 0775, true) && !is_dir($absoluteDir)) {
-                throw new RuntimeException('No se pudo preparar la carpeta para los favicons.');
-            }
-        }
+        [$relativeDir, $absoluteDir] = tenantEnsureUploadsDirectory('site/brand');
 
         try {
             $filename = 'favicon-' . time() . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
@@ -108,19 +100,11 @@ if (!function_exists('brandDeleteStoredFavicon')) {
             return;
         }
 
-        $projectRoot = dirname(__DIR__, 2);
-        $absolute = realpath($projectRoot . '/' . ltrim($relativePath, '/'));
-        $uploads = realpath($projectRoot . '/uploads/site/brand');
-        if (!$absolute || !$uploads) {
+        $normalized = ltrim($relativePath, '/');
+        if (!tenantUploadsIsWithin($normalized, 'site/brand')) {
             return;
         }
-
-        $absoluteNorm = strtolower(str_replace('\\', '/', $absolute));
-        $uploadsNorm = strtolower(str_replace('\\', '/', $uploads));
-        if (!str_starts_with($absoluteNorm, $uploadsNorm)) {
-            return;
-        }
-
+        $absolute = tenantUploadsAbsolutePath($normalized);
         if (is_file($absolute)) {
             @unlink($absolute);
         }

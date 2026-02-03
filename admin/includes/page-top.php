@@ -3,7 +3,7 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/brand.php';
 
 $adminUser = $_SESSION['admin_user'] ?? null;
-$pageTitle = $pageTitle ?? 'Panel administrativo';
+$pageTitle = $pageTitle ?? tenantText('admin.panel.title', 'Panel administrativo');
 $pageHeader = $pageHeader ?? $pageTitle;
 $activeNav = $activeNav ?? '';
 
@@ -31,7 +31,7 @@ if (!empty($brandSettings['favicon_path'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo htmlspecialchars(tenantLanguageCode(), ENT_QUOTES, 'UTF-8'); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -275,51 +275,51 @@ if (!empty($brandSettings['favicon_path'])) {
     </style>
 </head>
 <body class="bg-body-tertiary">
-    <button class="mobile-toggle" type="button" aria-label="Abrir menú" onclick="document.querySelector('.sidebar').classList.toggle('is-open');" hidden>
+    <button class="mobile-toggle" type="button" aria-label="<?php echo htmlspecialchars(tenantText('admin.sidebar.toggle', 'Abrir menú'), ENT_QUOTES, 'UTF-8'); ?>" onclick="document.querySelector('.sidebar').classList.toggle('is-open');" hidden>
         <span></span>
     </button>
     <div class="layout d-flex">
-        <aside class="sidebar d-flex flex-column" aria-label="Menú de navegación del panel" role="navigation">
-            <h1 class="sidebar__brand text-uppercase">Administrador</h1>
+        <aside class="sidebar d-flex flex-column" aria-label="<?php echo htmlspecialchars(tenantText('admin.sidebar.ariaNav', 'Menú de navegación del panel'), ENT_QUOTES, 'UTF-8'); ?>" role="navigation">
+            <h1 class="sidebar__brand text-uppercase"><?php echo htmlspecialchars(tenantText('admin.sidebar.brand', 'Administrador'), ENT_QUOTES, 'UTF-8'); ?></h1>
             <nav class="sidebar__nav nav flex-column gap-2">
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('dashboard', $activeNav); ?>" href="<?php echo adminUrl('dashboard'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h8v8H4Zm12 0h4v8h-4ZM4 14h8v6H4Zm12 0h4v6h-4Z"/></svg>
-                    <span>Dashboard</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.dashboard', 'Dashboard'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('home', $activeNav); ?>" href="<?php echo adminUrl('home'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10h2v10h5V15h4v5h5V10h2Z"/></svg>
-                    <span>Inicio</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.home', 'Inicio'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('about', $activeNav); ?>" href="<?php echo adminUrl('nosotros'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a4 4 0 1 1-4 4 4 4 0 0 1 4-4Zm0 9c-4 0-7 2-7 4v3h14v-3c0-2-3-4-7-4Z"/></svg>
-                    <span>Nosotros</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.about', 'Nosotros'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('services', $activeNav); ?>" href="<?php echo adminUrl('servicios'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h16v4H4Zm2 6h12v4H6Zm-2 6h16v4H4Z"/></svg>
-                    <span>Servicios</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.services', 'Servicios'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('contact', $activeNav); ?>" href="<?php echo adminUrl('contacto'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4Zm2 2v.51l6 4.5 6-4.5V6Zm12 12v-8.3l-6 4.5-6-4.5V18Z"/></svg>
-                    <span>Contacto</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.contact', 'Contacto'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('header', $activeNav); ?>" href="<?php echo adminUrl('cabecera'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v6H4Zm0 8h16v2H4Zm0 4h10v2H4Z"/></svg>
-                    <span>Cabecera</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.header', 'Cabecera'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('footer', $activeNav); ?>" href="<?php echo adminUrl('pie'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18h16v2H4Zm0-4h10v2H4Zm0-8h16v6H4Z"/></svg>
-                    <span>Pie de página</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.footer', 'Pie de página'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
                 <a class="sidebar__link nav-link<?php echo adminNavActiveClass('account', $activeNav); ?>" href="<?php echo adminUrl('datos'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 1 1-5 5 5 5 0 0 1 5-5Zm0 12c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5Zm7.5-4h-1.09a6.97 6.97 0 0 0-1.1-2.65l.77-.77-1.4-1.41-.77.77A6.97 6.97 0 0 0 13 4.59V3h-2v1.09a6.97 6.97 0 0 0-2.65 1.1l-.77-.77-1.41 1.4.77.77A6.97 6.97 0 0 0 4.59 9H3v2h1.09a6.97 6.97 0 0 0 1.1 2.65l-.77.77 1.4 1.41.77-.77A6.97 6.97 0 0 0 11 17.41V18h2v-1.09a6.97 6.97 0 0 0 2.65-1.1l.77.77 1.41-1.4-.77-.77A6.97 6.97 0 0 0 20.41 11H21v-2Z"/></svg>
-                    <span>Datos Admin</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.data', 'Datos admin'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
             </nav>
             <div class="sidebar__spacer"></div>
             <div class="sidebar__footer mt-auto">
                 <a class="sidebar__link nav-link" href="<?php echo adminUrl('logout'); ?>">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h7a2 2 0 0 1 2 2v3h-2V6H5v12h7v-3h2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm11.59 5.59L14.17 12l2.42 2.41L15 15.99 11 12l4-4 1.59 1.59Z"/></svg>
-                    <span>Cerrar sesión</span>
+                    <span><?php echo htmlspecialchars(tenantText('admin.sidebar.logout', 'Cerrar sesión'), ENT_QUOTES, 'UTF-8'); ?></span>
                 </a>
             </div>
         </aside>
@@ -327,6 +327,7 @@ if (!empty($brandSettings['favicon_path'])) {
             <header class="mb-4">
                 <h1 class="fw-semibold mb-1"><?php echo htmlspecialchars($pageHeader, ENT_QUOTES, 'UTF-8'); ?></h1>
                 <?php if ($adminUser && !empty($adminUser['full_name'])): ?>
-                    <p class="text-secondary mb-0"><?php echo htmlspecialchars($adminUser['full_name'], ENT_QUOTES, 'UTF-8'); ?></p>
+                    <?php $welcomeLabel = tenantText('admin.sidebar.welcome', 'Sesión iniciada como'); ?>
+                    <p class="text-secondary mb-0"><?php echo htmlspecialchars($welcomeLabel . ' ' . $adminUser['full_name'], ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php endif; ?>
             </header>

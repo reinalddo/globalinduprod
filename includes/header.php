@@ -5,6 +5,7 @@ $assetPath = $assetPath ?? $rootPath . '/assets';
 $activeNav = $activeNav ?? 'home';
 
 require_once __DIR__ . '/site-content.php';
+$languageCode = tenantLanguageCode();
 $headerSettings = getSiteHeaderSettings();
 $brandAssets = getSiteBrandAssets();
 $navLogoPath = $headerSettings['logo_path'] ?? null;
@@ -34,9 +35,47 @@ $currentSearchQuery = '';
 if (isset($_GET['q'])) {
   $currentSearchQuery = trim((string) $_GET['q']);
 }
+
+$navItems = [
+  [
+    'key' => 'home',
+    'href' => $rootPath . '/',
+    'label' => tenantText('header.nav.home', 'Inicio'),
+  ],
+  [
+    'key' => 'nosotros',
+    'href' => $rootPath . '/nosotros/',
+    'label' => tenantText('header.nav.about', 'Nosotros'),
+  ],
+  [
+    'key' => 'servicios',
+    'href' => $rootPath . '/servicios/',
+    'label' => tenantText('header.nav.services', 'Servicios'),
+  ],
+  [
+    'key' => 'contacto',
+    'href' => $rootPath . '/contacto/',
+    'label' => tenantText('header.nav.contact', 'Contacto'),
+  ],
+];
+
+$searchToggleLabel = tenantText('header.nav.searchToggle', 'Abrir buscador');
+$searchToggleSr = tenantText('header.nav.searchToggleSr', 'Abrir buscador');
+$searchPlaceholder = tenantText('header.nav.searchPlaceholder', 'Buscar servicios...');
+$searchLabel = tenantText('header.nav.searchLabel', 'Buscar servicios');
+$languageSwitcherLabel = tenantText('header.nav.languageSwitcher', 'Cambiar idioma');
+$navQuoteLabel = tenantText('header.nav.quote', 'cotizar');
+$languageLabels = [
+  'es' => tenantText('header.nav.language.es', 'ES'),
+  'en' => tenantText('header.nav.language.en', 'EN'),
+];
+$languageLinks = [
+  'es' => 'https://globalinduprod.com',
+  'en' => 'https://globalinduprodinternational.com',
+];
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?php echo htmlspecialchars($languageCode, ENT_QUOTES, 'UTF-8'); ?>">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -48,7 +87,7 @@ if (isset($_GET['q'])) {
 </head>
 <body<?php echo !empty($bodyClass) ? ' class="' . htmlspecialchars($bodyClass, ENT_QUOTES, 'UTF-8') . '"' : ''; ?>>
   <header class="site-header">
-    <nav class="navbar transparent-nav" role="navigation" aria-label="Menú principal">
+    <nav class="navbar transparent-nav" role="navigation" aria-label="<?php echo htmlspecialchars(tenantText('header.nav.ariaMain', 'Menú principal'), ENT_QUOTES, 'UTF-8'); ?>">
       <div class="navbar-brand">
         <a class="navbar-item brand-logo" href="<?php echo $rootPath; ?>/">
           <img src="<?php echo htmlspecialchars($navLogoUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($navLogoAlt, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
@@ -64,27 +103,26 @@ if (isset($_GET['q'])) {
       </div>
       <div class="navbar-menu" data-primary-nav>
         <div class="navbar-end">
-          <a href="<?php echo $rootPath; ?>/" class="navbar-item <?php echo $activeNav === 'home' ? 'is-active' : ''; ?>">Inicio</a>
-          <a href="<?php echo $rootPath; ?>/nosotros/" class="navbar-item <?php echo $activeNav === 'nosotros' ? 'is-active' : ''; ?>">Nosotros</a>
-          <a href="<?php echo $rootPath; ?>/servicios/" class="navbar-item <?php echo $activeNav === 'servicios' ? 'is-active' : ''; ?>">Servicios</a>
-          <a href="<?php echo $rootPath; ?>/contacto/" class="navbar-item <?php echo $activeNav === 'contacto' ? 'is-active' : ''; ?>">Contacto</a>
+          <?php foreach ($navItems as $item): ?>
+            <a href="<?php echo $item['href']; ?>" class="navbar-item <?php echo $activeNav === $item['key'] ? 'is-active' : ''; ?>"><?php echo htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8'); ?></a>
+          <?php endforeach; ?>
         </div>
         <div class="navbar-actions">
           <div class="nav-search" data-search-panel>
             <button class="nav-search__toggle" type="button" aria-expanded="false" aria-controls="nav-search-form">
-              <span class="sr-only">Abrir buscador</span>
+              <span class="sr-only"><?php echo htmlspecialchars($searchToggleSr, ENT_QUOTES, 'UTF-8'); ?></span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3a7.5 7.5 0 015.926 12.137l5.218 5.219a1 1 0 01-1.414 1.414l-5.219-5.218A7.5 7.5 0 1110.5 3zm0 2a5.5 5.5 0 100 11 5.5 5.5 0 000-11z"/></svg>
             </button>
             <form class="nav-search__form" id="nav-search-form" role="search" action="<?php echo $rootPath; ?>/servicios/" method="get" hidden>
-              <label for="header-search" class="sr-only">Buscar servicios</label>
-              <input id="header-search" name="q" type="search" placeholder="Buscar servicios..." value="<?php echo htmlspecialchars($currentSearchQuery, ENT_QUOTES, 'UTF-8'); ?>" autocomplete="off" required>
+              <label for="header-search" class="sr-only"><?php echo htmlspecialchars($searchLabel, ENT_QUOTES, 'UTF-8'); ?></label>
+              <input id="header-search" name="q" type="search" placeholder="<?php echo htmlspecialchars($searchPlaceholder, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($currentSearchQuery, ENT_QUOTES, 'UTF-8'); ?>" autocomplete="off" required>
             </form>
           </div>
-          <div class="nav-languages" role="group" aria-label="Cambiar idioma">
-            <a href="#" class="nav-languages__link is-active" data-lang="es">ES</a>
-            <a href="#" class="nav-languages__link" data-lang="en">EN</a>
+          <div class="nav-languages" role="group" aria-label="<?php echo htmlspecialchars($languageSwitcherLabel, ENT_QUOTES, 'UTF-8'); ?>">
+            <a href="<?php echo htmlspecialchars($languageLinks['es'], ENT_QUOTES, 'UTF-8'); ?>" class="nav-languages__link<?php echo $languageCode === 'es' ? ' is-active' : ''; ?>" data-lang="es"><?php echo htmlspecialchars($languageLabels['es'], ENT_QUOTES, 'UTF-8'); ?></a>
+            <a href="<?php echo htmlspecialchars($languageLinks['en'], ENT_QUOTES, 'UTF-8'); ?>" class="nav-languages__link<?php echo $languageCode === 'en' ? ' is-active' : ''; ?>" data-lang="en"><?php echo htmlspecialchars($languageLabels['en'], ENT_QUOTES, 'UTF-8'); ?></a>
           </div>
-          <a class="nav-quote" href="<?php echo $rootPath; ?>/contacto/">cotizar</a>
+          <a class="nav-quote" href="<?php echo $rootPath; ?>/contacto/"><?php echo htmlspecialchars($navQuoteLabel, ENT_QUOTES, 'UTF-8'); ?></a>
         </div>
       </div>
     </nav>

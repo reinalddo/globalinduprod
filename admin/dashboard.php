@@ -1,21 +1,25 @@
 <?php
-$pageTitle = 'Panel administrativo';
-$pageHeader = 'Panel administrativo';
+$pageTitle = tenantText('admin.panel.title', 'Panel administrativo');
+$pageHeader = $pageTitle;
 $activeNav = 'dashboard';
 require_once __DIR__ . '/includes/page-top.php';
 ?>
 <section>
-    <p>Bienvenido<?php echo $adminUser && !empty($adminUser['full_name']) ? ', ' . htmlspecialchars($adminUser['full_name'], ENT_QUOTES, 'UTF-8') : ''; ?>. Usa los accesos rápidos para gestionar el contenido.</p>
+    <?php
+    $welcomeSuffix = $adminUser && !empty($adminUser['full_name']) ? ', ' . htmlspecialchars($adminUser['full_name'], ENT_QUOTES, 'UTF-8') : '';
+    $welcomeMessage = sprintf(tenantText('admin.dashboard.welcome', 'Bienvenido%s. Usa los accesos rápidos para gestionar el contenido.'), $welcomeSuffix);
+    ?>
+    <p><?php echo htmlspecialchars($welcomeMessage, ENT_QUOTES, 'UTF-8'); ?></p>
     <div style="display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:24px;">
         <?php
         $shortcuts = [
-            ['icon' => 'home', 'title' => 'Gestionar Inicio', 'href' => adminUrl('home')],
-            ['icon' => 'users', 'title' => 'Sección Nosotros', 'href' => adminUrl('nosotros')],
-            ['icon' => 'layers', 'title' => 'Servicios', 'href' => adminUrl('servicios')],
-            ['icon' => 'mail', 'title' => 'Contacto', 'href' => adminUrl('contacto')],
-            ['icon' => 'bookmark', 'title' => 'Cabecera', 'href' => adminUrl('cabecera')],
-            ['icon' => 'layout', 'title' => 'Pie de página', 'href' => adminUrl('pie')],
-            ['icon' => 'shield', 'title' => 'Datos admin', 'href' => adminUrl('datos')],
+            ['icon' => 'home', 'title' => tenantText('admin.dashboard.shortcut.home', 'Gestionar Inicio'), 'href' => adminUrl('home')],
+            ['icon' => 'users', 'title' => tenantText('admin.dashboard.shortcut.about', 'Sección Nosotros'), 'href' => adminUrl('nosotros')],
+            ['icon' => 'layers', 'title' => tenantText('admin.dashboard.shortcut.services', 'Servicios'), 'href' => adminUrl('servicios')],
+            ['icon' => 'mail', 'title' => tenantText('admin.dashboard.shortcut.contact', 'Contacto'), 'href' => adminUrl('contacto')],
+            ['icon' => 'bookmark', 'title' => tenantText('admin.dashboard.shortcut.header', 'Cabecera'), 'href' => adminUrl('cabecera')],
+            ['icon' => 'layout', 'title' => tenantText('admin.dashboard.shortcut.footer', 'Pie de página'), 'href' => adminUrl('pie')],
+            ['icon' => 'shield', 'title' => tenantText('admin.dashboard.shortcut.data', 'Datos admin'), 'href' => adminUrl('datos')],
         ];
 
         foreach ($shortcuts as $item):
@@ -37,7 +41,7 @@ require_once __DIR__ . '/includes/page-top.php';
                     </svg>
                 </span>
                 <strong style="font-size:1.02rem;font-weight:600;"><?php echo htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                <span style="font-size:0.85rem;color:#6b7280;">Administrar módulo</span>
+                <span style="font-size:0.85rem;color:#6b7280;"><?php echo htmlspecialchars(tenantText('admin.dashboard.shortcut.caption', 'Administrar módulo'), ENT_QUOTES, 'UTF-8'); ?></span>
             </a>
         <?php endforeach; ?>
     </div>

@@ -43,7 +43,11 @@ if (!function_exists('contactDeleteStoredAsset')) {
         if (!$relativePath) {
             return;
         }
-        $absolute = dirname(__DIR__, 2) . '/' . ltrim($relativePath, '/');
+        $normalized = ltrim($relativePath, '/');
+        if (!tenantUploadsIsWithin($normalized, 'contact/email')) {
+            return;
+        }
+        $absolute = tenantUploadsAbsolutePath($normalized);
         if (is_file($absolute)) {
             @unlink($absolute);
         }
@@ -131,15 +135,11 @@ if (!function_exists('contactSaveMailLogo')) {
             imagesavealpha($image, true);
         }
 
-        $projectRoot = dirname(__DIR__, 2);
-        $relativeDir = 'uploads/contact/email';
-        $absoluteDir = $projectRoot . '/' . $relativeDir;
-
-        if (!is_dir($absoluteDir)) {
-            if (!mkdir($absoluteDir, 0775, true) && !is_dir($absoluteDir)) {
-                imagedestroy($image);
-                throw new RuntimeException('No se pudo preparar la carpeta para logos.');
-            }
+        try {
+            [$relativeDir, $absoluteDir] = tenantEnsureUploadsDirectory('contact/email');
+        } catch (Throwable $exception) {
+            imagedestroy($image);
+            throw $exception;
         }
 
         try {

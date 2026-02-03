@@ -122,16 +122,7 @@ if (!function_exists('headerSaveLogoImage')) {
             imagesavealpha($image, true);
         }
 
-        $projectRoot = dirname(__DIR__, 2);
-        $relativeDir = 'uploads/site/header';
-        $absoluteDir = $projectRoot . '/' . $relativeDir;
-
-        if (!is_dir($absoluteDir)) {
-            if (!mkdir($absoluteDir, 0775, true) && !is_dir($absoluteDir)) {
-                imagedestroy($image);
-                throw new RuntimeException('No se pudo preparar la carpeta para los logos.');
-            }
-        }
+        [$relativeDir, $absoluteDir] = tenantEnsureUploadsDirectory('site/header');
 
         try {
             $filename = 'logo-' . time() . '-' . bin2hex(random_bytes(4)) . '.' . $allowedMimes[$mime];
@@ -175,21 +166,11 @@ if (!function_exists('headerDeleteStoredLogo')) {
             return;
         }
 
-        $projectRoot = dirname(__DIR__, 2);
-        $absolutePath = realpath($projectRoot . '/' . ltrim($relativePath, '/'));
-        $uploadsPath = realpath($projectRoot . '/uploads/site/header');
-
-        if (!$absolutePath || !$uploadsPath) {
+        $normalized = ltrim($relativePath, '/');
+        if (!tenantUploadsIsWithin($normalized, 'site/header')) {
             return;
         }
-
-        $absoluteNormalized = strtolower(str_replace('\\', '/', $absolutePath));
-        $uploadsNormalized = strtolower(str_replace('\\', '/', $uploadsPath));
-
-        if (!str_starts_with($absoluteNormalized, $uploadsNormalized)) {
-            return;
-        }
-
+        $absolutePath = tenantUploadsAbsolutePath($normalized);
         if (is_file($absolutePath)) {
             @unlink($absolutePath);
         }
