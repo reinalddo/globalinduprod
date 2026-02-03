@@ -129,15 +129,33 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (languageLinks.length) {
+    const clickedFromPointer = new WeakSet();
+
     languageLinks.forEach((link) => {
       const href = link.getAttribute('href');
-      if (!href || href === '#') {
+      const isRealLink = href && href !== '#';
+
+      link.addEventListener('mousedown', () => {
+        clickedFromPointer.add(link);
+      });
+
+      if (!isRealLink) {
         link.addEventListener('click', (event) => {
           event.preventDefault();
           languageLinks.forEach((item) => item.classList.remove('is-active'));
           event.currentTarget.classList.add('is-active');
         });
+        return;
       }
+
+      link.addEventListener('click', (event) => {
+        if (clickedFromPointer.has(link)) {
+          clickedFromPointer.delete(link);
+          return;
+        }
+        event.preventDefault();
+        window.location.assign(href);
+      });
     });
   }
 
