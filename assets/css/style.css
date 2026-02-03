@@ -2315,6 +2315,36 @@ footer {
   pointer-events: auto;
 }
 
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: #0f172a;
+  font-size: 1.6rem;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.28);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 140;
+}
+
+.whatsapp-float:hover,
+.whatsapp-float:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 32px rgba(15, 23, 42, 0.32);
+  outline: none;
+}
+
+.has-floating-whatsapp .scroll-top {
+  right: 96px;
+}
+
 
 .brand-hero {
   background: url('../img/hero-mining.svg') center/cover no-repeat;

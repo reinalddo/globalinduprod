@@ -107,11 +107,9 @@ if (!function_exists('getContactPageSettings')) {
                             $defaults[$field] = (string) $row[$field];
                         }
                     }
-                                        if ($defaults['contact_whatsapp'] !== '') {
-                                            $digitsOnly = preg_replace('/\D+/', '', $defaults['contact_whatsapp']);
-                                            if ($digitsOnly !== '') {
-                                                $defaults['contact_whatsapp_link'] = 'https://wa.me/' . $digitsOnly;
-                                            }
+                                        $digitsOnly = preg_replace('/\D+/', '', $defaults['contact_whatsapp']);
+                                        if ($digitsOnly !== '') {
+                                            $defaults['contact_whatsapp_link'] = 'https://wa.me/' . $digitsOnly;
                                         }
                     if (isset($row['smtp_port'])) {
                         $defaults['smtp_port'] = (int) $row['smtp_port'];

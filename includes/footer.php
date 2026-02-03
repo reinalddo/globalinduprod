@@ -13,6 +13,9 @@ if (!empty($footerSettings['contact_text'])) {
 }
 
 $footerRightsText = htmlspecialchars($footerSettings['rights_text'] ?? '', ENT_QUOTES, 'UTF-8');
+$contactWhatsappNumber = $globalContactSettings['contact_whatsapp'] ?? '';
+$contactWhatsappLink = $globalContactSettings['contact_whatsapp_link'] ?? null;
+$showWhatsappFloat = is_string($contactWhatsappNumber) && trim($contactWhatsappNumber) !== '' && !empty($contactWhatsappLink);
 
 $companyHeading = tenantText('footer.company', 'Empresa');
 $informationHeading = tenantText('footer.information', 'Información');
@@ -95,6 +98,11 @@ $defaultIconMap = [
     </div>
   </footer>
   <button class="scroll-top" type="button" aria-label="<?php echo htmlspecialchars($scrollTopLabel, ENT_QUOTES, 'UTF-8'); ?>" data-scroll-top>↑</button>
+  <?php if ($showWhatsappFloat): ?>
+    <a href="<?php echo htmlspecialchars($contactWhatsappLink, ENT_QUOTES, 'UTF-8'); ?>" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+      <span aria-hidden="true">💬</span>
+    </a>
+  <?php endif; ?>
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
   <script src="<?php echo $assetPath; ?>/js/main.js" defer></script>
 </body>

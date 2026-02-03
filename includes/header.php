@@ -8,6 +8,9 @@ require_once __DIR__ . '/site-content.php';
 $languageCode = tenantLanguageCode();
 $headerSettings = getSiteHeaderSettings();
 $brandAssets = getSiteBrandAssets();
+$globalContactSettings = getContactPageSettings();
+$contactWhatsappRaw = isset($globalContactSettings['contact_whatsapp']) ? trim((string) $globalContactSettings['contact_whatsapp']) : '';
+$contactWhatsappLinkGlobal = $globalContactSettings['contact_whatsapp_link'] ?? null;
 $navLogoPath = $headerSettings['logo_path'] ?? null;
 $navLogoLabel = $headerSettings['logo_label'] ?? null;
 $navLogoUrl = $rootPath . '/logo.png';
@@ -34,6 +37,11 @@ if (!empty($brandAssets['favicon_path'])) {
 $currentSearchQuery = '';
 if (isset($_GET['q'])) {
   $currentSearchQuery = trim((string) $_GET['q']);
+}
+
+$bodyClass = $bodyClass ?? '';
+if ($contactWhatsappRaw !== '' && $contactWhatsappLinkGlobal) {
+  $bodyClass = trim($bodyClass . ' has-floating-whatsapp');
 }
 
 $navItems = [
