@@ -100,9 +100,7 @@ $defaultIconMap = [
   <button class="scroll-top" type="button" aria-label="<?php echo htmlspecialchars($scrollTopLabel, ENT_QUOTES, 'UTF-8'); ?>" data-scroll-top>↑</button>
   <?php if ($showWhatsappFloat): ?>
     <a href="<?php echo htmlspecialchars($contactWhatsappLink, ENT_QUOTES, 'UTF-8'); ?>" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-        <path d="M16 3C9.4 3 4 8.2 4 14.7c0 2.4.7 4.6 2 6.6L4 29l7.9-1.9c2 1.1 4.1 1.6 6.1 1.6 6.6 0 12-5.3 12-11.8C30 8.2 24.6 3 18 3h-2Zm0 2.5c5.2 0 9.5 4.1 9.5 9.2 0 5.1-4.3 9.3-9.5 9.3-1.9 0-3.7-.6-5.3-1.5l-.4-.2-4.7 1.1 1-4.5-.3-.4c-1.2-1.7-1.8-3.6-1.8-5.6 0-5.1 4.3-9.4 9.5-9.4Zm5.6 5.6c-.3-.7-.7-.7-1-.7h-.8c-.3 0-.8.1-1.2.6-.4.5-1.5 1.5-1.5 3.7 0 .3 0 .7.1 1 .2.7.7 1.3 1.4 2 .7.7 2.6 1.8 2.6 1.8.2.1.5.2.7.3.3.1.5.1.6-.1.2-.2.8-.8 1-1 .2-.2.2-.4.2-.6s-.1-.4-.1-.4-.1-.1-.3-.2c-.2-.1-1.6-.8-1.8-.9-.2-.1-.3-.1-.4.1-.1.2-.5.5-.6.5-.1 0-.2 0-.4-.2-.2-.2-.8-.7-1.1-1.2-.3-.5-.5-1-.3-1.2.1-.1.3-.3.4-.5.1-.2.1-.3.1-.4 0-.1 0-.3-.1-.4-.1-.1-.8-2.1-1-2.6Z" fill="currentColor"/>
-      </svg>
+      <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
       <span class="sr-only"><?php echo htmlspecialchars($contactWhatsappNumber, ENT_QUOTES, 'UTF-8'); ?></span>
     </a>
   <?php endif; ?>
