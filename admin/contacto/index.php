@@ -80,28 +80,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $formErrors[] = 'Debes indicar un correo electrónico válido para recibir mensajes.';
     }
 
-    if ($posted['smtp_host'] === '') {
-        $formErrors[] = 'Debes indicar el host SMTP.';
+    if ($posted['smtp_port'] < 0) {
+        $posted['smtp_port'] = 0;
     }
 
-    if ($posted['smtp_port'] <= 0) {
-        $formErrors[] = 'El puerto SMTP debe ser un número mayor que cero.';
-    }
-
-    if ($posted['smtp_username'] === '') {
-        $formErrors[] = 'Debes indicar el usuario SMTP.';
-    }
-
-    if ($posted['smtp_password'] === '') {
-        $formErrors[] = 'Debes indicar la contraseña SMTP.';
-    }
-
-    if ($posted['smtp_from_email'] === '' || !filter_var($posted['smtp_from_email'], FILTER_VALIDATE_EMAIL)) {
+    if ($posted['smtp_from_email'] !== '' && !filter_var($posted['smtp_from_email'], FILTER_VALIDATE_EMAIL)) {
         $formErrors[] = 'Debes indicar un correo válido como remitente.';
-    }
-
-    if ($posted['smtp_from_name'] === '') {
-        $formErrors[] = 'Debes indicar el nombre del remitente.';
     }
 
     if ($posted['email_subject'] === '') {
@@ -260,12 +244,12 @@ require_once __DIR__ . '/../includes/page-top.php';
             <legend style="padding:0 8px;font-weight:600;color:#111827;">Configuración SMTP (PHPMailer)</legend>
 
             <label for="contact_smtp_host">Servidor SMTP</label>
-            <input type="text" name="smtp_host" id="contact_smtp_host" required maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_host'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="text" name="smtp_host" id="contact_smtp_host" maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_host'], ENT_QUOTES, 'UTF-8'); ?>">
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;">
                 <div>
                     <label for="contact_smtp_port">Puerto</label>
-                    <input type="number" name="smtp_port" id="contact_smtp_port" required min="1" max="65535" value="<?php echo (int) $settings['smtp_port']; ?>">
+                    <input type="number" name="smtp_port" id="contact_smtp_port" min="0" max="65535" value="<?php echo (int) $settings['smtp_port']; ?>">
                 </div>
                 <div>
                     <label for="contact_smtp_encryption">Cifrado</label>
@@ -284,16 +268,16 @@ require_once __DIR__ . '/../includes/page-top.php';
             </div>
 
             <label for="contact_smtp_username">Usuario SMTP</label>
-            <input type="text" name="smtp_username" id="contact_smtp_username" required maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_username'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="text" name="smtp_username" id="contact_smtp_username" maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_username'], ENT_QUOTES, 'UTF-8'); ?>">
 
             <label for="contact_smtp_password">Contraseña SMTP</label>
-            <input type="password" name="smtp_password" id="contact_smtp_password" required maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_password'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="password" name="smtp_password" id="contact_smtp_password" maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_password'], ENT_QUOTES, 'UTF-8'); ?>">
 
             <label for="contact_smtp_from_email">Correo remitente</label>
-            <input type="email" name="smtp_from_email" id="contact_smtp_from_email" required maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_from_email'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="email" name="smtp_from_email" id="contact_smtp_from_email" maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_from_email'], ENT_QUOTES, 'UTF-8'); ?>">
 
             <label for="contact_smtp_from_name">Nombre remitente</label>
-            <input type="text" name="smtp_from_name" id="contact_smtp_from_name" required maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_from_name'], ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="text" name="smtp_from_name" id="contact_smtp_from_name" maxlength="255" value="<?php echo htmlspecialchars($settings['smtp_from_name'], ENT_QUOTES, 'UTF-8'); ?>">
 
             <label for="contact_email_subject">Asunto por defecto</label>
             <input type="text" name="email_subject" id="contact_email_subject" required maxlength="255" value="<?php echo htmlspecialchars($settings['email_subject'], ENT_QUOTES, 'UTF-8'); ?>">
