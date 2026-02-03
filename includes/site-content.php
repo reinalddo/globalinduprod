@@ -108,16 +108,14 @@ if (!function_exists('getContactPageSettings')) {
                             $defaults[$field] = (string) $row[$field];
                         }
                     }
-                                        $digitsOnly = preg_replace('/\D+/', '', $defaults['contact_whatsapp']);
-                                        if ($digitsOnly !== '') {
-                                            $defaults['contact_whatsapp_link'] = 'https://wa.me/' . $digitsOnly;
-                                        }
                     if (isset($row['smtp_port'])) {
                         $defaults['smtp_port'] = (int) $row['smtp_port'];
                     }
                     if (isset($row['smtp_auth'])) {
                         $defaults['smtp_auth'] = (int) $row['smtp_auth'] === 1 ? 1 : 0;
                     }
+
+                    $defaults['contact_whatsapp'] = isset($row['contact_whatsapp']) ? (string) $row['contact_whatsapp'] : '';
 
                     if (!empty($row['email_logo_path'])) {
                         $normalized = normalizeFrontAssetPath($row['email_logo_path']);
@@ -142,21 +140,41 @@ if (!function_exists('getContactPageSettings')) {
                             }
                         }
                     }
-
-                    $rawWhatsapp = isset($row['contact_whatsapp']) ? trim((string) $row['contact_whatsapp']) : '';
+                    $rawWhatsapp = trim($defaults['contact_whatsapp']);
                     if ($rawWhatsapp !== '') {
                         $digitsOnly = preg_replace('/\D+/', '', $rawWhatsapp);
                         if ($digitsOnly !== '') {
                             $defaults['contact_whatsapp'] = $digitsOnly;
                             $defaults['contact_whatsapp_display'] = '+' . $digitsOnly;
                             $defaults['contact_whatsapp_link'] = 'https://wa.me/' . $digitsOnly;
+                        } else {
+                            $defaults['contact_whatsapp'] = '';
+                            $defaults['contact_whatsapp_display'] = '';
+                            $defaults['contact_whatsapp_link'] = null;
                         }
+                    } else {
+                        $defaults['contact_whatsapp'] = '';
+                        $defaults['contact_whatsapp_display'] = '';
+                        $defaults['contact_whatsapp_link'] = null;
                     }
                 }
                 $result->free();
             }
         } catch (Throwable $exception) {
             // Se mantienen los valores por defecto si falla la consulta.
+        }
+
+        if ($defaults['contact_whatsapp'] !== '') {
+            $digitsOnly = preg_replace('/\D+/', '', (string) $defaults['contact_whatsapp']);
+            if ($digitsOnly !== '') {
+                $defaults['contact_whatsapp'] = $digitsOnly;
+                $defaults['contact_whatsapp_display'] = '+' . $digitsOnly;
+                $defaults['contact_whatsapp_link'] = 'https://wa.me/' . $digitsOnly;
+            } else {
+                $defaults['contact_whatsapp'] = '';
+                $defaults['contact_whatsapp_display'] = '';
+                $defaults['contact_whatsapp_link'] = null;
+            }
         }
 
         $cache = $defaults;
