@@ -59,24 +59,62 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (navToggle && nav) {
-    navToggle.setAttribute('aria-expanded', 'false');
-    nav.setAttribute('aria-hidden', 'true');
+    const isToggleVisible = () => window.getComputedStyle(navToggle).display !== 'none';
+
+    const closeNav = (shouldManageFocus = true) => {
+      navToggle.classList.remove('is-active');
+      nav.classList.remove('is-active');
+      navToggle.setAttribute('aria-expanded', 'false');
+      if (isToggleVisible()) {
+        nav.setAttribute('aria-hidden', 'true');
+        if (shouldManageFocus && nav.contains(document.activeElement) && typeof navToggle.focus === 'function') {
+          navToggle.focus({ preventScroll: true });
+        }
+      } else {
+        nav.removeAttribute('aria-hidden');
+      }
+    };
+
+    const openNav = () => {
+      navToggle.classList.add('is-active');
+      nav.classList.add('is-active');
+      navToggle.setAttribute('aria-expanded', 'true');
+      nav.setAttribute('aria-hidden', 'false');
+    };
+
+    const syncNavVisibility = () => {
+      if (isToggleVisible()) {
+        const expanded = navToggle.classList.contains('is-active');
+        navToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        if (!expanded) {
+          nav.setAttribute('aria-hidden', 'true');
+        }
+        return;
+      }
+      nav.classList.remove('is-active');
+      nav.removeAttribute('aria-hidden');
+      navToggle.classList.remove('is-active');
+      navToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    syncNavVisibility();
+    window.addEventListener('resize', syncNavVisibility);
 
     navToggle.addEventListener('click', () => {
-      const isActive = navToggle.classList.toggle('is-active');
-      nav.classList.toggle('is-active', isActive);
-      navToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-      nav.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-      if (!isActive) {
-        closeSearch();
+      if (!isToggleVisible()) {
+        return;
       }
+      if (navToggle.classList.contains('is-active')) {
+        closeNav();
+        closeSearch();
+        return;
+      }
+      openNav();
     });
+
     nav.querySelectorAll('.navbar-item').forEach((link) => {
       link.addEventListener('click', () => {
-        navToggle.classList.remove('is-active');
-        nav.classList.remove('is-active');
-        navToggle.setAttribute('aria-expanded', 'false');
-        nav.setAttribute('aria-hidden', 'true');
+        closeNav();
         closeSearch();
       });
     });
