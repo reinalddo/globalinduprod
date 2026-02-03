@@ -224,7 +224,7 @@ require_once __DIR__ . '/../includes/page-top.php';
 <section id="listado" style="margin-top:48px;">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
         <h2 style="margin:0;">Servicios publicados</h2>
-        <a class="btn btn-primary" href="<?php echo adminUrl('servicios/editar.php'); ?>">Añadir servicio</a>
+        <a class="btn btn-primary" href="<?php echo adminUrl('servicios/editar'); ?>">Añadir servicio</a>
     </div>
 
     <?php if ($listSuccess !== ''): ?>
@@ -265,7 +265,7 @@ require_once __DIR__ . '/../includes/page-top.php';
                             <td><?php echo $service['is_featured_about'] ? 'Sí' : 'No'; ?></td>
                             <td><?php echo htmlspecialchars(date('d/m/Y H:i', strtotime($service['updated_at'] ?? 'now')), ENT_QUOTES, 'UTF-8'); ?></td>
                             <td style="text-align:right;white-space:nowrap;">
-                                <a class="btn btn-outline" href="<?php echo adminUrl('servicios/editar.php?id=' . $service['id']); ?>">Editar</a>
+                                <a class="btn btn-outline" href="<?php echo adminUrl('servicios/editar') . '?id=' . (int) $service['id']; ?>">Editar</a>
                                 <form method="post" style="display:inline-block;margin-left:8px;" onsubmit="return confirm('¿Seguro que deseas eliminar este servicio? Esta acción no se puede deshacer.');">
                                     <input type="hidden" name="form_type" value="delete_service">
                                     <input type="hidden" name="service_id" value="<?php echo (int) $service['id']; ?>">

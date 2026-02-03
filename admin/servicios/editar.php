@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['service_edit_flash'] = [
                 'gallery_errors' => ['No se encontró el servicio asociado a la imagen.']
             ];
-            header('Location: ' . adminUrl('servicios/editar.php' . ($serviceId > 0 ? '?id=' . $serviceId : '')) . '#galeria');
+            header('Location: ' . adminUrl('servicios/editar') . ($serviceId > 0 ? '?id=' . $serviceId : '') . '#galeria');
             exit;
         }
 
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['service_edit_flash'] = [
                 'gallery_errors' => ['No se pudo identificar la imagen a eliminar.']
             ];
-            header('Location: ' . adminUrl('servicios/editar.php?id=' . $service['id']) . '#galeria');
+            header('Location: ' . adminUrl('servicios/editar') . '?id=' . $service['id'] . '#galeria');
             exit;
         }
 
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['service_edit_flash'] = [
                 'gallery_errors' => ['No se pudo eliminar la imagen seleccionada.']
             ];
-            header('Location: ' . adminUrl('servicios/editar.php?id=' . $service['id']) . '#galeria');
+            header('Location: ' . adminUrl('servicios/editar') . '?id=' . $service['id'] . '#galeria');
             exit;
         }
         $stmt->bind_param('ii', $imageId, $service['id']);
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['service_edit_flash'] = [
                 'gallery_errors' => ['No se encontró la imagen seleccionada.']
             ];
-            header('Location: ' . adminUrl('servicios/editar.php?id=' . $service['id']) . '#galeria');
+            header('Location: ' . adminUrl('servicios/editar') . '?id=' . $service['id'] . '#galeria');
             exit;
         }
 
@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['service_edit_flash'] = [
                 'gallery_errors' => ['No se pudo eliminar la imagen seleccionada.']
             ];
-            header('Location: ' . adminUrl('servicios/editar.php?id=' . $service['id']) . '#galeria');
+            header('Location: ' . adminUrl('servicios/editar') . '?id=' . $service['id'] . '#galeria');
             exit;
         }
         $stmt->bind_param('ii', $imageId, $service['id']);
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $stmt->close();
 
-        header('Location: ' . adminUrl('servicios/editar.php?id=' . $service['id']) . '#galeria');
+        header('Location: ' . adminUrl('servicios/editar') . '?id=' . $service['id'] . '#galeria');
         exit;
     }
 
@@ -184,6 +184,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $formErrors[] = 'No se pudo validar el slug del servicio.';
                 }
                 $stmt->close();
+
+            }
+        }
 
         $uploadedHero = $_FILES['hero_image'] ?? null;
         $replacingHero = $uploadedHero && $uploadedHero['error'] !== UPLOAD_ERR_NO_FILE;
@@ -315,7 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $_SESSION['service_edit_flash'] = $flashPayload;
 
-                header('Location: ' . adminUrl('servicios/editar.php?id=' . $service['id']) . '#detalles');
+                header('Location: ' . adminUrl('servicios/editar') . '?id=' . $service['id'] . '#detalles');
                 exit;
             } catch (Throwable $exception) {
                 $formErrors[] = 'No se pudo guardar la información del servicio.';
