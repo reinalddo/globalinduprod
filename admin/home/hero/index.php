@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+require_once __DIR__ . '/../../includes/helpers.php';
+
 $pageTitle = tenantLang('Inicio | Carrusel', 'Home | Slider');
 $pageHeader = tenantLang('Carrusel principal', 'Main carousel');
 $activeNav = 'home';
