@@ -84,6 +84,9 @@ if (!function_exists('getContactPageSettings')) {
             'email_logo_path' => null,
             'email_logo_url' => null,
             'email_logo_absolute' => null,
+            'hero_image_path' => null,
+            'hero_image_url' => null,
+            'hero_image_absolute' => null,
         ];
 
         try {
@@ -94,7 +97,7 @@ if (!function_exists('getContactPageSettings')) {
         }
 
         try {
-            $sql = 'SELECT hero_title, hero_kicker, hero_description, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path FROM contact_page_settings ORDER BY id ASC LIMIT 1';
+            $sql = 'SELECT hero_title, hero_kicker, hero_description, hero_image_path, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path FROM contact_page_settings ORDER BY id ASC LIMIT 1';
             if ($result = $db->query($sql)) {
                 if ($row = $result->fetch_assoc()) {
                     foreach (['hero_title','hero_kicker','hero_description','content_html','phone_placeholder','map_embed','contact_email','smtp_host','smtp_username','smtp_password','smtp_encryption','smtp_from_email','smtp_from_name','email_subject'] as $field) {
@@ -117,6 +120,18 @@ if (!function_exists('getContactPageSettings')) {
                             $absolute = dirname(__DIR__) . '/' . ltrim($row['email_logo_path'], '/');
                             if (is_file($absolute)) {
                                 $defaults['email_logo_absolute'] = $absolute;
+                            }
+                        }
+                    }
+
+                    if (!empty($row['hero_image_path'])) {
+                        $normalizedHero = normalizeFrontAssetPath($row['hero_image_path']);
+                        if ($normalizedHero) {
+                            $defaults['hero_image_path'] = $row['hero_image_path'];
+                            $defaults['hero_image_url'] = $normalizedHero;
+                            $heroAbsolute = dirname(__DIR__) . '/' . ltrim($row['hero_image_path'], '/');
+                            if (is_file($heroAbsolute)) {
+                                $defaults['hero_image_absolute'] = $heroAbsolute;
                             }
                         }
                     }

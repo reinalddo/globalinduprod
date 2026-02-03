@@ -38,19 +38,143 @@ if (!function_exists('contactEnsureColumn')) {
 }
 
 if (!function_exists('contactDeleteStoredAsset')) {
-    function contactDeleteStoredAsset(?string $relativePath): void
+    function contactDeleteStoredAsset(?string $relativePath, array $allowedSubdirectories = ['contact/email']): void
     {
-        if (!$relativePath) {
+        if (!$relativePath || !$allowedSubdirectories) {
             return;
         }
+
         $normalized = ltrim($relativePath, '/');
-        if (!tenantUploadsIsWithin($normalized, 'contact/email')) {
+
+        foreach ($allowedSubdirectories as $subdirectory) {
+            if (!tenantUploadsIsWithin($normalized, $subdirectory)) {
+                continue;
+            }
+            $absolute = tenantUploadsAbsolutePath($normalized);
+            if (is_file($absolute)) {
+                @unlink($absolute);
+            }
             return;
         }
-        $absolute = tenantUploadsAbsolutePath($normalized);
-        if (is_file($absolute)) {
-            @unlink($absolute);
+    }
+}
+
+if (!function_exists('contactSaveHeroImage')) {
+    function contactSaveHeroImage(array $file): string
+    {
+        if (!isset($file['error'], $file['tmp_name']) || $file['error'] !== UPLOAD_ERR_OK) {
+            throw new RuntimeException('No se pudo procesar la imagen del hero.');
         }
+
+        if (!is_uploaded_file($file['tmp_name'])) {
+            throw new RuntimeException('La carga de la imagen del hero no es válida.');
+        }
+
+        $allowed = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/webp' => 'webp'
+        ];
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = $finfo ? finfo_file($finfo, $file['tmp_name']) : false;
+        if ($finfo) {
+            finfo_close($finfo);
+        }
+
+        if (!$mime || !isset($allowed[$mime])) {
+            throw new RuntimeException('La imagen del hero debe ser JPG, PNG o WebP.');
+        }
+
+        switch ($mime) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($file['tmp_name']);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($file['tmp_name']);
+                break;
+            case 'image/webp':
+                if (!function_exists('imagecreatefromwebp')) {
+                    throw new RuntimeException('El servidor no soporta imágenes WebP.');
+                }
+                $image = imagecreatefromwebp($file['tmp_name']);
+                break;
+            default:
+                $image = false;
+        }
+
+        if (!$image) {
+            throw new RuntimeException('No se pudo leer la imagen del hero.');
+        }
+
+        $maxWidth = 2400;
+        $maxHeight = 1600;
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $targetWidth = $width;
+        $targetHeight = $height;
+
+        $scale = min(1, $maxWidth / $targetWidth, $maxHeight / $targetHeight);
+        if ($scale < 1) {
+            $targetWidth = (int) floor($targetWidth * $scale);
+            $targetHeight = (int) floor($targetHeight * $scale);
+        }
+
+        if ($targetWidth !== $width || $targetHeight !== $height) {
+            $optimized = imagecreatetruecolor($targetWidth, $targetHeight);
+            if ($mime === 'image/png' || $mime === 'image/webp') {
+                imagealphablending($optimized, false);
+                imagesavealpha($optimized, true);
+            }
+            imagecopyresampled($optimized, $image, 0, 0, 0, 0, $targetWidth, $targetHeight, $width, $height);
+            imagedestroy($image);
+            $image = $optimized;
+        }
+
+        if ($mime === 'image/png' || $mime === 'image/webp') {
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+        }
+
+        try {
+            [$relativeDir, $absoluteDir] = tenantEnsureUploadsDirectory('contact/hero');
+        } catch (Throwable $exception) {
+            imagedestroy($image);
+            throw $exception;
+        }
+
+        try {
+            $filename = 'contact-hero-' . time() . '-' . bin2hex(random_bytes(4)) . '.' . $allowed[$mime];
+        } catch (Throwable $exception) {
+            imagedestroy($image);
+            throw new RuntimeException('No se pudo generar el nombre de la imagen del hero.');
+        }
+
+        $targetPath = $absoluteDir . '/' . $filename;
+
+        switch ($mime) {
+            case 'image/jpeg':
+                imagejpeg($image, $targetPath, 82);
+                break;
+            case 'image/png':
+                imagepng($image, $targetPath, 7);
+                break;
+            case 'image/webp':
+                if (!function_exists('imagewebp')) {
+                    imagedestroy($image);
+                    throw new RuntimeException('El servidor no puede optimizar imágenes WebP.');
+                }
+                imagewebp($image, $targetPath, 82);
+                break;
+        }
+
+        imagedestroy($image);
+
+        if (!is_file($targetPath)) {
+            throw new RuntimeException('No se pudo guardar la imagen del hero.');
+        }
+
+        return $relativeDir . '/' . $filename;
     }
 }
 
@@ -208,6 +332,7 @@ SQL;
 
         contactEnsureColumn($db, 'contact_page_settings', 'hero_kicker', "VARCHAR(150) NOT NULL DEFAULT ''");
         contactEnsureColumn($db, 'contact_page_settings', 'hero_description', 'TEXT NOT NULL');
+        contactEnsureColumn($db, 'contact_page_settings', 'hero_image_path', "VARCHAR(255) NOT NULL DEFAULT ''");
         contactEnsureColumn($db, 'contact_page_settings', 'smtp_host', "VARCHAR(255) NOT NULL DEFAULT ''");
         contactEnsureColumn($db, 'contact_page_settings', 'smtp_port', 'INT NOT NULL DEFAULT 587');
         contactEnsureColumn($db, 'contact_page_settings', 'smtp_username', "VARCHAR(255) NOT NULL DEFAULT ''");
@@ -239,6 +364,7 @@ if (!function_exists('contactFetchSettings')) {
             'phone_placeholder' => '',
             'map_embed' => '',
             'contact_email' => '',
+            'hero_image_path' => '',
             'smtp_host' => '',
             'smtp_port' => 587,
             'smtp_username' => '',
@@ -251,7 +377,7 @@ if (!function_exists('contactFetchSettings')) {
             'email_logo_path' => ''
         ];
 
-        $sql = 'SELECT id, hero_title, hero_kicker, hero_description, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path FROM contact_page_settings ORDER BY id ASC LIMIT 1';
+        $sql = 'SELECT id, hero_title, hero_kicker, hero_description, hero_image_path, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path FROM contact_page_settings ORDER BY id ASC LIMIT 1';
         if ($result = $db->query($sql)) {
             if ($row = $result->fetch_assoc()) {
                 $defaults = [
@@ -263,6 +389,7 @@ if (!function_exists('contactFetchSettings')) {
                     'phone_placeholder' => (string) $row['phone_placeholder'],
                     'map_embed' => (string) $row['map_embed'],
                     'contact_email' => (string) $row['contact_email'],
+                    'hero_image_path' => isset($row['hero_image_path']) ? (string) $row['hero_image_path'] : '',
                     'smtp_host' => isset($row['smtp_host']) ? (string) $row['smtp_host'] : '',
                     'smtp_port' => isset($row['smtp_port']) ? (int) $row['smtp_port'] : 587,
                     'smtp_username' => isset($row['smtp_username']) ? (string) $row['smtp_username'] : '',
@@ -289,6 +416,7 @@ if (!function_exists('contactSaveSettings')) {
         $heroTitle = (string) ($settings['hero_title'] ?? '');
         $heroKicker = (string) ($settings['hero_kicker'] ?? '');
         $heroDescription = (string) ($settings['hero_description'] ?? '');
+        $heroImagePath = (string) ($settings['hero_image_path'] ?? '');
         $contentHtml = (string) ($settings['content_html'] ?? '');
         $phonePlaceholder = (string) ($settings['phone_placeholder'] ?? '');
         $mapEmbed = (string) ($settings['map_embed'] ?? '');
@@ -305,22 +433,22 @@ if (!function_exists('contactSaveSettings')) {
         $emailLogoPath = (string) ($settings['email_logo_path'] ?? '');
 
         if ($id > 0) {
-            $stmt = $db->prepare('UPDATE contact_page_settings SET hero_title = ?, hero_kicker = ?, hero_description = ?, content_html = ?, phone_placeholder = ?, map_embed = ?, contact_email = ?, smtp_host = ?, smtp_port = ?, smtp_username = ?, smtp_password = ?, smtp_encryption = ?, smtp_auth = ?, smtp_from_email = ?, smtp_from_name = ?, email_subject = ?, email_logo_path = ?, updated_at = NOW() WHERE id = ? LIMIT 1');
+            $stmt = $db->prepare('UPDATE contact_page_settings SET hero_title = ?, hero_kicker = ?, hero_description = ?, hero_image_path = ?, content_html = ?, phone_placeholder = ?, map_embed = ?, contact_email = ?, smtp_host = ?, smtp_port = ?, smtp_username = ?, smtp_password = ?, smtp_encryption = ?, smtp_auth = ?, smtp_from_email = ?, smtp_from_name = ?, email_subject = ?, email_logo_path = ?, updated_at = NOW() WHERE id = ? LIMIT 1');
             if ($stmt === false) {
                 throw new RuntimeException('No se pudo preparar la actualización de la sección de contacto.');
             }
-            $stmt->bind_param('ssssssssisssissssi', $heroTitle, $heroKicker, $heroDescription, $contentHtml, $phonePlaceholder, $mapEmbed, $contactEmail, $smtpHost, $smtpPort, $smtpUsername, $smtpPassword, $smtpEncryption, $smtpAuth, $smtpFromEmail, $smtpFromName, $emailSubject, $emailLogoPath, $id);
+            $stmt->bind_param('sssssssssisssissssi', $heroTitle, $heroKicker, $heroDescription, $heroImagePath, $contentHtml, $phonePlaceholder, $mapEmbed, $contactEmail, $smtpHost, $smtpPort, $smtpUsername, $smtpPassword, $smtpEncryption, $smtpAuth, $smtpFromEmail, $smtpFromName, $emailSubject, $emailLogoPath, $id);
             if (!$stmt->execute()) {
                 $stmt->close();
                 throw new RuntimeException('No se pudo actualizar la sección de contacto.');
             }
             $stmt->close();
         } else {
-            $stmt = $db->prepare('INSERT INTO contact_page_settings (hero_title, hero_kicker, hero_description, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $stmt = $db->prepare('INSERT INTO contact_page_settings (hero_title, hero_kicker, hero_description, hero_image_path, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             if ($stmt === false) {
                 throw new RuntimeException('No se pudo preparar el registro de la sección de contacto.');
             }
-            $stmt->bind_param('ssssssssisssissss', $heroTitle, $heroKicker, $heroDescription, $contentHtml, $phonePlaceholder, $mapEmbed, $contactEmail, $smtpHost, $smtpPort, $smtpUsername, $smtpPassword, $smtpEncryption, $smtpAuth, $smtpFromEmail, $smtpFromName, $emailSubject, $emailLogoPath);
+            $stmt->bind_param('sssssssssisssissss', $heroTitle, $heroKicker, $heroDescription, $heroImagePath, $contentHtml, $phonePlaceholder, $mapEmbed, $contactEmail, $smtpHost, $smtpPort, $smtpUsername, $smtpPassword, $smtpEncryption, $smtpAuth, $smtpFromEmail, $smtpFromName, $emailSubject, $emailLogoPath);
             if (!$stmt->execute()) {
                 $stmt->close();
                 throw new RuntimeException('No se pudo registrar la sección de contacto.');

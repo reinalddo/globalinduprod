@@ -16,6 +16,13 @@ $activeNav = 'contacto';
 $bodyClass = 'page-contacto';
 
 $contactSettings = getContactPageSettings();
+$contactHeroClasses = 'page-hero page-hero--contact';
+$contactHeroStyle = '';
+if (!empty($contactSettings['hero_image_url'])) {
+  $contactHeroClasses .= ' page-hero--contact-custom';
+  $heroUrl = htmlspecialchars($contactSettings['hero_image_url'], ENT_QUOTES, 'UTF-8');
+  $contactHeroStyle = ' style="background-image:url(\'' . $heroUrl . '\');"';
+}
 
 $formData = [
     'name' => '',
@@ -150,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 include dirname(__DIR__) . '/includes/header.php';
 ?>
   <main>
-    <section class="page-hero page-hero--contact">
+    <section class="<?php echo $contactHeroClasses; ?>"<?php echo $contactHeroStyle; ?>>
       <div class="page-hero-content">
         <?php if (!empty($contactSettings['hero_kicker'])): ?>
           <p style="letter-spacing:0.08em; text-transform:uppercase; font-size:0.9rem; color:#f1c75b; margin-bottom:10px;">

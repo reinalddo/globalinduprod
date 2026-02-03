@@ -33,6 +33,7 @@ if (isset($_SESSION['contact_flash'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentLogoPath = (string) ($settings['email_logo_path'] ?? '');
+    $currentHeroPath = (string) ($settings['hero_image_path'] ?? '');
     $posted = [
         'hero_title' => trim($_POST['hero_title'] ?? ''),
         'hero_kicker' => trim($_POST['hero_kicker'] ?? ''),
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'phone_placeholder' => trim($_POST['phone_placeholder'] ?? ''),
         'map_embed' => trim($_POST['map_embed'] ?? ''),
         'contact_email' => trim($_POST['contact_email'] ?? ''),
+        'hero_image_path' => $settings['hero_image_path'] ?? '',
         'smtp_host' => trim($_POST['smtp_host'] ?? ''),
         'smtp_port' => (int) ($_POST['smtp_port'] ?? 0),
         'smtp_username' => trim($_POST['smtp_username'] ?? ''),
@@ -51,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'smtp_from_name' => trim($_POST['smtp_from_name'] ?? ''),
         'email_subject' => trim($_POST['email_subject'] ?? ''),
         'remove_email_logo' => isset($_POST['remove_email_logo']) ? 1 : 0,
+        'remove_hero_image' => isset($_POST['remove_hero_image']) ? 1 : 0,
         'id' => $settings['id']
     ];
 
@@ -106,11 +109,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $newLogoPath = null;
+    $newHeroPath = null;
     $uploadedLogo = $_FILES['email_logo'] ?? null;
+    $uploadedHero = $_FILES['hero_image'] ?? null;
 
     if (!$formErrors && $uploadedLogo && (int) $uploadedLogo['error'] !== UPLOAD_ERR_NO_FILE) {
         try {
             $newLogoPath = contactSaveMailLogo($uploadedLogo);
+        } catch (Throwable $exception) {
+            $formErrors[] = $exception->getMessage();
+        }
+    }
+
+    if (!$formErrors && $uploadedHero && (int) $uploadedHero['error'] !== UPLOAD_ERR_NO_FILE) {
+        try {
+            $newHeroPath = contactSaveHeroImage($uploadedHero);
         } catch (Throwable $exception) {
             $formErrors[] = $exception->getMessage();
         }
@@ -121,6 +134,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $newLogoPath = null;
     }
 
+    if ($formErrors && $newHeroPath) {
+        contactDeleteStoredAsset($newHeroPath, ['contact/hero']);
+        $newHeroPath = null;
+    }
+
     if (!$formErrors) {
         if ($posted['remove_email_logo']) {
             $posted['email_logo_path'] = '';
@@ -128,6 +146,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $posted['email_logo_path'] = $newLogoPath;
         } else {
             $posted['email_logo_path'] = $currentLogoPath;
+        }
+
+        if ($posted['remove_hero_image']) {
+            $posted['hero_image_path'] = '';
+        } elseif ($newHeroPath) {
+            $posted['hero_image_path'] = $newHeroPath;
+        } else {
+            $posted['hero_image_path'] = $currentHeroPath;
         }
 
         try {
@@ -140,6 +166,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 contactDeleteStoredAsset($currentLogoPath);
             }
 
+            if ($newHeroPath && $currentHeroPath && $currentHeroPath !== $newHeroPath) {
+                contactDeleteStoredAsset($currentHeroPath, ['contact/hero']);
+            }
+            if ($posted['remove_hero_image'] && $currentHeroPath) {
+                contactDeleteStoredAsset($currentHeroPath, ['contact/hero']);
+            }
+
             $_SESSION['contact_flash'] = 'Se guardó la configuración de contacto correctamente.';
             header('Location: ' . adminUrl('contacto'));
             exit;
@@ -148,12 +181,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($newLogoPath) {
                 contactDeleteStoredAsset($newLogoPath);
             }
+            if ($newHeroPath) {
+                contactDeleteStoredAsset($newHeroPath, ['contact/hero']);
+            }
         }
     }
 
     $settings = array_merge($settings, $posted);
     if (!empty($settings['remove_email_logo'])) {
         $settings['email_logo_path'] = $currentLogoPath;
+    }
+    if (!empty($settings['remove_hero_image'])) {
+        $settings['hero_image_path'] = $currentHeroPath;
     }
 }
 
@@ -189,6 +228,21 @@ require_once __DIR__ . '/../includes/page-top.php';
 
         <label for="contact_hero_description">Descripción del hero</label>
         <textarea name="hero_description" id="contact_hero_description" rows="3" required><?php echo htmlspecialchars($settings['hero_description'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+
+        <label for="contact_hero_image">Imagen de fondo del hero</label>
+        <input type="file" name="hero_image" id="contact_hero_image" accept="image/*">
+        <?php if (!empty($settings['hero_image_path'])): ?>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:12px;">
+                <div style="border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;max-width:380px;">
+                    <img src="<?php echo htmlspecialchars(adminAssetUrl($settings['hero_image_path']), ENT_QUOTES, 'UTF-8'); ?>" alt="Imagen actual del hero" style="width:100%;height:auto;display:block;">
+                </div>
+                <label style="display:flex;align-items:center;gap:8px;">
+                    <input type="checkbox" name="remove_hero_image" value="1" <?php echo !empty($settings['remove_hero_image']) ? 'checked' : ''; ?>>
+                    Eliminar imagen actual
+                </label>
+                <p style="margin:0;font-size:12px;color:#6b7280;">Ruta actual: <?php echo htmlspecialchars($settings['hero_image_path'], ENT_QUOTES, 'UTF-8'); ?></p>
+            </div>
+        <?php endif; ?>
 
         <label for="contact_content_html">Contenido de contacto (HTML)</label>
         <textarea name="content_html" id="contact_content_html" rows="10"><?php echo htmlspecialchars($settings['content_html'], ENT_QUOTES, 'UTF-8'); ?></textarea>
