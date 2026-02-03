@@ -23,6 +23,8 @@ if (!empty($contactSettings['hero_image_url'])) {
   $heroUrl = htmlspecialchars($contactSettings['hero_image_url'], ENT_QUOTES, 'UTF-8');
   $contactHeroStyle = ' style="background-image:url(\'' . $heroUrl . '\');"';
 }
+$contactWhatsappNumber = trim((string) ($contactSettings['contact_whatsapp'] ?? ''));
+$contactWhatsappLink = isset($contactSettings['contact_whatsapp_link']) ? $contactSettings['contact_whatsapp_link'] : null;
 
 $formData = [
     'name' => '',
@@ -175,6 +177,15 @@ include dirname(__DIR__) . '/includes/header.php';
       <div class="contact-layout" style="margin-top:32px;">
         <article class="contact-card">
           <h2>Datos de contacto</h2>
+          <?php if ($contactWhatsappNumber !== '' && $contactWhatsappLink): ?>
+            <div class="contact-card__cta" style="margin:0 0 16px;padding:16px;border-radius:12px;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+              <div style="font-weight:600;font-size:0.95rem;">Atención inmediata por WhatsApp</div>
+              <a href="<?php echo htmlspecialchars($contactWhatsappLink, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:#22c55e;color:#0f172a;font-weight:600;padding:10px 16px;border-radius:999px;">
+                <span>Escríbenos</span>
+                <span style="font-size:0.85rem;opacity:0.9;"><?php echo htmlspecialchars($contactWhatsappNumber, ENT_QUOTES, 'UTF-8'); ?></span>
+              </a>
+            </div>
+          <?php endif; ?>
           <div class="contact-card__body">
             <?php echo $contactSettings['content_html']; ?>
           </div>

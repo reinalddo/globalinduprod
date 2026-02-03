@@ -312,6 +312,7 @@ CREATE TABLE IF NOT EXISTS contact_page_settings (
     phone_placeholder VARCHAR(120) NOT NULL DEFAULT '',
     map_embed TEXT NOT NULL,
     contact_email VARCHAR(255) NOT NULL,
+    contact_whatsapp VARCHAR(60) NOT NULL DEFAULT '',
     hero_kicker VARCHAR(150) NOT NULL DEFAULT '',
     hero_description TEXT NOT NULL,
     smtp_host VARCHAR(255) NOT NULL DEFAULT '',
@@ -333,6 +334,7 @@ SQL;
         contactEnsureColumn($db, 'contact_page_settings', 'hero_kicker', "VARCHAR(150) NOT NULL DEFAULT ''");
         contactEnsureColumn($db, 'contact_page_settings', 'hero_description', 'TEXT NOT NULL');
         contactEnsureColumn($db, 'contact_page_settings', 'hero_image_path', "VARCHAR(255) NOT NULL DEFAULT ''");
+        contactEnsureColumn($db, 'contact_page_settings', 'contact_whatsapp', "VARCHAR(60) NOT NULL DEFAULT ''");
         contactEnsureColumn($db, 'contact_page_settings', 'smtp_host', "VARCHAR(255) NOT NULL DEFAULT ''");
         contactEnsureColumn($db, 'contact_page_settings', 'smtp_port', 'INT NOT NULL DEFAULT 587');
         contactEnsureColumn($db, 'contact_page_settings', 'smtp_username', "VARCHAR(255) NOT NULL DEFAULT ''");
@@ -364,6 +366,7 @@ if (!function_exists('contactFetchSettings')) {
             'phone_placeholder' => '',
             'map_embed' => '',
             'contact_email' => '',
+            'contact_whatsapp' => '',
             'hero_image_path' => '',
             'smtp_host' => '',
             'smtp_port' => 587,
@@ -377,7 +380,7 @@ if (!function_exists('contactFetchSettings')) {
             'email_logo_path' => ''
         ];
 
-        $sql = 'SELECT id, hero_title, hero_kicker, hero_description, hero_image_path, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path FROM contact_page_settings ORDER BY id ASC LIMIT 1';
+        $sql = 'SELECT id, hero_title, hero_kicker, hero_description, hero_image_path, content_html, phone_placeholder, map_embed, contact_email, contact_whatsapp, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path FROM contact_page_settings ORDER BY id ASC LIMIT 1';
         if ($result = $db->query($sql)) {
             if ($row = $result->fetch_assoc()) {
                 $defaults = [
@@ -389,6 +392,7 @@ if (!function_exists('contactFetchSettings')) {
                     'phone_placeholder' => (string) $row['phone_placeholder'],
                     'map_embed' => (string) $row['map_embed'],
                     'contact_email' => (string) $row['contact_email'],
+                    'contact_whatsapp' => isset($row['contact_whatsapp']) ? (string) $row['contact_whatsapp'] : '',
                     'hero_image_path' => isset($row['hero_image_path']) ? (string) $row['hero_image_path'] : '',
                     'smtp_host' => isset($row['smtp_host']) ? (string) $row['smtp_host'] : '',
                     'smtp_port' => isset($row['smtp_port']) ? (int) $row['smtp_port'] : 587,
@@ -421,6 +425,7 @@ if (!function_exists('contactSaveSettings')) {
         $phonePlaceholder = (string) ($settings['phone_placeholder'] ?? '');
         $mapEmbed = (string) ($settings['map_embed'] ?? '');
         $contactEmail = (string) ($settings['contact_email'] ?? '');
+        $contactWhatsapp = (string) ($settings['contact_whatsapp'] ?? '');
         $smtpHost = (string) ($settings['smtp_host'] ?? '');
         $smtpPort = isset($settings['smtp_port']) ? (int) $settings['smtp_port'] : 587;
         $smtpUsername = (string) ($settings['smtp_username'] ?? '');
@@ -433,22 +438,22 @@ if (!function_exists('contactSaveSettings')) {
         $emailLogoPath = (string) ($settings['email_logo_path'] ?? '');
 
         if ($id > 0) {
-            $stmt = $db->prepare('UPDATE contact_page_settings SET hero_title = ?, hero_kicker = ?, hero_description = ?, hero_image_path = ?, content_html = ?, phone_placeholder = ?, map_embed = ?, contact_email = ?, smtp_host = ?, smtp_port = ?, smtp_username = ?, smtp_password = ?, smtp_encryption = ?, smtp_auth = ?, smtp_from_email = ?, smtp_from_name = ?, email_subject = ?, email_logo_path = ?, updated_at = NOW() WHERE id = ? LIMIT 1');
+            $stmt = $db->prepare('UPDATE contact_page_settings SET hero_title = ?, hero_kicker = ?, hero_description = ?, hero_image_path = ?, content_html = ?, phone_placeholder = ?, map_embed = ?, contact_email = ?, contact_whatsapp = ?, smtp_host = ?, smtp_port = ?, smtp_username = ?, smtp_password = ?, smtp_encryption = ?, smtp_auth = ?, smtp_from_email = ?, smtp_from_name = ?, email_subject = ?, email_logo_path = ?, updated_at = NOW() WHERE id = ? LIMIT 1');
             if ($stmt === false) {
                 throw new RuntimeException('No se pudo preparar la actualización de la sección de contacto.');
             }
-            $stmt->bind_param('sssssssssisssissssi', $heroTitle, $heroKicker, $heroDescription, $heroImagePath, $contentHtml, $phonePlaceholder, $mapEmbed, $contactEmail, $smtpHost, $smtpPort, $smtpUsername, $smtpPassword, $smtpEncryption, $smtpAuth, $smtpFromEmail, $smtpFromName, $emailSubject, $emailLogoPath, $id);
+            $stmt->bind_param('ssssssssssisssissssi', $heroTitle, $heroKicker, $heroDescription, $heroImagePath, $contentHtml, $phonePlaceholder, $mapEmbed, $contactEmail, $contactWhatsapp, $smtpHost, $smtpPort, $smtpUsername, $smtpPassword, $smtpEncryption, $smtpAuth, $smtpFromEmail, $smtpFromName, $emailSubject, $emailLogoPath, $id);
             if (!$stmt->execute()) {
                 $stmt->close();
                 throw new RuntimeException('No se pudo actualizar la sección de contacto.');
             }
             $stmt->close();
         } else {
-            $stmt = $db->prepare('INSERT INTO contact_page_settings (hero_title, hero_kicker, hero_description, hero_image_path, content_html, phone_placeholder, map_embed, contact_email, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $stmt = $db->prepare('INSERT INTO contact_page_settings (hero_title, hero_kicker, hero_description, hero_image_path, content_html, phone_placeholder, map_embed, contact_email, contact_whatsapp, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             if ($stmt === false) {
                 throw new RuntimeException('No se pudo preparar el registro de la sección de contacto.');
             }
-            $stmt->bind_param('sssssssssisssissss', $heroTitle, $heroKicker, $heroDescription, $heroImagePath, $contentHtml, $phonePlaceholder, $mapEmbed, $contactEmail, $smtpHost, $smtpPort, $smtpUsername, $smtpPassword, $smtpEncryption, $smtpAuth, $smtpFromEmail, $smtpFromName, $emailSubject, $emailLogoPath);
+            $stmt->bind_param('ssssssssssisssissss', $heroTitle, $heroKicker, $heroDescription, $heroImagePath, $contentHtml, $phonePlaceholder, $mapEmbed, $contactEmail, $contactWhatsapp, $smtpHost, $smtpPort, $smtpUsername, $smtpPassword, $smtpEncryption, $smtpAuth, $smtpFromEmail, $smtpFromName, $emailSubject, $emailLogoPath);
             if (!$stmt->execute()) {
                 $stmt->close();
                 throw new RuntimeException('No se pudo registrar la sección de contacto.');

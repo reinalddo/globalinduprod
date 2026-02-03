@@ -16,6 +16,7 @@ $defaults = [
     'hero_kicker' => tenantText('admin.contact.defaults.heroKicker', 'Atención 24/7'),
     'hero_description' => tenantText('admin.contact.defaults.heroDescription', 'Comparta los números de parte, modelo de equipo y requerimientos logísticos. Nuestro equipo responderá con disponibilidad, tiempos de entrega y alternativas compatibles.'),
     'phone_placeholder' => tenantText('admin.contact.defaults.phonePlaceholder', '+58 412-0000000'),
+    'contact_whatsapp' => tenantText('admin.contact.defaults.whatsapp', '+58 412-0000000'),
     'email_subject' => tenantText('admin.contact.defaults.emailSubject', 'Nuevo mensaje desde el sitio web'),
 ];
 
@@ -36,6 +37,7 @@ $heroDescriptionRequiredMessage = tenantText('admin.contact.error.heroDescriptio
 $contactContentRequiredMessage = tenantText('admin.contact.error.content', 'Debes completar el contenido de contacto.');
 $phonePlaceholderRequiredMessage = tenantText('admin.contact.error.phonePlaceholder', 'Debes indicar el teléfono de ejemplo para el placeholder.');
 $contactEmailInvalidMessage = tenantText('admin.contact.error.contactEmail', 'Debes indicar un correo electrónico válido para recibir mensajes.');
+$contactWhatsappInvalidMessage = tenantText('admin.contact.error.contactWhatsapp', 'Ingresa un número de WhatsApp válido (mínimo 7 dígitos).');
 $smtpFromEmailInvalidMessage = tenantText('admin.contact.error.smtpFromEmail', 'Debes indicar un correo válido como remitente.');
 $emailSubjectRequiredMessage = tenantText('admin.contact.error.emailSubject', 'Debes indicar el asunto por defecto del mensaje.');
 $contactSaveErrorMessage = tenantText('admin.contact.error.save', 'No se pudo guardar la configuración de contacto.');
@@ -56,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'phone_placeholder' => trim($_POST['phone_placeholder'] ?? ''),
         'map_embed' => trim($_POST['map_embed'] ?? ''),
         'contact_email' => trim($_POST['contact_email'] ?? ''),
+        'contact_whatsapp' => trim($_POST['contact_whatsapp'] ?? ''),
         'hero_image_path' => $settings['hero_image_path'] ?? '',
         'smtp_host' => trim($_POST['smtp_host'] ?? ''),
         'smtp_port' => (int) ($_POST['smtp_port'] ?? 0),
@@ -92,6 +95,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($posted['contact_email'] === '' || !filter_var($posted['contact_email'], FILTER_VALIDATE_EMAIL)) {
         $formErrors[] = $contactEmailInvalidMessage;
+    }
+
+    if ($posted['contact_whatsapp'] !== '') {
+        $digitsOnly = preg_replace('/\D+/', '', $posted['contact_whatsapp']);
+        if (strlen($digitsOnly) < 7) {
+            $formErrors[] = $contactWhatsappInvalidMessage;
+        }
     }
 
     if ($posted['smtp_port'] < 0) {
@@ -247,6 +257,12 @@ require_once __DIR__ . '/../includes/page-top.php';
 
         <label for="contact_phone_placeholder"><?php echo htmlspecialchars(tenantText('admin.contact.form.phonePlaceholder', 'Teléfono de ejemplo para placeholder'), ENT_QUOTES, 'UTF-8'); ?></label>
         <input type="text" name="phone_placeholder" id="contact_phone_placeholder" required maxlength="120" value="<?php echo htmlspecialchars($settings['phone_placeholder'], ENT_QUOTES, 'UTF-8'); ?>">
+
+        <label for="contact_whatsapp"><?php echo htmlspecialchars(tenantText('admin.contact.form.whatsapp', 'Número de WhatsApp para contacto'), ENT_QUOTES, 'UTF-8'); ?></label>
+        <input type="text" name="contact_whatsapp" id="contact_whatsapp" maxlength="60" value="<?php echo htmlspecialchars($settings['contact_whatsapp'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+        <p style="margin:-10px 0 18px;font-size:0.9rem;color:#6b7280;">
+            <?php echo htmlspecialchars(tenantText('admin.contact.form.whatsappHelp', 'Se mostrará como acceso directo en la página de contacto. Deja vacío para ocultarlo.'), ENT_QUOTES, 'UTF-8'); ?>
+        </p>
 
         <label for="contact_map_embed"><?php echo htmlspecialchars(tenantText('admin.contact.form.mapEmbed', 'Ubicación en Google Maps (URL o iframe)'), ENT_QUOTES, 'UTF-8'); ?></label>
         <textarea name="map_embed" id="contact_map_embed" rows="4"><?php echo htmlspecialchars($settings['map_embed'], ENT_QUOTES, 'UTF-8'); ?></textarea>
