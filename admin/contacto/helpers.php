@@ -392,7 +392,7 @@ if (!function_exists('contactFetchSettings')) {
                     'phone_placeholder' => (string) $row['phone_placeholder'],
                     'map_embed' => (string) $row['map_embed'],
                     'contact_email' => (string) $row['contact_email'],
-                    'contact_whatsapp' => isset($row['contact_whatsapp']) ? (string) $row['contact_whatsapp'] : '',
+                    'contact_whatsapp' => isset($row['contact_whatsapp']) ? preg_replace('/\D+/', '', (string) $row['contact_whatsapp']) : '',
                     'hero_image_path' => isset($row['hero_image_path']) ? (string) $row['hero_image_path'] : '',
                     'smtp_host' => isset($row['smtp_host']) ? (string) $row['smtp_host'] : '',
                     'smtp_port' => isset($row['smtp_port']) ? (int) $row['smtp_port'] : 587,
@@ -425,7 +425,7 @@ if (!function_exists('contactSaveSettings')) {
         $phonePlaceholder = (string) ($settings['phone_placeholder'] ?? '');
         $mapEmbed = (string) ($settings['map_embed'] ?? '');
         $contactEmail = (string) ($settings['contact_email'] ?? '');
-        $contactWhatsapp = (string) ($settings['contact_whatsapp'] ?? '');
+        $contactWhatsapp = preg_replace('/\D+/', '', (string) ($settings['contact_whatsapp'] ?? ''));
         $smtpHost = (string) ($settings['smtp_host'] ?? '');
         $smtpPort = isset($settings['smtp_port']) ? (int) $settings['smtp_port'] : 587;
         $smtpUsername = (string) ($settings['smtp_username'] ?? '');

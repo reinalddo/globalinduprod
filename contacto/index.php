@@ -23,7 +23,7 @@ if (!empty($contactSettings['hero_image_url'])) {
   $heroUrl = htmlspecialchars($contactSettings['hero_image_url'], ENT_QUOTES, 'UTF-8');
   $contactHeroStyle = ' style="background-image:url(\'' . $heroUrl . '\');"';
 }
-$contactWhatsappNumber = trim((string) ($contactSettings['contact_whatsapp'] ?? ''));
+$contactWhatsappNumber = trim((string) ($contactSettings['contact_whatsapp_display'] ?? ''));
 $contactWhatsappLink = isset($contactSettings['contact_whatsapp_link']) ? $contactSettings['contact_whatsapp_link'] : null;
 
 $formData = [

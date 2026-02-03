@@ -73,6 +73,7 @@ if (!function_exists('getContactPageSettings')) {
             'map_embed' => '',
             'contact_email' => 'mauro@induprod.com',
             'contact_whatsapp' => '',
+            'contact_whatsapp_display' => '',
             'contact_whatsapp_link' => null,
             'smtp_host' => '',
             'smtp_port' => 587,
@@ -102,7 +103,7 @@ if (!function_exists('getContactPageSettings')) {
             $sql = 'SELECT hero_title, hero_kicker, hero_description, hero_image_path, content_html, phone_placeholder, map_embed, contact_email, contact_whatsapp, smtp_host, smtp_port, smtp_username, smtp_password, smtp_encryption, smtp_auth, smtp_from_email, smtp_from_name, email_subject, email_logo_path FROM contact_page_settings ORDER BY id ASC LIMIT 1';
             if ($result = $db->query($sql)) {
                 if ($row = $result->fetch_assoc()) {
-                    foreach (['hero_title','hero_kicker','hero_description','content_html','phone_placeholder','map_embed','contact_email','contact_whatsapp','smtp_host','smtp_username','smtp_password','smtp_encryption','smtp_from_email','smtp_from_name','email_subject'] as $field) {
+                    foreach (['hero_title','hero_kicker','hero_description','content_html','phone_placeholder','map_embed','contact_email','smtp_host','smtp_username','smtp_password','smtp_encryption','smtp_from_email','smtp_from_name','email_subject'] as $field) {
                         if (isset($row[$field]) && trim((string) $row[$field]) !== '') {
                             $defaults[$field] = (string) $row[$field];
                         }
@@ -139,6 +140,16 @@ if (!function_exists('getContactPageSettings')) {
                             if (is_file($heroAbsolute)) {
                                 $defaults['hero_image_absolute'] = $heroAbsolute;
                             }
+                        }
+                    }
+
+                    $rawWhatsapp = isset($row['contact_whatsapp']) ? trim((string) $row['contact_whatsapp']) : '';
+                    if ($rawWhatsapp !== '') {
+                        $digitsOnly = preg_replace('/\D+/', '', $rawWhatsapp);
+                        if ($digitsOnly !== '') {
+                            $defaults['contact_whatsapp'] = $digitsOnly;
+                            $defaults['contact_whatsapp_display'] = '+' . $digitsOnly;
+                            $defaults['contact_whatsapp_link'] = 'https://wa.me/' . $digitsOnly;
                         }
                     }
                 }

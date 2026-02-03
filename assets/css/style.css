@@ -2334,6 +2334,11 @@ footer {
   z-index: 140;
 }
 
+.whatsapp-float svg {
+  width: 28px;
+  height: 28px;
+}
+
 .whatsapp-float:hover,
 .whatsapp-float:focus-visible {
   transform: translateY(-2px);

@@ -101,6 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $digitsOnly = preg_replace('/\D+/', '', $posted['contact_whatsapp']);
         if (strlen($digitsOnly) < 7) {
             $formErrors[] = $contactWhatsappInvalidMessage;
+        } else {
+            $posted['contact_whatsapp'] = $digitsOnly;
         }
     }
 
@@ -259,7 +261,7 @@ require_once __DIR__ . '/../includes/page-top.php';
         <input type="text" name="phone_placeholder" id="contact_phone_placeholder" required maxlength="120" value="<?php echo htmlspecialchars($settings['phone_placeholder'], ENT_QUOTES, 'UTF-8'); ?>">
 
         <label for="contact_whatsapp"><?php echo htmlspecialchars(tenantText('admin.contact.form.whatsapp', 'Número de WhatsApp para contacto'), ENT_QUOTES, 'UTF-8'); ?></label>
-        <input type="text" name="contact_whatsapp" id="contact_whatsapp" maxlength="60" value="<?php echo htmlspecialchars($settings['contact_whatsapp'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="text" name="contact_whatsapp" id="contact_whatsapp" maxlength="60" value="<?php echo htmlspecialchars(!empty($settings['contact_whatsapp']) ? '+' . ltrim($settings['contact_whatsapp'], '+') : '', ENT_QUOTES, 'UTF-8'); ?>">
         <p style="margin:-10px 0 18px;font-size:0.9rem;color:#6b7280;">
             <?php echo htmlspecialchars(tenantText('admin.contact.form.whatsappHelp', 'Se mostrará como acceso directo en la página de contacto. Deja vacío para ocultarlo.'), ENT_QUOTES, 'UTF-8'); ?>
         </p>
