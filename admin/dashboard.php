@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/config.php';
+
 $pageTitle = tenantText('admin.panel.title', 'Panel administrativo');
 $pageHeader = $pageTitle;
 $activeNav = 'dashboard';
