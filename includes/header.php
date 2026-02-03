@@ -73,6 +73,20 @@ $languageLinks = [
   'es' => 'https://globalinduprod.com',
   'en' => 'https://globalinduprodinternational.com',
 ];
+$languageActive = [
+  'es' => '',
+  'en' => '',
+];
+$currentHost = tenantNormalizeHost($_SERVER['HTTP_HOST'] ?? '');
+foreach ($languageLinks as $code => $url) {
+  $targetHost = tenantNormalizeHost((string) parse_url($url, PHP_URL_HOST));
+  if ($currentHost !== '' && $targetHost !== '' && $currentHost === $targetHost) {
+    $languageActive[$code] = ' is-active';
+  }
+}
+if ($languageActive['es'] === '' && $languageActive['en'] === '') {
+  $languageActive[$languageCode] = ' is-active';
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($languageCode, ENT_QUOTES, 'UTF-8'); ?>">
@@ -119,8 +133,8 @@ $languageLinks = [
             </form>
           </div>
           <div class="nav-languages" role="group" aria-label="<?php echo htmlspecialchars($languageSwitcherLabel, ENT_QUOTES, 'UTF-8'); ?>">
-            <a href="<?php echo htmlspecialchars($languageLinks['es'], ENT_QUOTES, 'UTF-8'); ?>" class="nav-languages__link<?php echo $languageCode === 'es' ? ' is-active' : ''; ?>" data-lang="es"><?php echo htmlspecialchars($languageLabels['es'], ENT_QUOTES, 'UTF-8'); ?></a>
-            <a href="<?php echo htmlspecialchars($languageLinks['en'], ENT_QUOTES, 'UTF-8'); ?>" class="nav-languages__link<?php echo $languageCode === 'en' ? ' is-active' : ''; ?>" data-lang="en"><?php echo htmlspecialchars($languageLabels['en'], ENT_QUOTES, 'UTF-8'); ?></a>
+            <a href="<?php echo htmlspecialchars($languageLinks['es'], ENT_QUOTES, 'UTF-8'); ?>" class="nav-languages__link<?php echo $languageActive['es']; ?>" data-lang="es"><?php echo htmlspecialchars($languageLabels['es'], ENT_QUOTES, 'UTF-8'); ?></a>
+            <a href="<?php echo htmlspecialchars($languageLinks['en'], ENT_QUOTES, 'UTF-8'); ?>" class="nav-languages__link<?php echo $languageActive['en']; ?>" data-lang="en"><?php echo htmlspecialchars($languageLabels['en'], ENT_QUOTES, 'UTF-8'); ?></a>
           </div>
           <a class="nav-quote" href="<?php echo $rootPath; ?>/contacto/"><?php echo htmlspecialchars($navQuoteLabel, ENT_QUOTES, 'UTF-8'); ?></a>
         </div>
