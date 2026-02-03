@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/helpers.php';
+
 $pageTitle = tenantText('admin.home.title', 'Inicio | Administración');
 $pageHeader = tenantText('admin.home.header', 'Gestión de la página de inicio');
 $activeNav = 'home';
