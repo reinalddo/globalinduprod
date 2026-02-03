@@ -132,9 +132,10 @@ if ($languageActive['es'] === '' && $languageActive['en'] === '') {
               <input id="header-search" name="q" type="search" placeholder="<?php echo htmlspecialchars($searchPlaceholder, ENT_QUOTES, 'UTF-8'); ?>" value="<?php echo htmlspecialchars($currentSearchQuery, ENT_QUOTES, 'UTF-8'); ?>" autocomplete="off" required>
             </form>
           </div>
+  
           <div class="nav-languages" role="group" aria-label="<?php echo htmlspecialchars($languageSwitcherLabel, ENT_QUOTES, 'UTF-8'); ?>">
-            <a href="<?php echo htmlspecialchars($languageLinks['es'], ENT_QUOTES, 'UTF-8'); ?>" class="nav-languages__link<?php echo $languageActive['es']; ?>" data-lang="es"><?php echo htmlspecialchars($languageLabels['es'], ENT_QUOTES, 'UTF-8'); ?></a>
-            <a href="<?php echo htmlspecialchars($languageLinks['en'], ENT_QUOTES, 'UTF-8'); ?>" class="nav-languages__link<?php echo $languageActive['en']; ?>" data-lang="en"><?php echo htmlspecialchars($languageLabels['en'], ENT_QUOTES, 'UTF-8'); ?></a>
+            <a href="https://globalinduprod.com" class="nav-languages__link<?php echo $languageActive['es']; ?>" data-lang="es"><?php echo htmlspecialchars($languageLabels['es'], ENT_QUOTES, 'UTF-8'); ?></a>
+            <a href="https://globalinduprodinternational.com" class="nav-languages__link<?php echo $languageActive['en']; ?>" data-lang="en"><?php echo htmlspecialchars($languageLabels['en'], ENT_QUOTES, 'UTF-8'); ?></a>
           </div>
           <a class="nav-quote" href="<?php echo $rootPath; ?>/contacto/"><?php echo htmlspecialchars($navQuoteLabel, ENT_QUOTES, 'UTF-8'); ?></a>
         </div>
