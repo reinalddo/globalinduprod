@@ -62,16 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const isToggleVisible = () => window.getComputedStyle(navToggle).display !== 'none';
 
     const closeNav = (shouldManageFocus = true) => {
+      const shouldRefocusToggle = shouldManageFocus && nav.contains(document.activeElement) && typeof navToggle.focus === 'function';
       navToggle.classList.remove('is-active');
       nav.classList.remove('is-active');
       navToggle.setAttribute('aria-expanded', 'false');
       if (isToggleVisible()) {
-        nav.setAttribute('aria-hidden', 'true');
-        if (shouldManageFocus && nav.contains(document.activeElement) && typeof navToggle.focus === 'function') {
+        if (shouldRefocusToggle) {
           navToggle.focus({ preventScroll: true });
         }
+        nav.setAttribute('inert', '');
       } else {
-        nav.removeAttribute('aria-hidden');
+        nav.removeAttribute('inert');
       }
     };
 
@@ -79,26 +80,26 @@ document.addEventListener('DOMContentLoaded', () => {
       navToggle.classList.add('is-active');
       nav.classList.add('is-active');
       navToggle.setAttribute('aria-expanded', 'true');
-      nav.setAttribute('aria-hidden', 'false');
+      nav.removeAttribute('inert');
     };
 
     const syncNavVisibility = () => {
       if (isToggleVisible()) {
         const expanded = navToggle.classList.contains('is-active');
         navToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        if (!expanded) {
-          nav.setAttribute('aria-hidden', 'true');
-        }
+        nav.toggleAttribute('inert', !expanded);
         return;
       }
       nav.classList.remove('is-active');
-      nav.removeAttribute('aria-hidden');
+      nav.removeAttribute('inert');
       navToggle.classList.remove('is-active');
       navToggle.setAttribute('aria-expanded', 'false');
     };
 
     syncNavVisibility();
+    window.requestAnimationFrame(syncNavVisibility);
     window.addEventListener('resize', syncNavVisibility);
+    window.addEventListener('load', syncNavVisibility);
 
     navToggle.addEventListener('click', () => {
       if (!isToggleVisible()) {
