@@ -325,6 +325,9 @@ include __DIR__ . '/includes/header.php';
           <button type="button" class="hero-slider__dot<?php echo $index === 0 ? ' is-active' : ''; ?>" aria-label="Ir al slide <?php echo $index + 1; ?>" data-hero-dot></button>
         <?php endforeach; ?>
       </div>
+      <?php if (!empty($heroFloatingLogoMarkup)): ?>
+        <?php echo $heroFloatingLogoMarkup; ?>
+      <?php endif; ?>
     </section>
 
     <section class="section-heading" data-aos="fade-up">

@@ -519,6 +519,50 @@ a {
   max-height: 56px;
 }
 
+.hero-floating-logo {
+  position: absolute;
+  left: clamp(16px, 5vw, 48px);
+  bottom: clamp(16px, 5vw, 42px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(10px);
+  z-index: 5;
+  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.hero-floating-logo:hover,
+.hero-floating-logo:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.78);
+  border-color: rgba(255, 215, 0, 0.55);
+  outline: none;
+}
+
+.hero-floating-logo img {
+  height: clamp(38px, 7vw, 64px);
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.45));
+}
+
+@media (max-width: 640px) {
+  .hero-floating-logo {
+    padding: 9px 14px;
+    left: 16px;
+    bottom: 16px;
+  }
+
+  .hero-floating-logo img {
+    height: 36px;
+  }
+}
+
 .hero {
   position: relative;
   min-height: max(480px, calc(100vh - 148px));

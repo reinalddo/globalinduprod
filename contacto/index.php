@@ -171,6 +171,9 @@ include dirname(__DIR__) . '/includes/header.php';
           <p><?php echo htmlspecialchars($contactSettings['hero_description'], ENT_QUOTES, 'UTF-8'); ?></p>
         <?php endif; ?>
       </div>
+      <?php if (!empty($heroFloatingLogoMarkup)): ?>
+        <?php echo $heroFloatingLogoMarkup; ?>
+      <?php endif; ?>
     </section>
 
     <section class="main-content">

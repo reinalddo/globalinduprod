@@ -21,6 +21,28 @@ if ($navLogoPath) {
 
 $navLogoAlt = $navLogoLabel ? 'Logo de ' . $navLogoLabel : 'Logo Global Induprod';
 
+if (!function_exists('renderHeroFloatingLogo')) {
+  function renderHeroFloatingLogo(?string $logoUrl, ?string $logoAlt, string $homeUrl): string
+  {
+    $normalizedUrl = trim((string) $logoUrl);
+    if ($normalizedUrl === '') {
+      return '';
+    }
+
+    $fallbackAlt = $logoAlt !== null && $logoAlt !== '' ? $logoAlt : 'Logo';
+
+    return sprintf(
+      '<a class="hero-floating-logo" href="%s" aria-label="%s"><img src="%s" alt="%s" loading="lazy"></a>',
+      htmlspecialchars($homeUrl, ENT_QUOTES, 'UTF-8'),
+      htmlspecialchars($fallbackAlt, ENT_QUOTES, 'UTF-8'),
+      htmlspecialchars($normalizedUrl, ENT_QUOTES, 'UTF-8'),
+      htmlspecialchars($fallbackAlt, ENT_QUOTES, 'UTF-8')
+    );
+  }
+}
+
+$heroFloatingLogoMarkup = renderHeroFloatingLogo($navLogoUrl, $navLogoAlt, $rootPath . '/');
+
 $faviconUrl = $rootPath . '/logo.png';
 $faviconType = 'image/png';
 if (!empty($brandAssets['favicon_path'])) {
@@ -113,9 +135,10 @@ if ($languageActive['es'] === '' && $languageActive['en'] === '') {
     <nav class="navbar transparent-nav" role="navigation" aria-label="<?php echo htmlspecialchars(tenantText('header.nav.ariaMain', 'Menú principal'), ENT_QUOTES, 'UTF-8'); ?>">
       <div class="navbar-brand">
         <a class="navbar-item brand-logo" href="<?php echo $rootPath; ?>/">
-          <img src="<?php echo htmlspecialchars($navLogoUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($navLogoAlt, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
           <?php if ($navLogoLabel): ?>
             <span class="brand-logo__label"><?php echo htmlspecialchars($navLogoLabel, ENT_QUOTES, 'UTF-8'); ?></span>
+          <?php else: ?>
+            <span class="brand-logo__label">Global Induprod</span>
           <?php endif; ?>
         </a>
         <a role="button" class="navbar-burger" aria-label="Abrir menú" aria-expanded="false" data-nav-toggle>

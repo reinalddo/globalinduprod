@@ -85,6 +85,9 @@ include dirname(__DIR__) . '/includes/header.php';
               <p><?php echo htmlspecialchars($serviceDetail['summary'], ENT_QUOTES, 'UTF-8'); ?></p>
             <?php endif; ?>
           </div>
+          <?php if (!empty($heroFloatingLogoMarkup)): ?>
+            <?php echo $heroFloatingLogoMarkup; ?>
+          <?php endif; ?>
         </section>
 
         <section class="main-content service-detail">
@@ -213,6 +216,9 @@ include dirname(__DIR__) . '/includes/header.php';
           <h1><?php echo htmlspecialchars($servicesHero['title'], ENT_QUOTES, 'UTF-8'); ?></h1>
           <p><?php echo htmlspecialchars($servicesHero['description'], ENT_QUOTES, 'UTF-8'); ?></p>
         </div>
+        <?php if (!empty($heroFloatingLogoMarkup)): ?>
+          <?php echo $heroFloatingLogoMarkup; ?>
+        <?php endif; ?>
       </section>
 
       <section class="main-content services-overview<?php echo $isSearchMode ? ' services-overview--search' : ''; ?>">
