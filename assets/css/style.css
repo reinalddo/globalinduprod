@@ -1758,7 +1758,8 @@ a {
   border-radius: 20px;
   padding: 28px;
   box-shadow: 0 20px 36px rgba(0, 0, 0, 0.26);
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 14px;
 }
 
@@ -1781,6 +1782,8 @@ a {
   align-items: center;
   justify-content: center;
   padding: 9px 16px;
+  height: 60px;
+  width: 100%;
   min-width: 0;
   background: var(--color-primary);
   color: #111111;
@@ -1790,6 +1793,7 @@ a {
   letter-spacing: 0.06em;
   font-size: 0.85rem;
   text-decoration: none;
+  margin-top: auto;
 }
 
 .service-detail__cta-button:hover {
