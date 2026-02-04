@@ -17,7 +17,7 @@
 
 :root {
   --color-primary: #f5c400;
-  --color-primary-dark: #cfa300;
+  --color-primary-dark: #FFD700;
   --color-secondary: #111111;
   --color-accent: #f5c400;
   --text-light: #f7f7f7;
@@ -38,10 +38,29 @@ body {
   font-family: var(--font-base);
   font-size: 1.5rem;
   line-height: 1.7;
-  background: transparent;
-  color: #191919;
+  background: #191919;
+  color: #f5f5f5;
   padding-top: var(--header-offset);
   overflow-x: hidden;
+}
+
+main p,
+main li {
+  color: #ffffff !important;
+}
+
+main p strong,
+main li strong {
+  color: #ffffff !important;
+}
+
+.page-hero p,
+.page-hero li,
+.hero-slider p,
+.hero-slider li,
+.brand-hero p,
+.brand-hero li {
+  color: inherit !important;
 }
 
 main h1,
@@ -869,7 +888,7 @@ a {
   width: min(1500px, calc(100% - 48px));
   margin: 0 auto;
   padding: 48px 0 72px;
-  background: #ffffff;
+  background: #191919;
   border: 0;
   border-radius: 0;
   box-shadow: none !important;
@@ -1141,18 +1160,20 @@ a {
   gap: 10px;
   padding: 14px 28px;
   border-radius: 999px;
-  border: 1px solid rgba(241, 199, 91, 0.6);
+  border: 1px solid #FFD700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 600;
-  color: #3a2a00;
-  background: rgba(241, 199, 91, 0.18);
+  color: #191919;
+  background: #FFD700;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .home-services__link:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 28px rgba(0, 0, 0, 0.18);
+  color: #FFFFFF;
+  background: #FFD700;
 }
 
 .home-clients {
@@ -2121,7 +2142,7 @@ a {
 }
 
 .contact-card {
-  background: #fafafa;
+  background: #191919;
   border-radius: 18px;
   padding: 28px;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
@@ -2140,14 +2161,14 @@ a {
 }
 
 .contact-form {
-  background: #ffffff;
-  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.08);
+  background: #191919;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.18);
 }
 
 .contact-form label {
   font-weight: 600;
   font-size: 1.05rem;
-  color: #333;
+  color: #ffffff;
 }
 
 .contact-form input,
